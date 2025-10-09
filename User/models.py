@@ -9,9 +9,11 @@ class Cart(models.Model):
         IN_CART = 'in_cart', 'In Cart'
         PURCHASED = 'purchased', 'Purchased'
         WISHLIST = 'wishlist', 'Wishlist'
-        
+
  product  = models.ForeignKey(Product,on_delete=models.CASCADE)
 
+ def __str__(self):
+     return self.product.name
 
 class Saflora_user(AbstractUser):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
