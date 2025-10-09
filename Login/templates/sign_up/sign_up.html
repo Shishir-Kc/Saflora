@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Saflora — Sign Up</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.js"
+      defer
+    ></script>
+
+    <style>
+      :root {
+        --bg-1: #f6fff8;
+        --bg-2: #e6fff0;
+        --accent-1: #1aa06a;
+        --accent-2: #6bd39a;
+        --muted: #6b6f76;
+        --card: #ffffff;
+        --glass: rgba(255, 255, 255, 0.6);
+        --radius: 18px;
+        --shadow: 0 8px 30px rgba(20, 40, 30, 0.08);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          rgba(107, 211, 154, 0.19),
+          rgba(26, 160, 106, 0.06)
+        );
+      }
+      body {
+        margin: 0;
+        font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+        color: #123;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 36px;
+      }
+      .container {
+        width: 100%;
+        max-width: 1100px;
+        display: grid;
+        grid-template-columns: 1fr 420px;
+        gap: 32px;
+        align-items: center;
+      }
+      .left {
+        border-radius: 24px;
+        min-height: 420px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+        align-items: center;
+      }
+      .brand {
+        width: 120px;
+        height: 120px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 28px;
+        box-shadow: 0 10px 30px rgba(26, 160, 106, 0.18);
+        flex-shrink: 0;
+      }
+      .left-content {
+        color: #0b3b2a;
+      }
+      .left-content p {
+        margin: 0 0 18px 0;
+        color: var(--muted);
+        text-align: center;
+        line-height: 1.45;
+        max-width: 520px;
+      }
+      .features {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .feature {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-weight: 600;
+        color: #0a4b36;
+        box-shadow: 0 6px 18px rgba(15, 40, 20, 0.04);
+        font-size: 13px;
+      }
+      .shape {
+        position: absolute;
+        left: 8%;
+        top: 6%;
+        width: 260px;
+        height: 260px;
+        filter: blur(36px);
+        opacity: 0.12;
+        background: radial-gradient(
+          circle at 30% 30%,
+          var(--accent-2),
+          var(--accent-1) 60%,
+          transparent 70%
+        );
+        border-radius: 48%;
+        transform: rotate(18deg);
+        pointer-events: none;
+      }
+      .card {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.9),
+          rgba(255, 255, 255, 0.8)
+        );
+        border-radius: var(--radius);
+        padding: 34px;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(20, 50, 30, 0.04);
+      }
+      .card h2 {
+        margin: 0;
+        font-size: 32px;
+        color: #17ba81;
+      }
+      .card p {
+        margin: 0 0 20px 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .form-row {
+        margin-bottom: 14px;
+      }
+      .flex-row {
+        display: flex;
+        gap: 12px;
+      }
+      .input {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(246, 255, 248, 0.9);
+        border-radius: 12px;
+        padding: 10px 12px;
+        border: 1px solid rgba(15, 40, 20, 0.06);
+      }
+      .input input,
+      .input select {
+        border: 0;
+        outline: 0;
+        font-size: 15px;
+        background: transparent;
+        width: 100%;
+        color: #083523;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 12px 18px;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        border: 0;
+        background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+        color: white;
+        box-shadow: 0 8px 24px rgba(26, 160, 106, 0.18);
+        transition: transform 0.16s ease, box-shadow 0.16s ease;
+      }
+      .btn:active {
+        transform: translateY(1px);
+      }
+      .signup {
+        margin-top: 16px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+      }
+      .signup a {
+        color: var(--accent-1);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      @media (max-width: 980px) {
+        .flex-row {
+          flex-direction: column;
+        }
+        .container {
+          grid-template-columns: 1fr;
+          padding: 0;
+        }
+        .left {
+          order: 2;
+          margin-top: 6px;
+        }
+        .card {
+          order: 1;
+        }
+        .left {
+          min-height: 200px;
+          padding: 22px;
+        }
+        .brand {
+          width: 88px;
+          height: 88px;
+          font-size: 22px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shape" aria-hidden="true"></div>
+    <div class="container" role="main">
+      <section class="left">
+        <img
+          style="width: 30%"
+          src="../../static/Login/images/saflora.png"
+          alt="Saflora Logo"
+        />
+        <div class="left-content">
+          <p>
+            Eco-friendly powder floor cleaner crafted in Nepal. Gentle on Floor,
+            tough on dirt — Introducing clean and fresh solution for household
+          </p>
+          <div class="features" aria-hidden="true">
+            <div class="feature">Affordable</div>
+            <div class="feature">Cleaning Property</div>
+            <div class="feature">Fresh herbal scent</div>
+          </div>
+        </div>
+      </section>
+      <aside class="card" aria-label="Sign Up form">
+        <h2>Create Account</h2>
+        <p>Sign up to start managing orders, products, and more</p>
+        <form id="signupForm" autocomplete="on" novalidate>
+          <!-- Username -->
+          <div class="form-row">
+            <div class="input">
+              <input
+                type="text"
+                name="username"
+                placeholder="Username"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- First & Last Name -->
+          <div class="form-row flex-row">
+            <div class="input">
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                required
+              />
+            </div>
+            <div class="input">
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last Name"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Contact & Address -->
+          <div class="form-row flex-row">
+            <div class="input">
+              <input
+                type="text"
+                name="contact"
+                placeholder="Contact"
+                required
+              />
+            </div>
+            <div class="input">
+              <input
+                type="text"
+                name="address"
+                placeholder="Address"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="form-row">
+            <div class="input">
+              <input type="email" name="email" placeholder="Email" required />
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="form-row">
+            <div class="input">
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                required
+                minlength="6"
+              />
+            </div>
+          </div>
+
+          <!-- Referral -->
+          <div class="form-row">
+            <div class="input">
+              <select id="referral" name="referral" required>
+                <option value="" disabled selected>
+                  Where did you hear about us?
+                </option>
+                <option value="friend">Friend</option>
+                <option value="social">Social Media</option>
+                <option value="ad">Advertisement</option>
+                <option value="other">Other</option>
+              </select>
+              <input
+                type="text"
+                id="referralOther"
+                name="referralOther"
+                placeholder="Please specify"
+                style="display: none; margin-top: 8px"
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <button class="btn" type="submit">Sign Up</button>
+          </div>
+          <div class="signup">
+            <div style="color: var(--muted)">Already have an account?</div>
+            <a href="login.html">Log In</a>
+          </div>
+        </form>
+      </aside>
+    </div>
+
+    <script>
+      const signupForm = document.getElementById("signupForm");
+      const referral = document.getElementById("referral");
+      const referralOther = document.getElementById("referralOther");
+
+      // Show 'Other' input when selected
+      referral.addEventListener("change", () => {
+        if (referral.value === "other") {
+          referralOther.style.display = "block";
+        } else {
+          referralOther.style.display = "none";
+        }
+      });
+
+      function showToast(message, type = "success", duration = 3000) {
+        let bgColor = type === "error" ? "#e74c3c" : "#4CAF50";
+
+        Toastify({
+          text: message,
+          duration: duration,
+          close: true,
+          gravity: "top",
+          position: "right",
+          backgroundColor: bgColor,
+          stopOnFocus: true,
+        }).showToast();
+      }
+
+      signupForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        showToast("Signing up...");
+
+        setTimeout(() => {
+          const email = signupForm.email.value;
+          const password = signupForm.password.value;
+
+          if (email && password) {
+            showToast("Account created successfully!", "success");
+            // window.location.href = "login.html";
+          } else {
+            showToast("Please fill all fields!", "error");
+          }
+        }, 1500);
+      });
+    </script>
+  </body>
+</html>
