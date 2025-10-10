@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Home',
     'Login',
-    'User',
+    'Accounts',
     'Product',    
 ]
 
@@ -71,7 +71,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Saflora_web.wsgi.application'
 
-AUTH_USER_MODEL = 'User.Saflora_user'
+AUTH_USER_MODEL = 'Accounts.Saflora_user'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
