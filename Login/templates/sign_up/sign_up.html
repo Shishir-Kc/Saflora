@@ -229,6 +229,28 @@
           font-size: 22px;
         }
       }
+
+      /* Custom toast styles matching the Saflora brand */
+      .toastify {
+        font-family: "Poppins", sans-serif;
+        padding: 16px 20px;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(20, 40, 30, 0.15);
+        font-weight: 500;
+        font-size: 15px;
+      }
+      .toastify.success {
+        background: linear-gradient(135deg, #1aa06a, #6bd39a);
+      }
+      .toastify.error {
+        background: linear-gradient(135deg, #dc2626, #ef4444);
+      }
+      .toastify.warning {
+        background: linear-gradient(135deg, #f59e0b, #fbbf24);
+      }
+      .toastify.info {
+        background: linear-gradient(135deg, #3b82f6, #60a5fa);
+      }
     </style>
   </head>
   <body>
@@ -255,8 +277,9 @@
       <aside class="card" aria-label="Sign Up form">
         <h2>Create Account</h2>
         <p>Sign up to start managing orders, products, and more</p>
-        <form id="signupForm" autocomplete="on" novalidate>
-          <!-- Username -->
+        <form id="signupForm" autocomplete="on" novalidate method="POST">
+          {% csrf_token %}
+           Username 
           <div class="form-row">
             <div class="input">
               <input
@@ -268,12 +291,12 @@
             </div>
           </div>
 
-          <!-- First & Last Name -->
+           First & Last Name 
           <div class="form-row flex-row">
             <div class="input">
               <input
                 type="text"
-                name="firstName"
+                name="firstname"
                 placeholder="First Name"
                 required
               />
@@ -281,14 +304,14 @@
             <div class="input">
               <input
                 type="text"
-                name="lastName"
+                name="lastname"
                 placeholder="Last Name"
                 required
               />
             </div>
           </div>
 
-          <!-- Contact & Address -->
+           Contact & Address 
           <div class="form-row flex-row">
             <div class="input">
               <input
@@ -308,14 +331,14 @@
             </div>
           </div>
 
-          <!-- Email -->
+           Email 
           <div class="form-row">
             <div class="input">
               <input type="email" name="email" placeholder="Email" required />
             </div>
           </div>
 
-          <!-- Password -->
+           Password 
           <div class="form-row">
             <div class="input">
               <input
@@ -328,7 +351,7 @@
             </div>
           </div>
 
-          <!-- Referral -->
+           Referral 
           <div class="form-row">
             <div class="input">
               <select id="referral" name="referral" required>
@@ -355,56 +378,59 @@
           </div>
           <div class="signup">
             <div style="color: var(--muted)">Already have an account?</div>
-            <a href="login.html">Log In</a>
+            <a href='{% url "login:user_login" %}'>Log In</a>
           </div>
         </form>
       </aside>
     </div>
-
     <script>
-      const signupForm = document.getElementById("signupForm");
-      const referral = document.getElementById("referral");
-      const referralOther = document.getElementById("referralOther");
+      // Display Django messages as toast notifications
+      {% if messages %}
+        document.addEventListener('DOMContentLoaded', function() {
+          {% for message in messages %}
+            const messageLevel = '{{ message.tags }}';
+            const messageText = '{{ message|escapejs }}';
+            
+            // Map Django message levels to toast styles
+            let toastClass = 'info';
+            if (messageLevel.includes('error') || messageLevel.includes('danger')) {
+              toastClass = 'error';
+            } else if (messageLevel.includes('success')) {
+              toastClass = 'success';
+            } else if (messageLevel.includes('warning')) {
+              toastClass = 'warning';
+            }
+            
+            // Show toast notification
+            Toastify({
+              text: messageText,
+              duration: 4000,
+              close: true,
+              gravity: "top",
+              position: "right",
+              stopOnFocus: true,
+              className: toastClass,
+              offset: {
+                x: 20,
+                y: 20
+              }
+            }).showToast();
+          {% endfor %}
+        });
+      {% endif %}
 
-      // Show 'Other' input when selected
-      referral.addEventListener("change", () => {
-        if (referral.value === "other") {
-          referralOther.style.display = "block";
+      // Handle referral dropdown "Other" option
+      const referralSelect = document.getElementById('referral');
+      const referralOther = document.getElementById('referralOther');
+      
+      referralSelect.addEventListener('change', function() {
+        if (this.value === 'other') {
+          referralOther.style.display = 'block';
+          referralOther.required = true;
         } else {
-          referralOther.style.display = "none";
+          referralOther.style.display = 'none';
+          referralOther.required = false;
         }
-      });
-
-      function showToast(message, type = "success", duration = 3000) {
-        let bgColor = type === "error" ? "#e74c3c" : "#4CAF50";
-
-        Toastify({
-          text: message,
-          duration: duration,
-          close: true,
-          gravity: "top",
-          position: "right",
-          backgroundColor: bgColor,
-          stopOnFocus: true,
-        }).showToast();
-      }
-
-      signupForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-
-        showToast("Signing up...");
-
-        setTimeout(() => {
-          const email = signupForm.email.value;
-          const password = signupForm.password.value;
-
-          if (email && password) {
-            showToast("Account created successfully!", "success");
-            // window.location.href = "login.html";
-          } else {
-            showToast("Please fill all fields!", "error");
-          }
-        }, 1500);
       });
     </script>
   </body>
