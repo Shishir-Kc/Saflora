@@ -268,10 +268,53 @@
           font-size: 22px;
         }
       }
+
+      /* Custom toast notification styles matching Saflora theme */
+      .toastify {
+        font-family: "Poppins", sans-serif;
+        padding: 16px 20px;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(20, 40, 30, 0.15);
+        font-weight: 500;
+        font-size: 14px;
+        backdrop-filter: blur(8px);
+      }
+
+      .toastify.success {
+        background: linear-gradient(135deg, #1aa06a, #6bd39a);
+        color: white;
+      }
+
+      .toastify.error {
+        background: linear-gradient(135deg, #dc2626, #ef4444);
+        color: white;
+      }
+
+      .toastify.warning {
+        background: linear-gradient(135deg, #f59e0b, #fbbf24);
+        color: white;
+      }
+
+      .toastify.info {
+        background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+        color: white;
+      }
+
+      /* Hide the default Django messages list */
+      .messages {
+        display: none;
+      }
     </style>
   </head>
   <body>
-    <div id="toast"></div>
+    <!-- Django messages container (hidden, used by JavaScript) -->
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
 
     <div class="shape" aria-hidden="true"></div>
     <div class="container" role="main">
@@ -296,7 +339,8 @@
       <aside class="card" aria-label="Login form">
         <h2>Welcome Back</h2>
         <p>Sign in to manage orders, view Product and more</p>
-        <form id="loginForm" autocomplete="on" novalidate>
+        <form id="loginForm" autocomplete="on" novalidate method="post">
+          {% csrf_token %}
           <div class="form-row">
             <label for="email" style="display: none">Email</label>
             <div class="input" role="group" aria-labelledby="email">

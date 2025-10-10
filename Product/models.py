@@ -1,5 +1,4 @@
 from django.db import models
-from User.models import Saflora_user
 import uuid
 
 class Feature(models.Model):
@@ -11,7 +10,7 @@ class Feature(models.Model):
 
 
 
-class Product(models.Model):
+class Saflora_Product(models.Model):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     name = models.CharField(max_length=200)
     price = models.FloatField()
