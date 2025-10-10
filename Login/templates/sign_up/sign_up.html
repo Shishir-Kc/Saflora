@@ -252,9 +252,11 @@
           </div>
         </div>
       </section>
+
       <aside class="card" aria-label="Sign Up form">
         <h2>Create Account</h2>
         <p>Sign up to start managing orders, products, and more</p>
+
         <form id="signupForm" autocomplete="on" novalidate>
           <!-- Username -->
           <div class="form-row">
@@ -293,6 +295,7 @@
             <div class="input">
               <input
                 type="text"
+                class="contact"
                 name="contact"
                 placeholder="Contact"
                 required
@@ -353,34 +356,41 @@
           <div class="form-row">
             <button class="btn" type="submit">Sign Up</button>
           </div>
+
           <div class="signup">
             <div style="color: var(--muted)">Already have an account?</div>
-            <a href="login.html">Log In</a>
+            <a href="/Login/templates/login/login.html">Log In</a>
           </div>
         </form>
       </aside>
     </div>
 
+    <!-- Toastify JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
     <script>
       const signupForm = document.getElementById("signupForm");
       const referral = document.getElementById("referral");
+      const contact = document.querySelector(".contact");
       const referralOther = document.getElementById("referralOther");
 
-      // Show 'Other' input when selected
       referral.addEventListener("change", () => {
-        if (referral.value === "other") {
-          referralOther.style.display = "block";
-        } else {
-          referralOther.style.display = "none";
+        referralOther.style.display =
+          referral.value === "other" ? "block" : "none";
+      });
+
+      contact.addEventListener("input", () => {
+        contact.value = contact.value.replace(/\D/g, ""); // remove non-digits
+        if (contact.value.length > 10) {
+          contact.value = contact.value.slice(0, 10);
         }
       });
 
       function showToast(message, type = "success", duration = 3000) {
-        let bgColor = type === "error" ? "#e74c3c" : "#4CAF50";
-
+        const bgColor = type === "error" ? "#e74c3c" : "#4CAF50";
         Toastify({
           text: message,
-          duration: duration,
+          duration,
           close: true,
           gravity: "top",
           position: "right",
@@ -389,21 +399,72 @@
         }).showToast();
       }
 
-      signupForm.addEventListener("submit", function (e) {
+      function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        return emailRegex.test(email);
+      }
+
+      function isStrongPassword(password) {
+        const passwordRegex =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+        return passwordRegex.test(password);
+      }
+
+      signupForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        showToast("Signing up...");
+        const username = signupForm.username.value.trim();
+        const firstName = signupForm.firstName.value.trim();
+        const lastName = signupForm.lastName.value.trim();
+        const address = signupForm.address.value.trim();
+        const contactNum = contact.value.trim();
+        const email = signupForm.email.value.trim();
+        const password = signupForm.password.value.trim();
+        const referralValue = referral.value;
+        const referralOtherValue = referralOther.value.trim();
 
+        if (
+          !username ||
+          !firstName ||
+          !lastName ||
+          !address ||
+          !email ||
+          !password
+        ) {
+          showToast("Please fill out all required fields!", "error");
+          return;
+        }
+
+        if (contactNum.length !== 10) {
+          showToast("Contact number must be exactly 10 digits!", "error");
+          return;
+        }
+
+        if (!isValidEmail(email)) {
+          showToast("Please enter a valid email address!", "error");
+          return;
+        }
+
+        if (!isStrongPassword(password)) {
+          showToast(
+            "Password must be 8+ chars, include upper, lower, number & special char!",
+            "error"
+          );
+          return;
+        }
+
+        if (referralValue === "other" && referralOtherValue === "") {
+          showToast("Please specify where you heard about us.", "error");
+          return;
+        }
+
+        showToast("Creating your account...", "success");
         setTimeout(() => {
-          const email = signupForm.email.value;
-          const password = signupForm.password.value;
-
-          if (email && password) {
-            showToast("Account created successfully!", "success");
-            // window.location.href = "login.html";
-          } else {
-            showToast("Please fill all fields!", "error");
-          }
+          showToast("Account created successfully!", "success");
+          signupForm.reset();
+          referralOther.style.display = "none";
         }, 1500);
       });
     </script>

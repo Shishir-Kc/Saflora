@@ -412,20 +412,25 @@
           </div>
           <div class="signup">
             <div style="color: var(--muted)">Don't have an account?</div>
-            <a href="#" id="signupLink">Sign Up</a>
+            <a href="/Login/templates/sign_up/sign_up.html" id="signupLink"
+              >Sign Up</a
+            >
           </div>
         </form>
       </aside>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script>
       const loginForm = document.getElementById("loginForm");
+      const togglePwd = document.getElementById("togglePwd");
+      const passwordInput = document.getElementById("password");
+      const eyeIcon = document.getElementById("eye");
 
       function showToast(message, type = "success", duration = 3000) {
-        let bgColor = type === "error" ? "#e74c3c" : "#4CAF50"; // Red for error, green for success
-
+        const bgColor = type === "error" ? "#e74c3c" : "#4CAF50";
         Toastify({
           text: message,
-          duration: duration,
+          duration,
           close: true,
           gravity: "top",
           position: "right",
@@ -434,20 +439,58 @@
         }).showToast();
       }
 
-      loginForm.addEventListener("submit", function (e) {
+      function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+      }
+
+      function isStrongPassword(password) {
+        const passwordRegex =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return passwordRegex.test(password);
+      }
+
+      togglePwd.addEventListener("click", () => {
+        const type =
+          passwordInput.getAttribute("type") === "password"
+            ? "text"
+            : "password";
+        passwordInput.setAttribute("type", type);
+        eyeIcon.innerHTML =
+          type === "text"
+            ? `<path d="M12 5c-5.523 0-10 7-10 7s4.477 7 10 7 10-7 10-7-4.477-7-10-7zm0 3a4 4 0 110 8 4 4 0 010-8z" stroke="#0b3b2a" stroke-width="1.2"/>`
+            : `<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" stroke="#0b3b2a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.5" stroke="#0b3b2a" stroke-width="1.2"/>`;
+      });
+
+      loginForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        showToast("Logging in..."); // initial toast
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
 
-        // Simulate login logic (replace with real API call)
+        if (!email || !password) {
+          showToast("Please fill in both email and password!", "error");
+          return;
+        }
+
+        if (!isValidEmail(email)) {
+          showToast("Invalid email format!", "error");
+          return;
+        }
+
+        if (!isStrongPassword(password)) {
+          showToast(
+            "Weak password! Include upper, lower, number & special char (min 8 chars).",
+            "error"
+          );
+          return;
+        }
+
+        showToast("Logging in...");
         setTimeout(() => {
-          const email = document.getElementById("email").value;
-          const password = document.getElementById("password").value;
-
-          // Example validation
-          if (email === "test@example.com" && password === "123456") {
+          if (email === "test@example.com" && password === "Risu@123") {
             showToast("Login successful!", "success");
-            // window.location.href = "/dashboard";
+            loginForm.reset();
           } else {
             showToast("Invalid email or password!", "error");
           }
