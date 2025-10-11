@@ -42,12 +42,14 @@ def user_signup(request):
         user_last_name = request.POST.get('lastname')
         # Server-side Validation
         print("==================================================") 
-        print(len(user_contact))
+        print(user_email)
         if len(user_contact)< 10 or len(user_contact)>10:
-            messages.error(request,"Contact number must be 10 digits !")
-            return render(request, "sign_up/sign_up.html")
+            messages.error(request,"Please enter valid contact number ")
+            print("contact  is invalid ")
+            return render(request, "sign_up/sign_up.html") #ok from server! 
         if '@' not in user_email:
             messages.error(request,"Enter a valid email !")
+            print("invalid email ! ")
             return render(request, "sign_up/sign_up.html")    
 
         if Saflora_user.objects.filter(email=user_email,contact=user_contact).exists():
