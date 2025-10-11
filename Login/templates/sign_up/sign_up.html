@@ -481,13 +481,6 @@
           showToast("Please specify where you heard about us.", "error");
           return;
         }
-
-        showToast("Creating your account...", "success");
-        setTimeout(() => {
-          showToast("Account created successfully!", "success");
-          signupForm.reset();
-          referralOther.style.display = "none";
-        }, 1500);
       });
     </script>
   </body>
