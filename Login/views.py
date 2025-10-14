@@ -3,6 +3,9 @@ from django.contrib.auth  import authenticate, login ,logout
 from django.contrib import messages
 from Accounts.models import Saflora_user
 from django.contrib.auth.decorators import login_required
+from .tools import send_verification_email,does_user_exists
+from .models import Verification_code
+from Accounts.models import Saflora_user
 
 
 def user_login(request):
@@ -72,4 +75,64 @@ def user_logout(request):
 
 
 def forgot_pass(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        if not does_user_exists(email=email):
+            print("user no !")
+            messages.error(request,'User does not exists ! ')
+            return redirect("login:forgot_pass")
+        
+        request.session['pending_email'] = email
+        try:
+         is_send = send_verification_email(email=[email],code=Verification_code.generate_code(email=email).code)
+         return redirect("login:otp_verify")
+        except Exception as e:
+            messages.error(request,"Error Email Could not be sent ! ")
+            return render(request,"reset_pass/email.html",)
+
     return render (request,"reset_pass/email.html")
+
+
+def verify_otp(request):
+    if request.method == "POST":
+        code = request.POST.get("code")
+        email = request.session['pending_email']
+        try:
+            user = Saflora_user.objects.get(email=email)
+        except Saflora_user.DoesNotExist:
+            messages.error(request,'User with taht email does not exists ! ')
+        except Verification_code.DoesNotExist:
+            messages.error(request,'Invalid Code ! ')
+        try:
+            Validated = Verification_code.objects.get(code=code)
+        except Verification_code.DoesNotExist:
+            messages.error(request,'Invalid Code ! ')
+            return redirect("login:otp_verify")
+        
+        if Validated:
+            Validated.is_used = True
+            Validated.save()
+            return redirect("login:reset_pass")
+    return render(request,"reset_pass/code.html")
+
+
+def reset_pass(request):
+    if request.method == "POST":
+        new_pass = request.POST.get("new_pass")
+        confirm_pass = request.POST.get("confirm_pass")
+        email = request.session['pending_email']
+        if new_pass != confirm_pass:
+            messages.error(request,"Password do not match ! ")
+            return redirect("login:reset_pass")
+        try:
+            user = Saflora_user.objects.get(email=email)
+            user.set_password(new_pass)
+            user.save()
+            messages.success(request,"Password Reset Successful ! Please Login ")
+            return redirect("login:user_login")
+        except Saflora_user.DoesNotExist:
+            messages.error(request,'User with that email does not exists ! ')
+            return redirect("login:forgot_pass")
+
+    
+    return render(request,"reset_pass/pass.html")

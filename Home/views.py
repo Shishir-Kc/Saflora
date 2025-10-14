@@ -5,4 +5,4 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def in_home(request):
-    return HttpResponse("This is Home Page")
+    return render(request,'Home/Landing_page/landing_page.html')
