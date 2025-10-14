@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Saflora — Verify Code</title>
+    <title>Saflora — Set New Password</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
       rel="stylesheet"
@@ -232,48 +232,96 @@
         </div>
       </section>
 
-      <aside class="card" aria-label="Verification Code Form">
-        <h2>Check Your Email</h2>
+      <aside class="card" aria-label="New Password Form">
+        <h2>Set a New Password</h2>
         <p>
-          We've sent a 6-digit code to your email address. Please enter it below
-          to continue.
+          Create a strong new password for your account. Make sure it's secure!
         </p>
         <form autocomplete="off" novalidate>
           <div class="form-row">
-            <label for="code" style="display: none">Verification Code</label>
-            <div class="input" role="group" aria-labelledby="code">
+            <label for="password" style="display: none">New Password</label>
+            <div class="input" role="group" aria-labelledby="password">
               <svg
                 class="icon"
-                xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
-                width="18"
-                height="18"
                 fill="none"
+                xmlns="http://www.w3.org/2000/svg"
                 aria-hidden="true"
               >
                 <path
-                  d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V13H5V6.3l7-3.11v9.8z"
-                  fill="#0b3b2a"
+                  d="M6 10v-1a6 6 0 0112 0v1"
+                  stroke="#0b3b2a"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <rect
+                  x="4"
+                  y="10"
+                  width="16"
+                  height="10"
+                  rx="2"
+                  stroke="#0b3b2a"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
                 />
               </svg>
               <input
-                id="code"
-                name="code"
-                type="text"
-                placeholder="Enter 6-digit code"
+                id="password"
+                type="password"
+                placeholder="New Password"
                 required
-                maxlength="6"
-                inputmode="numeric"
-                pattern="[0-9]{6}"
+                minlength="6"
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="confirm-password" style="display: none"
+              >Confirm Password</label
+            >
+            <div class="input" role="group" aria-labelledby="confirm-password">
+              <svg
+                class="icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  d="M6 10v-1a6 6 0 0112 0v1"
+                  stroke="#0b3b2a"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <rect
+                  x="4"
+                  y="10"
+                  width="16"
+                  height="10"
+                  rx="2"
+                  stroke="#0b3b2a"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <input
+                id="confirm-password"
+                type="password"
+                placeholder="Confirm Password"
+                required
+                minlength="6"
               />
             </div>
           </div>
           <div class="form-row" style="margin-top: 24px">
-            <button class="btn" type="submit">Verify Code</button>
+            <button class="btn" type="submit">Reset Password</button>
           </div>
           <div class="signup">
-            <div style="color: var(--muted)">Didn't get the code?</div>
-            <a href="#">Resend</a>
+            <div style="color: var(--muted)">Changed your mind?</div>
+            <a href="login.html">Back to Login</a>
           </div>
         </form>
       </aside>
