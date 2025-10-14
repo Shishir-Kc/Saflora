@@ -458,62 +458,90 @@
           </div>
           <div class="signup">
             <div style="color: var(--muted)">Don't have an account?</div>
-            <a href='{% url "login:user_signup" %}' id="signupLink">Sign Up</a>
+            <a href="/Login/templates/sign_up/sign_up.html" id="signupLink"
+              >Sign Up</a
+            >
           </div>
         </form>
       </aside>
     </div>
-  
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script>
-      // toast message from django ! 
-      document.addEventListener('DOMContentLoaded', function() {
-        const messagesList = document.querySelector('.messages');
-        
-        if (messagesList) {
-          const messages = messagesList.querySelectorAll('li');
-          
-          messages.forEach(function(messageItem) {
-            const messageText = messageItem.textContent.trim();
-            const messageTag = messageItem.className || 'info';
-            
-            // Map Django message tags to toast classes
-            let toastClass = 'info';
-            if (messageTag.includes('success')) {
-              toastClass = 'success';
-            } else if (messageTag.includes('error') || messageTag.includes('danger')) {
-              toastClass = 'error';
-            } else if (messageTag.includes('warning')) {
-              toastClass = 'warning';
-            }
-            
-            // Display toast notification
-            Toastify({
-              text: messageText,
-              duration: 4000,
-              gravity: "top",
-              position: "right",
-              className: toastClass,
-              stopOnFocus: true,
-              offset: {
-                x: 20,
-                y: 20
-              }
-            }).showToast();
-          });
-        }
+      const loginForm = document.getElementById("loginForm");
+      const togglePwd = document.getElementById("togglePwd");
+      const passwordInput = document.getElementById("password");
+      const eyeIcon = document.getElementById("eye");
+
+      function showToast(message, type = "success", duration = 3000) {
+        const bgColor = type === "error" ? "#e74c3c" : "#4CAF50";
+        Toastify({
+          text: message,
+          duration,
+          close: true,
+          gravity: "top",
+          position: "right",
+          backgroundColor: bgColor,
+          stopOnFocus: true,
+        }).showToast();
+      }
+
+      function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+      }
+
+      function isStrongPassword(password) {
+        const passwordRegex =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return passwordRegex.test(password);
+      }
+
+      togglePwd.addEventListener("click", () => {
+        const type =
+          passwordInput.getAttribute("type") === "password"
+            ? "text"
+            : "password";
+        passwordInput.setAttribute("type", type);
+        eyeIcon.innerHTML =
+          type === "text"
+            ? `<path d="M12 5c-5.523 0-10 7-10 7s4.477 7 10 7 10-7 10-7-4.477-7-10-7zm0 3a4 4 0 110 8 4 4 0 010-8z" stroke="#0b3b2a" stroke-width="1.2"/>`
+            : `<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" stroke="#0b3b2a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.5" stroke="#0b3b2a" stroke-width="1.2"/>`;
       });
 
-      // Password toggle functionality
-      const togglePwd = document.getElementById('togglePwd');
-      const passwordInput = document.getElementById('password');
-      
-      if (togglePwd && passwordInput) {
-        togglePwd.addEventListener('click', function() {
-          const type = passwordInput.type === 'password' ? 'text' : 'password';
-          passwordInput.type = type;
-          togglePwd.setAttribute('aria-label', type === 'password' ? 'Show password' : 'Hide password');
-        });
-      }
+      loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        if (!email || !password) {
+          showToast("Please fill in both email and password!", "error");
+          return;
+        }
+
+        if (!isValidEmail(email)) {
+          showToast("Invalid email format!", "error");
+          return;
+        }
+
+        if (!isStrongPassword(password)) {
+          showToast(
+            "Weak password! Include upper, lower, number & special char (min 8 chars).",
+            "error"
+          );
+          return;
+        }
+
+        showToast("Logging in...");
+        setTimeout(() => {
+          if (email === "test@example.com" && password === "Risu@123") {
+            showToast("Login successful!", "success");
+            loginForm.reset();
+          } else {
+            showToast("Invalid email or password!", "error");
+          }
+        }, 1500);
+      });
     </script>
   </body>
 </html>

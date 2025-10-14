@@ -1,5 +1,3 @@
-{% load static %}
-{% load static tailwind_tags %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -255,7 +253,6 @@
         background: linear-gradient(135deg, #3b82f6, #60a5fa);
       }
     </style>
-     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
     <div class="shape" aria-hidden="true"></div>
@@ -278,12 +275,13 @@
           </div>
         </div>
       </section>
+
       <aside class="card" aria-label="Sign Up form">
         <h2>Create Account</h2>
         <p>Sign up to start managing orders, products, and more</p>
-        <form id="signupForm" autocomplete="on" novalidate method="POST">
-          {% csrf_token %}
-           Username 
+
+        <form id="signupForm" autocomplete="on" novalidate>
+          <!-- Username -->
           <div class="form-row">
             <div class="input">
               <input
@@ -295,7 +293,7 @@
             </div>
           </div>
 
-           First & Last Name 
+          First & Last Name
           <div class="form-row flex-row">
             <div class="input">
               <input
@@ -315,12 +313,13 @@
             </div>
           </div>
 
-           Contact & Address 
+          Contact & Address
           <div class="form-row flex-row">
             <div class="input">
               <input
                 id="contactInput"
                 type="text"
+                class="contact"
                 name="contact"
                 placeholder="Contact"
                 required
@@ -336,17 +335,14 @@
             </div>
           </div>
 
-          <p id="contactError" style="color: red" class="text-red-400 text-sm mt-2 opacity-0 transition-opacity duration-300"></p>
-
-           Email 
+          Email
           <div class="form-row">
             <div class="input">
-              <input id="emailInput" type="email" name="email" placeholder="Email" required />
+              <input type="email" name="email" placeholder="Email" required />
             </div>
-            <p id="emailError" style="color: red" class="text-red-400 text-sm mt-2 opacity-0 transition-opacity duration-300"></p>
           </div>
 
-           Password 
+          Password
           <div class="form-row">
             <div class="input">
               <input
@@ -360,10 +356,7 @@
             </div>
           </div>
 
-          <p id="passwordError" style="color: red" class="text-red-400 text-sm mt-2 opacity-0 transition-opacity duration-300"></p>
-          <p id="passwordStrength" class="text-sm mt-1 text-gray-600"></p>
-
-           Referral 
+          Referral
           <div class="form-row">
             <div class="input">
               <select id="referral" name="referral" required>
@@ -386,210 +379,110 @@
           </div>
 
           <div class="form-row">
-          <button id="signupBtn" class="btn" type="submit" disabled>Sign Up</button>
+            <button class="btn" type="submit">Sign Up</button>
           </div>
+
           <div class="signup">
             <div style="color: var(--muted)">Already have an account?</div>
-            <a href='{% url "login:user_login" %}'>Log In</a>
+            <a href="/Login/templates/login/login.html">Log In</a>
           </div>
         </form>
       </aside>
     </div>
+
+    <!-- Toastify JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
     <script>
+      const signupForm = document.getElementById("signupForm");
+      const referral = document.getElementById("referral");
+      const contact = document.querySelector(".contact");
+      const referralOther = document.getElementById("referralOther");
 
-      // Front-end validation: email, contact, password strength.
-      const emailInput = document.getElementById('emailInput');
-      const emailError = document.getElementById('emailError');
-      const contactInput = document.getElementById('contactInput');
-      const contactError = document.getElementById('contactError');
-      const passwordInput = document.getElementById('passwordInput');
-      const passwordError = document.getElementById('passwordError');
-      const passwordStrength = document.getElementById('passwordStrength');
-      const signupBtn = document.getElementById('signupBtn');
-
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      // Allow digits, spaces, +, -, parentheses. We'll normalize and check length between 7-15 digits
-      const phoneDigitsRegex = /\d/g;
-
-      function validateEmail() {
-        const v = emailInput.value.trim();
-        if (v === '') {
-          emailError.textContent = 'Email is required.';
-          emailError.classList.add('opacity-100');
-          return false;
-        }
-        if (!emailRegex.test(v)) {
-          emailError.textContent = 'Please enter a valid email address.';
-          emailError.classList.add('opacity-100');
-          return false;
-        }
-        emailError.classList.remove('opacity-100');
-        return true;
-      }
-
-      function validateContact() {
-        const v = contactInput.value.trim();
-        if (v === '') {
-          contactError.textContent = 'Contact is required.';
-          contactError.classList.add('opacity-100');
-          return false;
-        }
-        const digits = (v.match(phoneDigitsRegex) || []).join('');
-        if (digits.length < 10) {
-          contactError.textContent = 'Please enter a valid contact number (10digits).';
-          contactError.classList.add('opacity-100');
-          return false;
-        }
-        contactError.classList.remove('opacity-100');
-        return true;
-      }
-
-      function checkPasswordStrength(pw) {
-        const score = {
-          length: pw.length >= 8,
-          lower: /[a-z]/.test(pw),
-          upper: /[A-Z]/.test(pw),
-          number: /[0-9]/.test(pw),
-          special: /[^A-Za-z0-9]/.test(pw)
-        };
-        const passed = Object.values(score).filter(Boolean).length;
-        if (pw.length === 0) return { level: 'empty', passed };
-        if (passed <= 2) return { level: 'weak', passed };
-        if (passed === 3 || passed === 4) return { level: 'medium', passed };
-        return { level: 'strong', passed };
-      }
-
-      function validatePassword() {
-        const v = passwordInput.value;
-        if (v === '') {
-          passwordError.textContent = 'Password is required.';
-          passwordError.classList.add('opacity-100');
-          passwordStrength.textContent = '';
-          return false;
-        }
-        if (v.length < 8) {
-          passwordError.textContent = 'Password must be at least 8 characters.';
-          passwordError.classList.add('opacity-100');
-        } else {
-          passwordError.classList.remove('opacity-100');
-        }
-        const strength = checkPasswordStrength(v);
-        if (strength.level === 'empty') {
-          passwordStrength.textContent = '';
-        } else if (strength.level === 'weak') {
-          passwordStrength.textContent = 'Strength: Weak (add uppercase, numbers or symbols)';
-          passwordStrength.style.color = '#dc2626';
-        } else if (strength.level === 'medium') {
-          passwordStrength.textContent = 'Strength: Medium (add more variety for stronger password)';
-          passwordStrength.style.color = '#f59e0b';
-        } else {
-          passwordStrength.textContent = 'Strength: Strong';
-          passwordStrength.style.color = '#16a34a';
-        }
-
-        // Require at least 3 of the 5 checks and min length 8
-        const ok = v.length >= 8 && strength.passed >= 3;
-        if (!ok) {
-          if (!passwordError.classList.contains('opacity-100')) {
-            passwordError.textContent = 'Password should include upper, lower, numbers or symbols.';
-            passwordError.classList.add('opacity-100');
-          }
-        } else {
-          passwordError.classList.remove('opacity-100');
-        }
-        return ok;
-      }
-
-      function updateSignupState() {
-        const valid = validateEmail() && validateContact() && validatePassword();
-        signupBtn.disabled = !valid;
-        if (signupBtn.disabled) {
-          signupBtn.style.opacity = '0.6';
-          signupBtn.style.cursor = 'not-allowed';
-        } else {
-          signupBtn.style.opacity = '1';
-          signupBtn.style.cursor = 'pointer';
-        }
-      }
-
-      [emailInput, contactInput, passwordInput].forEach(el => {
-        el.addEventListener('input', updateSignupState);
-        el.addEventListener('blur', updateSignupState);
+      referral.addEventListener("change", () => {
+        referralOther.style.display =
+          referral.value === "other" ? "block" : "none";
       });
 
-      // initialize state on load
-      document.addEventListener('DOMContentLoaded', function() {
-        updateSignupState();
-      });
-
-      // Prevent submit if validations fail (covers Enter key or direct submit attempts)
-      const signupFormEl = document.getElementById('signupForm');
-      signupFormEl.addEventListener('submit', function(e) {
-        const valid = validateEmail() && validateContact() && validatePassword();
-        if (!valid) {
-          e.preventDefault();
-          updateSignupState();
-          if (typeof Toastify === 'function') {
-            Toastify({
-              text: 'Please fix form errors before signing up.',
-              duration: 3000,
-              close: true,
-              gravity: 'top',
-              position: 'right',
-              className: 'warning'
-            }).showToast();
-          }
+      contact.addEventListener("input", () => {
+        contact.value = contact.value.replace(/\D/g, ""); // remove non-digits
+        if (contact.value.length > 10) {
+          contact.value = contact.value.slice(0, 10);
         }
       });
 
-      // Display Django messages as toast notifications
+      function showToast(message, type = "success", duration = 3000) {
+        const bgColor = type === "error" ? "#e74c3c" : "#4CAF50";
+        Toastify({
+          text: message,
+          duration,
+          close: true,
+          gravity: "top",
+          position: "right",
+          backgroundColor: bgColor,
+          stopOnFocus: true,
+        }).showToast();
+      }
 
-      // might be error in here ! 
-      {% if messages %}
-        document.addEventListener('DOMContentLoaded', function() {
-          {% for message in messages %}
-            const messageLevel = '{{ message.tags }}';
-            const messageText = '{{ message|escapejs }}';
-            
-            // Map Django message levels to toast styles
-            let toastClass = 'info';
-            if (messageLevel.includes('error') || messageLevel.includes('danger')) {
-              toastClass = 'error';
-            } else if (messageLevel.includes('success')) {
-              toastClass = 'success';
-            } else if (messageLevel.includes('warning')) {
-              toastClass = 'warning';
-            }
-            
-            // Show toast notification
-            Toastify({
-              text: messageText,
-              duration: 4000,
-              close: true,
-              gravity: "top",
-              position: "right",
-              stopOnFocus: true,
-              className: toastClass,
-              offset: {
-                x: 20,
-                y: 20
-              }
-            }).showToast();
-          {% endfor %}
-        });
-      {% endif %}
+      function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      // Handle referral dropdown "Other" option
-      const referralSelect = document.getElementById('referral');
-      const referralOther = document.getElementById('referralOther');
-      
-      referralSelect.addEventListener('change', function() {
-        if (this.value === 'other') {
-          referralOther.style.display = 'block';
-          referralOther.required = true;
-        } else {
-          referralOther.style.display = 'none';
-          referralOther.required = false;
+        return emailRegex.test(email);
+      }
+
+      function isStrongPassword(password) {
+        const passwordRegex =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+        return passwordRegex.test(password);
+      }
+
+      signupForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const username = signupForm.username.value.trim();
+        const firstName = signupForm.firstName.value.trim();
+        const lastName = signupForm.lastName.value.trim();
+        const address = signupForm.address.value.trim();
+        const contactNum = contact.value.trim();
+        const email = signupForm.email.value.trim();
+        const password = signupForm.password.value.trim();
+        const referralValue = referral.value;
+        const referralOtherValue = referralOther.value.trim();
+
+        if (
+          !username ||
+          !firstName ||
+          !lastName ||
+          !address ||
+          !email ||
+          !password
+        ) {
+          showToast("Please fill out all required fields!", "error");
+          return;
+        }
+
+        if (contactNum.length !== 10) {
+          showToast("Contact number must be exactly 10 digits!", "error");
+          return;
+        }
+
+        if (!isValidEmail(email)) {
+          showToast("Please enter a valid email address!", "error");
+          return;
+        }
+
+        if (!isStrongPassword(password)) {
+          showToast(
+            "Password must be 8+ chars, include upper, lower, number & special char!",
+            "error"
+          );
+          return;
+        }
+
+        if (referralValue === "other" && referralOtherValue === "") {
+          showToast("Please specify where you heard about us.", "error");
+          return;
         }
       });
     </script>
