@@ -1,4 +1,282 @@
-<form method ="POST">
-    {% csrf_token %}
-    <input name='code' placeholder = 'eg 1234fg' > 
-    <button> Verify !</button>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Saflora — Verify Code</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-1: #f6fff8;
+        --bg-2: #e6fff0;
+        --accent-1: #1aa06a;
+        --accent-2: #6bd39a;
+        --muted: #6b6f76;
+        --card: #ffffff;
+        --glass: rgba(255, 255, 255, 0.6);
+        --radius: 18px;
+        --shadow: 0 8px 30px rgba(20, 40, 30, 0.08);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+        background: linear-gradient(
+          135deg,
+          rgba(107, 211, 154, 0.19),
+          rgba(26, 160, 106, 0.06)
+        );
+        color: #123;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 36px;
+      }
+      .container {
+        width: 100%;
+        max-width: 1100px;
+        display: grid;
+        grid-template-columns: 1fr 420px;
+        gap: 32px;
+        align-items: center;
+      }
+      .left {
+        border-radius: 24px;
+        min-height: 420px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+        align-items: center;
+      }
+      .brand-logo {
+        width: 30%;
+        max-width: 150px;
+      }
+      .left-content {
+        color: #0b3b2a;
+        text-align: center;
+      }
+      .left-content h1 {
+        margin: 0 0 10px 0;
+        font-size: 28px;
+        letter-spacing: -0.2px;
+      }
+      .left-content p {
+        margin: 0 0 18px 0;
+        color: var(--muted);
+        line-height: 1.45;
+        max-width: 520px;
+      }
+      .features {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .feature {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-weight: 600;
+        color: #0a4b36;
+        box-shadow: 0 6px 18px rgba(15, 40, 20, 0.04);
+        font-size: 13px;
+      }
+      .shape {
+        position: absolute;
+        left: 8%;
+        top: 6%;
+        width: 260px;
+        height: 260px;
+        filter: blur(36px);
+        opacity: 0.12;
+        background: radial-gradient(
+          circle at 30% 30%,
+          var(--accent-2),
+          var(--accent-1) 60%,
+          transparent 70%
+        );
+        border-radius: 48%;
+        transform: rotate(18deg);
+        pointer-events: none;
+      }
+      .card {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.9),
+          rgba(255, 255, 255, 0.8)
+        );
+        border-radius: var(--radius);
+        padding: 34px;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(20, 50, 30, 0.04);
+      }
+      .card h2 {
+        margin: 0 0 10px 0;
+        font-size: 32px;
+        color: #17ba81;
+      }
+      .card p {
+        margin: 0 0 20px 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .form-row {
+        margin-bottom: 14px;
+      }
+      .input {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(246, 255, 248, 0.9);
+        border-radius: 12px;
+        padding: 10px 12px;
+        border: 1px solid rgba(15, 40, 20, 0.06);
+      }
+      .input input {
+        border: 0;
+        outline: 0;
+        font-size: 15px;
+        background: transparent;
+        width: 100%;
+        color: #083523;
+      }
+      .input .icon {
+        opacity: 0.6;
+        width: 20px;
+        height: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 12px 18px;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        border: 0;
+        background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+        color: white;
+        box-shadow: 0 8px 24px rgba(26, 160, 106, 0.18);
+        transition: transform 0.16s ease, box-shadow 0.16s ease;
+      }
+      .btn:active {
+        transform: translateY(1px);
+      }
+      .signup {
+        margin-top: 24px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+      }
+      .signup a {
+        color: var(--accent-1);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      @media (max-width: 980px) {
+        .container {
+          grid-template-columns: 1fr;
+          padding: 0;
+        }
+        .left {
+          display: none;
+        }
+        .card {
+          order: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shape" aria-hidden="true"></div>
+    <div class="container" role="main">
+      <section class="left" aria-labelledby="saflora-heading">
+        <img
+          class="brand-logo"
+          src="../../static/Login/images/saflora.png"
+          alt="Saflora Logo"
+        />
+        <div class="left-content">
+          <p>
+            Eco-friendly powder floor cleaner crafted in Nepal. Gentle on Floor,
+            tough on dirt — Introducing clean and fresh solution for household
+          </p>
+          <div class="features" aria-hidden="true">
+            <div class="feature">Affordable</div>
+            <div class="feature">Cleaning Property</div>
+            <div class="feature">Fresh herbal scent</div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="card" aria-label="Verification Code Form">
+        <h2>Check Your Email</h2>
+        <p>
+          We've sent a 6-digit code to your email address. Please enter it below
+          to continue.
+        </p>
+        <form autocomplete="off" novalidate>
+          <div class="form-row">
+            <label for="code" style="display: none">Verification Code</label>
+            <div class="input" role="group" aria-labelledby="code">
+              <svg
+                class="icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V13H5V6.3l7-3.11v9.8z"
+                  fill="#0b3b2a"
+                />
+              </svg>
+              <input
+                id="code"
+                name="code"
+                type="text"
+                placeholder="Enter 6-digit code"
+                required
+                maxlength="6"
+                inputmode="numeric"
+                pattern="[0-9]{6}"
+              />
+            </div>
+          </div>
+          <div class="form-row" style="margin-top: 24px">
+            <button class="btn" type="submit">Verify Code</button>
+          </div>
+          <div class="signup">
+            <div style="color: var(--muted)">Didn't get the code?</div>
+            <a href="#">Resend</a>
+          </div>
+        </form>
+      </aside>
+    </div>
+  </body>
+</html>
