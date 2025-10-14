@@ -16,16 +16,8 @@ class Cart(models.Model):
      return self.product.name
 
 class Saflora_user(AbstractUser):
-    class Heard_from(models.TextChoices):
-        FRIEND = 'friend', 'Friend'
-        SOCIAL_MEDIA = 'social_media', 'Social Media'
-        ADVERTISEMENT = 'advertisement', 'Advertisement'
-        OTHER = 'other', 'Other'
-
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     contact = models.IntegerField(null=True, blank=True)
     cart = models.ManyToManyField(Cart, blank=True)
     address = models.TextField(null=True, blank=True)
-    hear_about_us = models.CharField(max_length=20,choices=Heard_from.choices,default=Heard_from.OTHER) 
-
-
+    hear_about_us = models.CharField(max_length=20,default='Others')
