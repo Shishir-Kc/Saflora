@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -216,7 +217,7 @@
       <section class="left" aria-labelledby="saflora-heading">
         <img
           class="brand-logo"
-          src="../../static/Login/images/saflora.png"
+          src="{% static 'Login/images/saflora.png' %}"
           alt="Saflora Logo"
         />
         <div class="left-content">
@@ -238,7 +239,8 @@
           We've sent a 6-digit code to your email address. Please enter it below
           to continue.
         </p>
-        <form autocomplete="off" novalidate>
+        <form autocomplete="off" method= "POST" novalidate>
+          {% csrf_token %}
           <div class="form-row">
             <label for="code" style="display: none">Verification Code</label>
             <div class="input" role="group" aria-labelledby="code">
@@ -273,7 +275,7 @@
           </div>
           <div class="signup">
             <div style="color: var(--muted)">Didn't get the code?</div>
-            <a href="#">Resend</a>
+            <a href='{% url "login:forgot_pass" %}'>Resend</a>
           </div>
         </form>
       </aside>

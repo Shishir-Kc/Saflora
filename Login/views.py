@@ -12,16 +12,21 @@ def user_login(request):
     if request.method == "POST":
         user_email = request.POST.get("email")
         user_password = request.POST.get("password")
+        print("==================================================")
+        print(user_email,user_password)
         if not '@' in user_email:
             messages.error(request,'Enter a Valid Gmail ')
             return redirect("login:user_login")
         try:
          user_id = Saflora_user.objects.get(email=user_email)
+         print('============================================================')
+         print(user_id)
         except:
             messages.error(request,"User with this email does not exist ! ")
             return redirect("login:user_login")
         
         user = authenticate(request,username=user_id.username, password =user_password)
+        print(user)
         if user is not None:
             login(request,user)
             return redirect("home:in_home")
@@ -128,6 +133,8 @@ def reset_pass(request):
             user = Saflora_user.objects.get(email=email)
             user.set_password(new_pass)
             user.save()
+            print("============================================")
+            print(user.check_password(new_pass))
             messages.success(request,"Password Reset Successful ! Please Login ")
             return redirect("login:user_login")
         except Saflora_user.DoesNotExist:
@@ -136,3 +143,5 @@ def reset_pass(request):
 
     
     return render(request,"reset_pass/pass.html")
+
+

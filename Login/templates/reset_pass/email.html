@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -216,7 +217,7 @@
       <section class="left" aria-labelledby="saflora-heading">
         <img
           class="brand-logo"
-          src="../../static/Login/images/saflora.png"
+          src="{% static 'Login/images/saflora.png' %}"
           alt="Saflora Logo"
         />
         <div class="left-content">
@@ -239,6 +240,7 @@
           code to reset it.
         </p>
         <form autocomplete="on" method="POST" novalidate>
+          {% csrf_token %}
           <div class="form-row">
             <label for="email" style="display: none">Email</label>
             <div class="input" role="group" aria-labelledby="email">
@@ -280,7 +282,7 @@
           </div>
           <div class="signup">
             <div style="color: var(--muted)">Remember your password?</div>
-            <a href="login.html">Back to Login</a>
+            <a href='{% url "login:user_login" %}'>Back to Login</a>
           </div>
         </form>
       </aside>

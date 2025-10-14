@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -216,7 +217,7 @@
       <section class="left" aria-labelledby="saflora-heading">
         <img
           class="brand-logo"
-          src="../../static/Login/images/saflora.png"
+          src="{% static 'Login/images/saflora.png' %}"
           alt="Saflora Logo"
         />
         <div class="left-content">
@@ -231,13 +232,21 @@
           </div>
         </div>
       </section>
+       {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
 
       <aside class="card" aria-label="New Password Form">
         <h2>Set a New Password</h2>
         <p>
           Create a strong new password for your account. Make sure it's secure!
         </p>
-        <form autocomplete="off" novalidate>
+        <form autocomplete="off" method ="POST" novalidate>
+          {% csrf_token %}
           <div class="form-row">
             <label for="password" style="display: none">New Password</label>
             <div class="input" role="group" aria-labelledby="password">
@@ -273,6 +282,7 @@
                 placeholder="New Password"
                 required
                 minlength="6"
+                name="new_pass"
               />
             </div>
           </div>
@@ -313,6 +323,7 @@
                 placeholder="Confirm Password"
                 required
                 minlength="6"
+                name="confirm_pass"
               />
             </div>
           </div>
