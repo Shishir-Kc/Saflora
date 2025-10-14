@@ -69,3 +69,7 @@ def user_signup(request):
 def user_logout(request):
     logout(request)
     return render(request,"login/login.html")    
+
+
+def forgot_pass(request):
+    return render (request,"reset_pass/email.html")
