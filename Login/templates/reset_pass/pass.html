@@ -232,13 +232,13 @@
           </div>
         </div>
       </section>
-       {% if messages %}
+       {% comment %} {% if messages %}
     <ul class="messages">
       {% for message in messages %}
       <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
       {% endfor %}
     </ul>
-    {% endif %}
+    {% endif %} {% endcomment %}
 
       <aside class="card" aria-label="New Password Form">
         <h2>Set a New Password</h2>
