@@ -59,6 +59,9 @@ def user_signup(request):
             messages.error(request,"Enter a valid email !")
             print("invalid email ! ")
             return render(request, "sign_up/sign_up.html")    
+        if Saflora_user.objects.filter(username=username).exists():
+            messages.error(request,"Username already taken !")
+            return render(request, "sign_up/sign_up.html")
 
         if Saflora_user.objects.filter(email=user_email,contact=user_contact).exists():
             messages.error(request,"User with that email already exists !")
@@ -97,6 +100,15 @@ def forgot_pass(request):
 
     return render (request,"reset_pass/email.html")
 
+def rsend_otp(request):
+    email = request.session['pending_email']
+    try:
+         is_send = send_verification_email(email=[email],code=Verification_code.generate_code(email=email).code)
+         messages.success(request,"OTP Resent Successfully ! ")
+         return redirect("login:otp_verify")
+    except Exception as e:
+            messages.error(request,"Error Email Could not be sent ! ")
+            return redirect("login:otp_verify")
 
 def verify_otp(request):
     if request.method == "POST":
