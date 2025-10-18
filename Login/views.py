@@ -3,10 +3,11 @@ from django.contrib.auth  import authenticate, login ,logout
 from django.contrib import messages
 from Accounts.models import Saflora_user
 from django.contrib.auth.decorators import login_required
-from .tools import send_verification_email,does_user_exists
+from .tools import does_user_exists
 from .models import Verification_code
 from Accounts.models import Saflora_user
-
+from celery import shared_task
+from .tasks import send_verification_email
 
 def user_login(request):
     if request.method == "POST":
@@ -92,7 +93,7 @@ def forgot_pass(request):
         
         request.session['pending_email'] = email
         try:
-         is_send = send_verification_email(email=[email],code=Verification_code.generate_code(email=email).code)
+         is_send = send_verification_email.delay(email=[email],code=Verification_code.generate_code(email=email).code)
          return redirect("login:otp_verify")
         except Exception as e:
             messages.error(request,"Error Email Could not be sent ! ")
