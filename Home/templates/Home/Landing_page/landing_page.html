@@ -339,11 +339,14 @@
           </ul>
           {% if not user.is_authenticated %}
           <div class="nav-auth">
-            <a href='{% url "login:user_login" %}' class="btn btn-secondary">Log In </a>
-            <a href='{% url "login:user_signup" %}' class="btn btn-primary">Sign Up</a>
+            <a href='{% url "login:user_login" %}' class="btn btn-secondary"
+              >Log In
+            </a>
+            <a href='{% url "login:user_signup" %}' class="btn btn-primary"
+              >Sign Up</a
+            >
           </div>
           {% endif %}
-
         </nav>
       </div>
     </header>
@@ -410,11 +413,14 @@
             <div class="team-member">
               <img
                 class="team-photo"
+                style="width: 150px; height: 150px"
                 src="{% static 'assets/co_founders/rishab.jpg' %}"
                 alt="Rishab Thapa"
               /><!--TODO:add   photo -->
               <h3>Rishab Thapa</h3>
-              <h4>Co-Founder | Product Development</h4>
+              <h4 style="font-weight: bold">
+                Co-Founder | Product Development
+              </h4>
               <p>
                 A science enthusiast, he leads product development. His
                 innovative approach ensures Saflora is effective, eco-friendly,
@@ -425,12 +431,13 @@
             <div class="team-member">
               <img
                 class="team-photo"
+                style="width: 150px; height: 150px"
                 src="{% static 'assets/co_founders/sudha.jpg' %}"
                 alt="Sudha Basnet"
               /><!--TODO:add   photo -->
 
               <h3>Sudha Basnet</h3>
-              <h4>Co-Founder | Finance Manager</h4>
+              <h4 style="font-weight: bold">Co-Founder | Finance Manager</h4>
               <p>
                 A natural leader, she manages Saflora's finances and operations,
                 ensuring the business runs smoothly while keeping prices
@@ -441,11 +448,14 @@
             <div class="team-member">
               <img
                 class="team-photo"
+                style="width: 150px; height: 150px"
                 src="{% static 'assets/co_founders/shreya.png' %}"
                 alt="Shreya Rai"
               /><!--TODO:add   photo -->
               <h3>Shreya Rai</h3>
-              <h4>Co-Founder | Marketing & Content</h4>
+              <h4 style="font-weight: bold">
+                Co-Founder | Marketing & Content
+              </h4>
               <p>
                 A creative force, she handles marketing and social media. Her
                 passion for storytelling connects us with families across Nepal.
