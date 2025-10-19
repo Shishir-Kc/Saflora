@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NavBar</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .container {
+        display: flex;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .sidebar {
+        width: 220px;
+        background: #f6f9f6;
+        padding: 20px 15px;
+        border-right: 1px solid #eee;
+        transition: transform 0.3s ease;
+      }
+
+      .sidebar .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 30px;
+      }
+      .sidebar .logo img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
+      .sidebar .logo h3 {
+        font-family: "Poppins", sans-serif;
+        color: #2d6a4f;
+        font-size: 24px;
+        font-weight: 400;
+      }
+
+      .sidebar nav ul {
+        list-style: none;
+        padding: 0;
+      }
+      .sidebar nav ul a {
+        text-decoration: none;
+        color: inherit;
+      }
+      .sidebar nav ul li {
+        font-family: "Poppins", sans-serif;
+        padding: 12px 5px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #2d6a4f;
+        font-size: 15px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <aside class="sidebar" id="sidebar">
+        <div class="logo">
+          <img src="saflora.png" alt="Saflora Logo" />
+          <h3>Saflora</h3>
+        </div>
+        <nav>
+          <ul>
+            <a href="index.html"
+              ><li>
+                <img class="icons" src="/icons/home-button.png" /> Home
+              </li></a
+            >
+            <a href="about.html"
+              ><li>
+                <img class="icons" src="/icons/information-board.png" /> About
+                Us
+              </li></a
+            >
+            <a href="product.html"
+              ><li>
+                <img class="icons" src="/icons/new-product.png" /> Product
+              </li></a
+            >
+            <a href="htu.html"
+              ><li>
+                <img class="icons" src="/icons/guide.png" /> How to Use
+              </li></a
+            >
+            <a href="buynow.html"
+              ><li>
+                <img class="icons" src="/icons/checklist.png" /> Buy Now
+              </li></a
+            >
+            <a href="contact.html"
+              ><li><img class="icons" src="/icons/phone.png" /> Contact</li></a
+            >
+          </ul>
+        </nav>
+      </aside>
+    </div>
+  </body>
+</html>
