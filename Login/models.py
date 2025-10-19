@@ -6,7 +6,7 @@ class Verification_code(models.Model):
     email = models.EmailField()
     code = models.CharField(max_length=6)
     created_at  = models.DateTimeField(auto_now_add=True)
-    is_used = models.BooleanField(default=False)
+    is_used = models.BooleanField(default=False) 
 
     class Meta:
         verbose_name = "Verification Code"
