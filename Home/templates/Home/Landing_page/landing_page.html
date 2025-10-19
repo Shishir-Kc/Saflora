@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -323,7 +324,7 @@
     <header class="header">
       <div class="container">
         <nav class="navbar">
-          <a href="#" class="nav-logo">Saflora</a>
+          <a href='{% url "home:in_home" %}' class="nav-logo">Saflora</a>
           <ul class="nav-menu">
             <li class="nav-item"><a href="#hero" class="nav-link">Home</a></li>
             <li class="nav-item">
@@ -336,10 +337,13 @@
               <a href="#contact" class="nav-link">Contact</a>
             </li>
           </ul>
+          {% if not user.is_authenticated %}
           <div class="nav-auth">
-            <button class="btn btn-secondary">Log In</button>
-            <button class="btn btn-primary">Sign Up</button>
+            <a href='{% url "login:user_login" %}' class="btn btn-secondary">Log In </a>
+            <a href='{% url "login:user_signup" %}' class="btn btn-primary">Sign Up</a>
           </div>
+          {% endif %}
+
         </nav>
       </div>
     </header>
@@ -406,7 +410,7 @@
             <div class="team-member">
               <img
                 class="team-photo"
-                src=""
+                src="{% static 'assets/co_founders/rishab.jpg' %}"
                 alt="Rishab Thapa"
               /><!--TODO:add   photo -->
               <h3>Rishab Thapa</h3>
@@ -421,7 +425,7 @@
             <div class="team-member">
               <img
                 class="team-photo"
-                src=""
+                src="{% static 'assets/co_founders/sudha.jpg' %}"
                 alt="Sudha Basnet"
               /><!--TODO:add   photo -->
 
@@ -437,7 +441,7 @@
             <div class="team-member">
               <img
                 class="team-photo"
-                src=""
+                src="{% static 'assets/co_founders/shreya.png' %}"
                 alt="Shreya Rai"
               /><!--TODO:add   photo -->
               <h3>Shreya Rai</h3>
