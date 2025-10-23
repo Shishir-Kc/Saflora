@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -69,39 +70,39 @@
     <div class="container">
       <aside class="sidebar" id="sidebar">
         <div class="logo">
-          <img src="saflora.png" alt="Saflora Logo" />
+          <img src="{% static 'assets/images/saflora.png' %}" alt="Saflora Logo" />
           <h3>Saflora</h3>
         </div>
         <nav>
           <ul>
             <a href="index.html"
               ><li>
-                <img class="icons" src="/icons/home-button.png" /> Home
+                <img class="icons" src="{% static 'assets/icons/home-button.png' %}" /> Home
               </li></a
             >
             <a href="about.html"
               ><li>
-                <img class="icons" src="/icons/information-board.png" /> About
+                <img class="icons" src="{% static 'assets/icons/information-board.png' %}" /> About
                 Us
               </li></a
             >
             <a href="product.html"
               ><li>
-                <img class="icons" src="/icons/new-product.png" /> Product
+                <img class="icons" src="{% static 'assets/icons/new-product.png' %}" /> Product
               </li></a
             >
             <a href="htu.html"
               ><li>
-                <img class="icons" src="/icons/guide.png" /> How to Use
+                <img class="icons" src="{% static 'assets/icons/guide.png' %}" /> How to Use
               </li></a
             >
             <a href="buynow.html"
               ><li>
-                <img class="icons" src="/icons/checklist.png" /> Buy Now
+                <img class="icons" src="{% static 'assets/icons/checklist.png' %}" /> Buy Now
               </li></a
             >
             <a href="contact.html"
-              ><li><img class="icons" src="/icons/phone.png" /> Contact</li></a
+              ><li><img class="icons" src="{% static 'assets/icons/phone.png' %}" /> Contact</li></a
             >
           </ul>
         </nav>
