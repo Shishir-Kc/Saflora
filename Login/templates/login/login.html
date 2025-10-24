@@ -469,7 +469,7 @@
     <script>
       const loginForm = document.getElementById("loginForm");
       const togglePwd = document.getElementById("togglePwd");
-      const passwordInput = document.getElementById("password");
+      const passwordInput = document.getElementById("passwords");
       const eyeIcon = document.getElementById("eye");
 
       function showToast(message, type = "success", duration = 3000) {
@@ -490,11 +490,7 @@
         return emailRegex.test(email);
       }
 
-      function isStrongPassword(password) {
-        const passwordRegex =
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        return passwordRegex.test(password);
-      }
+   
 
       togglePwd.addEventListener("click", () => {
         const type =
@@ -524,13 +520,6 @@
           return;
         }
 
-        if (!isStrongPassword(password)) {
-          showToast(
-            "Weak password! Include upper, lower, number & special char (min 8 chars).",
-            "error"
-          );
-          return;
-        }
 
         showToast("Logging in...");
         setTimeout(() => {
