@@ -11,7 +11,7 @@ class Feature(models.Model):
 
 
 class Saflora_Product(models.Model):
-    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=True)
     name = models.CharField(max_length=200)
     price = models.FloatField()
     discount_price = models.FloatField(null=True, blank=True)
