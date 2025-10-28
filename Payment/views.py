@@ -5,7 +5,7 @@ import requests
 from django.urls import reverse
 from dotenv import load_dotenv
 import os 
-from Accounts.models import Saflora_user
+from Accounts.models import Saflora_user,Saflora_Product,Cart
 from django.contrib import messages
 from .models import Payment_Records
 import hmac, hashlib, base64
@@ -19,25 +19,30 @@ def payment(request):
     return HttpResponse("This is a payment Page ! ")
 
 
-def khalti_payment(request):
+
+def khalti_payment(request,id,cart_id):
   if request.method == "POST":
+     print("POST")
+     print(request.POST.get('quantity'))
+     product = Saflora_Product.objects.get(id=id)
+     cart = Cart.objects.create(product=product)
      try:
       user = Saflora_user.objects.get(username=request.user)
      except:
         messages.error(request,"User Does not exists !")
         return redirect("payment:khalti_payment") # need to add proper payment page !
 
-     amount = request.POST.get('amount')
+     amount = 10
      amount = (int(amount)*100) # converting rupeese in paisa 
      print(amount)
      url = f'{os.environ.get('KHALTI_BASE_URL')}{os.environ.get("KHALTI_PAYMENT_URL")}'
 
      payload = json.dumps({
-     "return_url": request.build_absolute_uri(reverse('payment:validate_khalti_payment')),
+     "return_url": request.build_absolute_uri(reverse('payment:validate_khalti_payment',kwargs={'cart_id':cart_id})),
      "website_url": request.build_absolute_uri('/'),
      "amount": amount,
-     "purchase_order_id": "001",
-     "purchase_order_name": "Saflora jasmine",
+     "purchase_order_id": str(cart.id),
+     "purchase_order_name": product.name,
      "customer_info": {
      "name": f"{user.first_name} {user.last_name}",
      "email": f"{user.email}",
@@ -51,7 +56,7 @@ def khalti_payment(request):
      try:
          response = requests.request("POST", url, headers=headers, data=payload)
          amount = float(amount)/100 # converting paisa back to rupese 
-         payment = Payment_Records.objects.create(user=user,pidx=response.json()['pidx'],total_amount=amount)
+         payment = Payment_Records.objects.create(user=user,pidx=response.json()['pidx'],total_amount=amount,product=product)
          payment.status = payment.Status.INITIATED
          payment.provider = payment.Payment_Provider.KHALTI
          payment.save() 
@@ -64,9 +69,10 @@ def khalti_payment(request):
   else:
       return render (request,'payment/payment.html') 
 
-def validate_khalti_payment(request):
+def validate_khalti_payment(request,cart_id):
    if request.method  != "POST":  
     print("RECIVED DATA ! ")
+    print(Cart.objects.get(id=cart_id))
     pidx =  request.GET.get('pidx')
     url  =f'{os.environ.get("KHALTI_BASE_URL")}{os.environ.get("KHALTI_PAYMENT_VERIFICATION")}'
     payload = json.dumps({
@@ -90,8 +96,10 @@ def validate_khalti_payment(request):
        recived_pidx = response['pidx']
        if (float(recived_amount)/100) == payment_record.total_amount and recived_pidx == payment_record.pidx: # converting paisa into rupeese for validation  !
            recived_response = response['status']
+           cart = Cart.objects.get(id=cart_id)
            if recived_response == "Completed":
             status = Payment_Records.Status.COMPLETED
+            cart.cart_status = Cart.Status.PURCHASED
            elif recived_response == "Pending":
               status = Payment_Records.Status.PENDING
            elif recived_response == "Refused":
@@ -110,7 +118,9 @@ def validate_khalti_payment(request):
            payment_record.fee = float(response['fee'])/100
            payment_record.status = Payment_Records.Status.COMPLETED
            print(f"Fee:{response['fee']}")
+           cart.save()
            payment_record.save()
+
        else:
             messages.error(request,"Missguided payment !")
             return redirect('home:in_home') 
@@ -157,3 +167,5 @@ def esewa_payment(request):
         "epay_url": "https://rc-epay.esewa.com.np/api/epay/main/v2/form"
     }
     return render(request, "payment/esewa.html", context)
+
+
