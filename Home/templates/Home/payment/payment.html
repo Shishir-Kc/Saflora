@@ -1,0 +1,437 @@
+
+{% extends "Home/base/navbar.html" %}
+{% block title %} Check-Out{% endblock title %}
+{% block content %} 
+<style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #20df6c;
+      --text: #0e1b13;
+      --text-light: #50956c;
+      --bg-light: #f6f8f7;
+      --border: #d1e6d9;
+      --white: #fff;
+      --shadow: rgba(0, 0, 0, 0.08);
+    }
+
+    body {
+      font-family: 'Manrope', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0;
+      margin: 0;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* Header */
+    header {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+
+    .logo-icon {
+      width: 24px;
+      height: 24px;
+      background: var(--text);
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z'/%3E%3C/svg%3E") no-repeat center;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z'/%3E%3C/svg%3E") no-repeat center;
+    }
+
+    /* Main Layout */
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      padding: 24px 0 48px;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        flex-direction: row;
+      }
+      .form-section {
+        width: 60%;
+      }
+      .summary-section {
+        width: 40%;
+      }
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: var(--text-light);
+      font-size: 1rem;
+      margin-bottom: 32px;
+    }
+
+    /* Form */
+    .section-title {
+      font-size: 1.375rem;
+      font-weight: 700;
+      margin: 32px 0 16px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      background: var(--white);
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-cols-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media (max-width: 767px) {
+      .grid-cols-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Payment Options */
+    .payment-option {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+
+    .payment-option:hover,
+    .payment-option.active {
+      border-color: var(--primary);
+      background-color: rgba(32, 223, 108, 0.1);
+    }
+
+    .payment-option input {
+      width: auto;
+      margin-right: 16px;
+    }
+
+    .material-symbols-outlined {
+      font-size: 20px;
+      color: var(--text-light);
+      margin-left: auto;
+    }
+
+    /* Button */
+    .btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--primary);
+      color: var(--text);
+      border: none;
+      border-radius: 8px;
+      font-size: 1.125rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 24px;
+      transition: transform 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Summary */
+    .summary-card {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 320px;
+      background: #e8f5e9;
+      
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .summary-content {
+      padding: 24px;
+      text-align: center;
+    }
+
+    .product-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 16px 0 8px;
+    }
+
+    .product-price {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-total {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-top: 16px;
+    }
+</style>
+
+  <div class="container">
+<main>
+  <div class="form-section">
+    <h1>Checkout</h1>
+    <p class="subtitle">Complete Your Purchase</p>
+
+    <h2 class="section-title">Shipping Information</h2>
+    {% comment %} action='{% url "payment:Khalti_payment" product.id%}' {% endcomment %}
+    <form method="POST">
+      {% csrf_token %}
+      <div class="grid grid-cols-2">
+        <div class="form-group">
+          <label for="first">First Name</label>
+          <input type="text" id="first" name="first_name" placeholder="Enter your first name" />
+        </div>
+        <div class="form-group">
+          <label for="last">Last Name</label>
+          <input type="text" id="last" name="last_name" placeholder="Enter your last name" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2">
+        <div class="form-group">
+          <label for="contact">Contact</label>
+          <input type="tel" id="contact" name="contact" placeholder="+977 98XXXXXXXX" />
+        </div>
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input type="text" id="location" name="location" placeholder="Enter your city" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="address">Address</label>
+        <textarea id="address" name="address" rows="3" placeholder="Enter your full address"></textarea>
+      </div>
+
+      <h2 class="section-title">Payment Method</h2>
+      <div class="payment-option active">
+        <input type="radio" name="payment" value="COD" checked />
+        <span>Cash on Delivery (COD)</span>
+        <span class="material-symbols-outlined">local_shipping</span>
+      </div>
+      <div class="payment-option">
+        <input type="radio" name="payment" value="Online" />
+        <span>Online Payment</span>
+        <span class="material-symbols-outlined">credit_card</span>
+      </div>
+
+      <!-- Hidden inputs for quantity and total -->
+      <input type="hidden" id="quantity-input" name="quantity" value="1" />
+      <input type="hidden" id="total-input" name="total" value="0.00" />
+
+      <button class="btn" type="submit">Place Order</button>
+    </form>
+  </div>
+
+  <div class="summary-section">
+    <div class="summary-card">
+      <div class="product-image">
+        <img 
+          src="{{ product.image.url }}" 
+          alt="{{ product.name }}" 
+          class="product-image"
+        />
+      </div>
+
+      <div class="summary-content">
+        <h3 class="product-title">{{ product.name }}</h3>
+        <div class="product-price">
+          Rs.<span id="product-price">
+            {% if product.discount_price %}
+              {{ product.discount_price }}
+            {% else %}
+              {{ product.price }}
+            {% endif %}
+          </span>
+        </div>
+
+        <!-- Quantity control -->
+        <div class="quantity-control">
+          <button type="button" id="decrease">−</button>
+          <input type="number" id="quantity" name='quantity'value="1" min="1" />
+          <button type="button" id="increase">+</button>
+        </div>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="subtotal">Rs.<span id="subtotal-value">0.00</span></span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span id="shipping">Rs.<span id="shipping-value">100.00</span></span>
+        </div>
+        <div class="summary-row summary-total">
+          <span>Total</span>
+          <span id="total">Rs.<span id="total-value">0.00</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- JS Section -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const price = parseFloat(document.getElementById("product-price").innerText);
+    const shipping = parseFloat(document.getElementById("shipping-value").innerText);
+    const quantityInput = document.getElementById("quantity");
+    const quantityHidden = document.getElementById("quantity-input");
+    const subtotalValue = document.getElementById("subtotal-value");
+    const totalValue = document.getElementById("total-value");
+    const totalHidden = document.getElementById("total-input");
+
+    const updateTotals = () => {
+      let quantity = parseInt(quantityInput.value);
+
+      if (isNaN(quantity) || quantity < 1) {
+        quantity = 1;
+        quantityInput.value = 1;
+      }
+
+      const subtotal = price * quantity;
+      const total = subtotal + shipping;
+
+      subtotalValue.innerText = subtotal.toFixed(2);
+      totalValue.innerText = total.toFixed(2);
+
+      // update hidden fields for form submission
+      quantityHidden.value = quantity;
+      totalHidden.value = total.toFixed(2);
+    };
+
+    // Initialize totals
+    updateTotals();
+
+    document.getElementById("increase").addEventListener("click", () => {
+      let quantity = parseInt(quantityInput.value) || 1;
+      quantityInput.value = quantity + 1;
+      updateTotals();
+    });
+
+    document.getElementById("decrease").addEventListener("click", () => {
+      let quantity = parseInt(quantityInput.value) || 1;
+      if (quantity > 1) {
+        quantityInput.value = quantity - 1;
+        updateTotals();
+      }
+    });
+
+    quantityInput.addEventListener("input", updateTotals);
+  });
+</script>
+
+<!-- CSS for quantity buttons -->
+<style>
+  .quantity-control {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+  }
+  .quantity-control button {
+    background: #ddd;
+    border: none;
+    padding: 6px 12px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .quantity-control input {
+    width: 50px;
+    text-align: center;
+    margin: 0 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    height: 32px;
+  }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 6px 0;
+  }
+  .summary-total {
+    font-weight: bold;
+    border-top: 1px solid #ccc;
+    padding-top: 8px;
+  }
+</style>
+
+</div>
+{% endblock content %}
