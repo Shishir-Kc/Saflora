@@ -15,7 +15,7 @@ class Cart(models.Model):
         IN_CART = 'IN_CART', 'In Cart'
         PURCHASED = 'PURCHASED', 'Purchased'
         WISHLIST = 'WISHLIST', 'Wishlist'
-    
+ id = models.UUIDField(default=uuid.uuid4,primary_key=True,editable=False)
  product  = models.ForeignKey(Saflora_Product,on_delete=models.CASCADE)
  user = models.ForeignKey(Saflora_user, verbose_name="User", on_delete=models.CASCADE,related_name='Saflora_user',null=True)
  cart_status = models.CharField(choices=Status.choices,default=Status.IN_CART)
