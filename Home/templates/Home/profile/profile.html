@@ -1,0 +1,161 @@
+{% extends "Home/base/navbar.html" %}
+{% load static %}
+
+{% block title %}Your Profile - Saflora{% endblock title %}
+{% block extra_css %}
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      /* Custom styles to match your project */
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f8f9fa; /* Light gray background */
+      }
+
+      .sidebar {
+        width: 220px;
+        background: #f6f9f6;
+        padding: 20px 15px;
+        border-right: 1px solid #eee;
+        flex-shrink: 0;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+      }
+      .sidebar .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 30px;
+      }
+      .sidebar .logo img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
+      .sidebar .logo h3 {
+        font-family: "Poppins", sans-serif;
+        color: #2d6a4f;
+        font-size: 24px;
+        font-weight: 400;
+      }
+      .sidebar nav ul {
+        list-style: none;
+        padding: 0;
+      }
+      .sidebar nav ul a {
+        text-decoration: none;
+        color: inherit;
+      }
+      .sidebar nav ul li {
+        padding: 12px 5px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #2d6a4f;
+        font-size: 15px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 0.3s;
+      }
+      .sidebar nav ul li:hover {
+        background-color: #e8f5e9;
+      }
+      .sidebar nav .icons {
+        width: 20px;
+        height: 20px;
+      }
+    </style>
+{% endblock extra_css %}
+{% block content %}
+  
+    <div class="flex">
+      <!-- Main Content Area -->
+      <main class="flex-1 p-8 md:p-12">
+        <div class="max-w-4xl mx-auto">
+          <!-- Personal Information Card -->
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <div class="flex justify-between items-center">
+              <h2 class="text-xl font-bold text-gray-900">
+                Personal Information
+              </h2>
+              <button
+                class="flex items-center gap-2 bg-gray-100 text-gray-700 px-4 py-2 rounded-md text-sm font-semibold hover:bg-gray-200"
+              >
+                <i class="fas fa-pen text-xs"></i>
+                Edit
+              </button>
+            </div>
+
+            <div class="mt-6 space-y-4">
+              <!-- DJANGO: You'll get this data from {{ user }} object -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                <p class="text-gray-500">Full Name</p>
+                <p class="md:col-span-2 font-semibold text-gray-800">
+                  {{user.get_full_name}}
+                </p>
+                <!-- {{ user.get_full_name }} -->
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                <p class="text-gray-500">Email Address</p>
+                <p class="md:col-span-2 font-semibold text-gray-800">
+                  {{user.email}}
+                </p>
+                <!-- {{ user.email }} -->
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                <p class="text-gray-500">Phone Number</p>
+                <p class="md:col-span-2 font-semibold text-gray-800">
+                  {{user.contact}}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Saved Addresses Card -->
+          <div class="bg-white p-6 rounded-lg shadow-sm mt-8">
+            <div class="flex justify-between items-center">
+              <h2 class="text-xl font-bold text-gray-900">Saved Addresses</h2>
+            </div>
+
+            <!-- Address List Container -->
+            <div class="mt-6 space-y-6">
+              <!-- Address Item 1 -->
+              <div class="flex justify-between items-center border-t pt-6">
+                <div>
+                  <h3 class="font-semibold text-gray-800">Home</h3>
+                  <!-- {{ address.type }} -->
+                  <p class="text-gray-600 mt-1">
+                   {{user.address}}
+                  </p>
+                  <!-- {{ address.full_address }} -->
+                </div>
+                <div class="flex items-center space-x-2">
+                  <button
+                    class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-md hover:bg-gray-200"
+                  >
+                    <i class="fas fa-pen text-gray-600 text-sm"></i>
+                  </button>
+                  <button
+                    class="w-8 h-8 flex items-center justify-center bg-red-50 rounded-md hover:bg-red-100"
+                  >
+                    <i class="fas fa-trash text-red-500 text-sm"></i>
+                  </button>
+                </div>
+              </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+{% endblock content %}
