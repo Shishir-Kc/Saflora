@@ -341,7 +341,7 @@
       <aside class="card" aria-label="Login form">
         <h2>Welcome Back</h2>
         <p>Sign in to manage orders, view Product and more</p>
-        <form id="loginForm" autocomplete="on" novalidate method="post">
+        <form  autocomplete="on" novalidate method="post">
           {% csrf_token %}
           <div class="form-row">
             <label for="email" style="display: none">Email</label>
@@ -454,11 +454,11 @@
             <a class="link-muted" href='{% url "login:forgot_pass" %}' id="forgot">Forgotten?</a>
           </div>
           <div class="form-row">
-            <button class="btn" type="submit" id="loginBtn">Log In</button>
+            <button class="btn" type="submit" >Log In</button>
           </div>
           <div class="signup">
             <div style="color: var(--muted)">Don't have an account?</div>
-            <a href="/Login/templates/sign_up/sign_up.html" id="signupLink"
+            <a href='{% url "login:user_signup" %}' id="signupLink"
               >Sign Up</a
             >
           </div>
@@ -522,14 +522,6 @@
 
 
         showToast("Logging in...");
-        setTimeout(() => {
-          if (email === "test@example.com" && password === "Risu@123") {
-            showToast("Login successful!", "success");
-            loginForm.reset();
-          } else {
-            showToast("Invalid email or password!", "error");
-          }
-        }, 1500);
       });
     </script>
   </body>
