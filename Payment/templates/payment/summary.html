@@ -1,0 +1,28 @@
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Tailwind + Django</title>
+
+    <!-- This loads the compiled Tailwind CSS -->
+    {% tailwind_css %}
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen flex flex-col items-center justify-center">
+
+    <h1 class="text-3xl font-bold text-blue-500 mb-6">
+        Hello, Tailwind + Django!
+    </h1>
+
+    <form method="POST" class="space-y-4">
+        {% csrf_token %}
+        <button type="submit" 
+                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded">
+            Pay
+        </button> 
+    </form>
+
+</body>
+</html>
