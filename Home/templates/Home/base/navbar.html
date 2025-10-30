@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    {% block head %} 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Saflora{% endblock title %}</title>
@@ -28,202 +29,207 @@
         overflow-x: hidden;
       }
 
-      .container {
-        display: flex;
-        min-height: 100vh;
-        margin: 0;
-        padding: 0;
-      }
-
-      .sidebar {
-        width: 220px;
-        background: #f6f9f6;
-        padding: 20px 15px;
-        border-right: 1px solid #eee;
-        transition: transform 0.3s ease, width 0.3s ease;
-        position: fixed;
-        height: 100vh;
-        z-index: 1000;
-        transform: translateX(0);
-        left: 0;
+      /* Modern horizontal navbar styling */
+      .navbar {
+        background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        position: sticky;
         top: 0;
+        z-index: 1000;
+        border-bottom: 1px solid #e8f5e8;
       }
 
-      .sidebar.active {
-        transform: translateX(-100%);
-      }
-
-      .sidebar.collapsed {
-        width: 70px;
-      }
-
-      .sidebar.collapsed .logo h3,
-      .sidebar.collapsed nav ul li span {
-        display: none;
-      }
-
-      .sidebar.collapsed .logo {
-        justify-content: center;
-        margin-bottom: 20px;
-      }
-
-      .sidebar.collapsed nav ul li {
-        justify-content: center;
-        gap: 0;
-      }
-
-      .sidebar .logo {
+      .navbar-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
         display: flex;
         align-items: center;
-        gap: 10px;
-        margin-bottom: 30px;
-        padding: 0 10px;
+        justify-content: space-between;
+        height: 70px;
       }
 
-      .sidebar .logo img {
-        width: 50px;
-        height: 50px;
+      .navbar-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: #2d6a4f;
+        font-weight: 700;
+        font-size: 22px;
+        transition: opacity 0.3s ease;
+      }
+
+      .navbar-logo:hover {
+        opacity: 0.8;
+      }
+
+      .navbar-logo img {
+        width: 45px;
+        height: 45px;
         border-radius: 50%;
         object-fit: cover;
       }
 
-      .sidebar .logo h3 {
-        font-family: "Poppins", sans-serif;
-        color: #2d6a4f;
-        font-size: 24px;
-        font-weight: 400;
-        white-space: nowrap;
-      }
-
-      .sidebar nav ul {
-        list-style: none;
-        padding: 0;
-      }
-
-      .sidebar nav ul a {
-        text-decoration: none;
-        color: inherit;
-        display: block;
-      }
-
-      .sidebar nav ul li {
-        font-family: "Poppins", sans-serif;
-        padding: 12px 15px;
+      .navbar-menu {
         display: flex;
         align-items: center;
-        gap: 15px;
+        gap: 0;
+        list-style: none;
+      }
+
+      .navbar-menu a {
+        text-decoration: none;
         color: #2d6a4f;
-        font-size: 15px;
-        cursor: pointer;
-        border-radius: 8px;
-        transition: background-color 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        font-weight: 500;
         white-space: nowrap;
       }
 
-      .sidebar nav ul li:hover {
+      .navbar-menu a:hover {
         background-color: #e8f5e8;
+        color: #1b4332;
       }
 
-      .sidebar nav ul li.active {
+      .navbar-menu a.active {
         background-color: #d4edda;
-        color: #2d6a4f;
+        color: #1b4332;
         font-weight: 600;
       }
 
-      .icons {
-        width: 20px;
-        height: 20px;
-        min-width: 20px;
+      .navbar-menu .material-icons {
+        font-size: 20px;
       }
 
-      .toggle-btn {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        background: #2d6a4f;
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
-        cursor: pointer;
-        z-index: 1001;
-        display: none;
+      .navbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .navbar-actions a {
+        display: flex;
         align-items: center;
         justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #f0f0f0;
+        color: #2d6a4f;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 20px;
+      }
+
+      .navbar-actions a:hover {
+        background-color: #e8f5e8;
+        transform: scale(1.05);
+      }
+
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 5px;
+        background: none;
+        border: none;
+        padding: 0;
+      }
+
+      .hamburger span {
+        width: 25px;
+        height: 3px;
+        background-color: #2d6a4f;
+        border-radius: 2px;
         transition: all 0.3s ease;
       }
 
-      .toggle-btn i {
-        pointer-events: none;
+      .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(10px, 10px);
       }
 
-      .toggle-btn.hidden {
+      .hamburger.active span:nth-child(2) {
         opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
+      }
+
+      .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
       }
 
       .main-content {
-        flex: 1;
-        margin-left: 220px;
         padding: 20px;
-        transition: margin-left 0.3s ease;
-        position: relative;
-      }
-
-      .main-content.collapsed {
-        margin-left: 70px;
-      }
-
-      .overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-        display: none;
-      }
-
-      .overlay.active {
-        display: block;
+        min-height: calc(100vh - 70px);
       }
 
       @media (max-width: 768px) {
-        .toggle-btn {
+        .hamburger {
           display: flex;
         }
-        
-        .sidebar {
-          width: 220px;
-          transform: translateX(-100%);
+
+        .navbar-menu {
+          position: absolute;
+          top: 70px;
+          left: 0;
+          right: 0;
+          background: white;
+          flex-direction: column;
+          gap: 0;
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.3s ease;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
-        .sidebar.active {
-          transform: translateX(0);
+
+        .navbar-menu.active {
+          max-height: 500px;
         }
-        
+
+        .navbar-menu a {
+          padding: 14px 20px;
+          border-radius: 0;
+          width: 100%;
+          border-bottom: 1px solid #f0f0f0;
+        }
+
+        .navbar-actions {
+          gap: 8px;
+        }
+
+        .navbar-actions a {
+          width: 36px;
+          height: 36px;
+          font-size: 18px;
+        }
+
         .main-content {
-          margin-left: 0;
-          padding: 20px 15px;
-        }
-        
-        .main-content.collapsed {
-          margin-left: 0;
+          padding: 15px;
         }
       }
 
-      @media (min-width: 769px) {
-        .sidebar {
-          transform: translateX(0) !important;
-          display: block !important;
+      @media (max-width: 480px) {
+        .navbar-container {
+          padding: 0 15px;
         }
-        
-        .toggle-btn {
-          display: none !important;
+
+        .navbar-logo {
+          font-size: 18px;
+          gap: 8px;
+        }
+
+        .navbar-logo img {
+          width: 40px;
+          height: 40px;
+        }
+
+        .navbar-menu a {
+          font-size: 13px;
+          padding: 12px 16px;
         }
       }
     </style>
@@ -231,128 +237,101 @@
     {% block extra_css %}{% endblock %}
 
   </head>
+  {% endblock head %}
   <body>
-    <button class="toggle-btn" id="toggleSidebar">
-      <i class="fas fa-bars"></i>
-    </button>
-    
-    <div class="overlay" id="overlay"></div>
-
-    <div class="container">
-      <aside class="sidebar" id="sidebar">
-        <div class="logo">
+    <!-- Modern horizontal navbar -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <a href="{% url 'home:in_home' %}" class="navbar-logo">
           <img
             src="{% static 'assets/images/saflora.png' %}"
             alt="Saflora Logo"
           />
-          <h3>Saflora</h3>
-        </div>
-        <nav>
-          <ul>
-            <a href="{% url 'home:in_home' %}">
-              <li>
-                <img
-                  class="icons"
-                  src="{% static 'assets/icons/home-button.png' %}"
-                  alt="Home"
-                />
-                <span>Home</span>
-              </li>
-            </a>
-            <a href="">
-              <li>
-                <img
-                  class="icons"
-                  src="{% static 'assets/icons/information-board.png' %}"
-                  alt="About Us"
-                />
-                <span>About Us</span>
-              </li>
-            </a>
-            <a href='{% url "home:products_list" %}'>
-              <li>
-                <img
-                  class="icons"
-                  src="{% static 'assets/icons/new-product.png' %}"
-                  alt="Product"
-                />
-                <span>Product</span>
-              </li>
-            </a>
-            <a href="">
-              <li>
-                <img
-                  class="icons"
-                  src="{% static 'assets/icons/guide.png' %}"
-                  alt="How to Use"
-                />
-                <span>How to Use</span>
-              </li>
-            </a>
-            {% comment %} <a href="">
-              <li>
-                <img
-                  class="icons"
-                  src="{% static 'assets/icons/checklist.png' %}"
-                  alt="Buy Now"
-                />
-                <span>Buy Now</span>
-              </li> {% endcomment %}
-            </a>
-            <a href="">
-              <li>
-                <img
-                  class="icons"
-                  src="{% static 'assets/icons/phone.png' %}"
-                  alt="Contact"
-                />
-                <span>Contact</span>
-              </li>
-            </a>
-          </ul>
-        </nav>
-      </aside>
+          <span>Saflora</span>
+        </a>
 
-      <div class="main-content" id="mainContent">
-        {% block content %}
-        
-        {% endblock content %}
+        <button class="hamburger" id="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <ul class="navbar-menu" id="navbarMenu">
+          <a href="{% url 'home:in_home' %}">
+            <li style="display: flex; align-items: center; gap: 8px;">
+              <span class="material-icons">home</span>
+              <span>Home</span>
+            </li>
+          </a>
+          <a href="{% url 'home:about_us' %}">
+            <li style="display: flex; align-items: center; gap: 8px;">
+              <span class="material-icons">info</span>
+              <span>About Us</span>
+            </li>
+          </a>
+          <a href="{% url 'home:products_list' %}">
+            <li style="display: flex; align-items: center; gap: 8px;">
+              <span class="material-icons">shopping_bag</span>
+              <span>Products</span>
+            </li>
+          </a>
+          <a href="{% url 'home:how_to_use' %}">
+            <li style="display: flex; align-items: center; gap: 8px;">
+              <span class="material-icons">help</span>
+              <span>How to Use</span>
+            </li>
+          </a>
+          <a href="{% url 'home:contact' %}">
+            <li style="display: flex; align-items: center; gap: 8px;">
+              <span class="material-icons">phone</span>
+              <span>Contact</span>
+            </li>
+          </a>
+        </ul>
+
+        <div class="navbar-actions">
+          <a href='{% url "home:user_profile" %}' title="Profile">
+            <span class="material-icons">person</span>
+          </a>
+          <a href="#" title="Cart">
+            <span class="material-icons">shopping_cart</span>
+          </a>
+        </div>
       </div>
+    </nav>
+
+    <div class="main-content" id="mainContent">
+      {% block content %}
+      
+      {% endblock content %}
     </div>
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.getElementById('sidebar');
-        const toggleBtn = document.getElementById('toggleSidebar');
-        const overlay = document.getElementById('overlay');
+        const hamburger = document.getElementById('hamburger');
+        const navbarMenu = document.getElementById('navbarMenu');
         
-        toggleBtn.addEventListener('click', function() {
-          sidebar.classList.toggle('active');
-          overlay.classList.toggle('active');
-          
-          if (sidebar.classList.contains('active')) {
-            toggleBtn.classList.add('hidden');
-          } else {
-            toggleBtn.classList.remove('hidden');
+        hamburger.addEventListener('click', function() {
+          hamburger.classList.toggle('active');
+          navbarMenu.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked
+        const navLinks = navbarMenu.querySelectorAll('a');
+        navLinks.forEach(link => {
+          link.addEventListener('click', function() {
+            hamburger.classList.remove('active');
+            navbarMenu.classList.remove('active');
+          });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+          if (!event.target.closest('.navbar')) {
+            hamburger.classList.remove('active');
+            navbarMenu.classList.remove('active');
           }
         });
-        
-        overlay.addEventListener('click', function() {
-          sidebar.classList.remove('active');
-          overlay.classList.remove('active');
-          toggleBtn.classList.remove('hidden');
-        });
-        
-        function handleResize() {
-          if (window.innerWidth > 768) {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-            toggleBtn.classList.remove('hidden');
-          }
-        }
-        
-        window.addEventListener('resize', handleResize);
-        handleResize();
       });
     </script>
     {% block extra_js %}{% endblock %}
