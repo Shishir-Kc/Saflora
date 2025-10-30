@@ -67,7 +67,7 @@ def khalti_payment(request,id,cart_id):
 
      return redirect (return_url)
   else:
-      return render (request,'payment/payment.html') 
+      return render (request,'payment/summary.html') 
 
 def validate_khalti_payment(request,cart_id):
    if request.method  != "POST":  
