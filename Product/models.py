@@ -15,6 +15,10 @@ class Variants(models.Model):
         return self.variant
 
 class Saflora_Product(models.Model):
+    class Fragnence(models.TextChoices):
+        LEMON = 'LEMON','lemon'
+        JASMINE = 'JASMIE','Jasmine'
+
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     name = models.CharField(max_length=200)
     price = models.FloatField()
@@ -26,6 +30,7 @@ class Saflora_Product(models.Model):
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     variant = models.ManyToManyField(Variants)
+    fragnence = models.CharField(choices=Fragnence.choices,null=True)
     class Meta():
         verbose_name = "Product"
         verbose_name_plural = "Products"
