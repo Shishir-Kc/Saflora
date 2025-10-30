@@ -1,0 +1,278 @@
+{% extends 'Home/base/navbar.html' %}
+{% load static %}
+
+{% block title %}About Us - Saflora{% endblock title %}
+
+{% block content %}
+<style>
+  /* Added custom animations for scroll effects and hover interactions */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.6s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.6s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.6s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* Stagger animations for list items */
+  .animate-fade-in-up:nth-child(1) { animation-delay: 0.1s; }
+  .animate-fade-in-up:nth-child(2) { animation-delay: 0.2s; }
+  .animate-fade-in-up:nth-child(3) { animation-delay: 0.3s; }
+  .animate-fade-in-up:nth-child(4) { animation-delay: 0.4s; }
+
+  .feature-card {
+    transition: all 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-8px);
+  }
+
+  .feature-card:hover svg {
+    animation: float 2s ease-in-out infinite;
+  }
+</style>
+
+<div class="bg-amber-50 min-h-screen">
+  <!-- Hero Section -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+    <div class="text-center mb-12 sm:mb-16 animate-fade-in-up">
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-green-700 mb-4 sm:mb-6">Our Story</h1>
+      <p class="text-base sm:text-lg text-gray-700 max-w-2xl mx-auto">
+        Born from three young minds in Nepal who believed cleaning could be smarter, safer, and more sustainable.
+      </p>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-16 sm:mb-20">
+      <!-- Left Content -->
+      <div class="order-2 lg:order-1 animate-slide-in-left">
+        <h2 class="text-3xl sm:text-4xl font-bold text-green-700 mb-6">From Dorm Room to Your Home</h2>
+        
+        <p class="text-gray-700 text-base sm:text-lg leading-relaxed mb-4">
+          It started with a simple question: Why do floor cleaners have to be 90% water? Three +2 students in Itahari – Rishab, Sudha, and Shreya – were frustrated with heavy liquid cleaners that cost more to ship than to make, and often contained harsh chemicals.
+        </p>
+        
+        <p class="text-gray-700 text-base sm:text-lg leading-relaxed mb-6">
+          After months of research and testing with their academic knowledge combined with modern science, they created Nepal's first powder floor cleaner. Today, Saflora represents the spirit of young Nepal – innovative, sustainable, and deeply rooted in care for community.
+        </p>
+
+        <!-- Features List -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+          <div class="flex items-start gap-3 animate-fade-in-up">
+            <svg class="w-6 h-6 text-green-600 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+            <span class="text-gray-700 text-sm sm:text-base">Powder floor cleaner in Nepal</span>
+          </div>
+          <div class="flex items-start gap-3 animate-fade-in-up">
+            <svg class="w-6 h-6 text-green-600 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+            <span class="text-gray-700 text-sm sm:text-base">100% biodegradable ingredients</span>
+          </div>
+          <div class="flex items-start gap-3 animate-fade-in-up">
+            <svg class="w-6 h-6 text-green-600 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+            <span class="text-gray-700 text-sm sm:text-base">50% less packaging waste</span>
+          </div>
+          <div class="flex items-start gap-3 animate-fade-in-up">
+            <svg class="w-6 h-6 text-green-600 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+            <span class="text-gray-700 text-sm sm:text-base">Community of 500+ users</span>
+          </div>
+        </div>
+
+        <!-- CTA Button -->
+        <a href='{% url "home:products_list" %}' class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105 hover:shadow-lg">
+          See Our Product
+        </a>
+      </div>
+
+      <!-- Right Image -->
+      <div class="order-1 lg:order-2 relative animate-slide-in-right">
+        <img src="{% static 'about_us/gang.jpeg' %}" alt="Saflora Team" class="w-full rounded-2xl shadow-lg object-cover transform transition duration-500 hover:scale-105">
+        <!-- Founded Badge -->
+        <div class="absolute bottom-4 right-4 bg-yellow-400 text-gray-900 px-4 py-3 rounded-lg font-bold text-center shadow-lg animate-float">
+          <div class="text-xl sm:text-2xl">2025</div>
+          <div class="text-xs sm:text-sm">Founded in Nepal</div>
+        </div>
+      </div>
+    </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+      <!-- Card 1 -->
+      <div class="bg-white rounded-xl p-6 sm:p-8 shadow-md feature-card animate-scale-in" style="animation-delay: 0.1s;">
+        <div class="flex justify-center mb-4">
+          <!-- Replaced SVG with Font Awesome leaf icon -->
+          <i class="fas fa-leaf text-green-600 text-5xl sm:text-6xl"></i>
+        </div>
+        <h3 class="text-xl sm:text-2xl font-bold text-green-700 text-center mb-3">Eco-Friendly</h3>
+        <p class="text-gray-600 text-center text-sm sm:text-base">Sustainable ingredients and packaging for a cleaner planet</p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="bg-white rounded-xl p-6 sm:p-8 shadow-md feature-card animate-scale-in" style="animation-delay: 0.2s;">
+        <div class="flex justify-center mb-4">
+          <!-- Replaced SVG with Font Awesome house icon -->
+          <i class="fas fa-house text-green-600 text-5xl sm:text-6xl"></i>
+        </div>
+        <h3 class="text-xl sm:text-2xl font-bold text-green-700 text-center mb-3">Made in Nepal</h3>
+        <p class="text-gray-600 text-center text-sm sm:text-base">Proudly created by young Nepali entrepreneurs</p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="bg-white rounded-xl p-6 sm:p-8 shadow-md feature-card animate-scale-in" style="animation-delay: 0.3s;">
+        <div class="flex justify-center mb-4">
+          <!-- Replaced SVG with Font Awesome heart icon -->
+          <i class="fas fa-heart text-green-600 text-5xl sm:text-6xl"></i>
+        </div>
+        <h3 class="text-xl sm:text-2xl font-bold text-green-700 text-center mb-3">Family Safe</h3>
+        <p class="text-gray-600 text-center text-sm sm:text-base">Non-toxic formula safe for children and pets</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mission & Vision Section -->
+  <div class="bg-white mt-16 sm:mt-20 py-12 sm:py-16 lg:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+        <!-- Mission -->
+        <div class="animate-slide-in-left">
+          <h3 class="text-2xl sm:text-3xl font-bold text-green-700 mb-4">Our Mission</h3>
+          <p class="text-gray-700 text-base sm:text-lg leading-relaxed">
+            To provide high-quality, sustainable, and ethically sourced products that bring joy and value to our customers' lives.
+          </p>
+        </div>
+        <!-- Vision -->
+        <div class="animate-slide-in-right">
+          <h3 class="text-2xl sm:text-3xl font-bold text-green-700 mb-4">Our Vision</h3>
+          <p class="text-gray-700 text-base sm:text-lg leading-relaxed">
+            To be a leading brand in sustainable cleaning solutions known for our commitment to excellence, innovation, and customer satisfaction.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Team Section -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+    <h2 class="text-3xl sm:text-4xl font-bold text-green-700 text-center mb-12 sm:mb-16 animate-fade-in-up">Meet Our Team</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
+      <!-- Team Member 1 -->
+      <div class="text-center animate-scale-in" style="animation-delay: 0.1s;">
+        <img src="{% static 'assets/co_founders/rishab.jpg' %}" alt="Rishab Thapa" class="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover mx-auto mb-4 border-4 border-green-600 shadow-lg transform transition duration-500 hover:scale-110 hover:shadow-2xl">
+        <h3 class="text-xl sm:text-2xl font-bold text-green-700 mb-2">Rishab Thapa</h3>
+        <p class="text-gray-600 text-base sm:text-lg">Co-Founder & CEO</p>
+      </div>
+      <!-- Team Member 2 -->
+      <div class="text-center animate-scale-in" style="animation-delay: 0.2s;">
+        <img src="{% static 'assets/co_founders/sudha.jpg' %}" alt="Sushant Chaudhary" class="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover mx-auto mb-4 border-4 border-green-600 shadow-lg transform transition duration-500 hover:scale-110 hover:shadow-2xl">
+        <h3 class="text-xl sm:text-2xl font-bold text-green-700 mb-2">Shuda Basnet</h3>
+        <p class="text-gray-600 text-base sm:text-lg">Co-Founder & Finance Manager</p>
+      </div>
+      <!-- Team Member 3 -->
+      <div class="text-center animate-scale-in" style="animation-delay: 0.2s;">
+        <img src="{% static 'assets/co_founders/shreya.png' %}" alt="Sushant Chaudhary" class="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover mx-auto mb-4 border-4 border-green-600 shadow-lg transform transition duration-500 hover:scale-110 hover:shadow-2xl">
+        <h3 class="text-xl sm:text-2xl font-bold text-green-700 mb-2">Shreya Rai</h3>
+        <p class="text-gray-600 text-base sm:text-lg">Co-Founder &  Marketing/content creater</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observe all animated elements
+    document.querySelectorAll('[class*="animate-"]').forEach(el => {
+      observer.observe(el);
+    });
+  });
+</script>
+
+{% endblock content %}
