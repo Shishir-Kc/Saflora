@@ -22,31 +22,44 @@ def payment(request):
 
 def khalti_payment(request,id,cart_id):
   if request.method == "POST":
-     print("POST")
-     print(request.POST.get('quantity'))
-     product = Saflora_Product.objects.get(id=id)
-     cart = Cart.objects.create(product=product)
-     try:
-      user = Saflora_user.objects.get(username=request.user)
-     except:
-        messages.error(request,"User Does not exists !")
-        return redirect("payment:khalti_payment") # need to add proper payment page !
+     user = Saflora_user.objects.get(username=request.user)
+     full_name = user.get_full_name()
+     email = user.email
+     address= user.address
+     contact_number = user.contact
 
-     amount = 10
+     if not request.user.is_authenticated:
+       try: 
+        full_name = request.POST.get('full_name')
+        contact_number = request.POST.get('contact')
+        email = request.POST.get('email')
+        address = request.POST.get('address')
+        city = request.POST.get("city")
+        provience = request.POST.get('state')
+        postal_code = request.POST.get('postal_code')
+        user = Saflora_user.objects.get(username="AnonymousUser")
+
+       except:
+        messages.error(request,'please provide full information !')
+        return redirect("payment:Khalti_payment")
+     
+     cart = Cart.objects.get(id=cart_id)
+     product = Saflora_Product.objects.get(id=id)
+     amount = cart.total_price
+     payment = Payment_Records.objects.create(user=user,product=product,total_amount=amount)
      amount = (int(amount)*100) # converting rupeese in paisa 
-     print(amount)
      url = f'{os.environ.get('KHALTI_BASE_URL')}{os.environ.get("KHALTI_PAYMENT_URL")}'
 
      payload = json.dumps({
      "return_url": request.build_absolute_uri(reverse('payment:validate_khalti_payment',kwargs={'cart_id':cart_id})),
      "website_url": request.build_absolute_uri('/'),
      "amount": amount,
-     "purchase_order_id": str(cart.id),
+     "purchase_order_id": str(payment.id),
      "purchase_order_name": product.name,
      "customer_info": {
-     "name": f"{user.first_name} {user.last_name}",
-     "email": f"{user.email}",
-     "phone": f"{user.contact}"
+     "name": full_name,
+     "email": email,
+     "phone": contact_number
      }
         })
      headers = {
@@ -55,19 +68,45 @@ def khalti_payment(request,id,cart_id):
      }
      try:
          response = requests.request("POST", url, headers=headers, data=payload)
-         amount = float(amount)/100 # converting paisa back to rupese 
-         payment = Payment_Records.objects.create(user=user,pidx=response.json()['pidx'],total_amount=amount,product=product)
+         payment.pidx=response.json()['pidx']
          payment.status = payment.Status.INITIATED
          payment.provider = payment.Payment_Provider.KHALTI
          payment.save() 
          print("PAYMENT SAVED")        
          return_url = (response.json()['payment_url'])
      except KeyError:
-         return redirect("home:in_home")
+         messages.error(request,'Some thing went wrong ! ')
+         return redirect("home:products_list")
 
      return redirect (return_url)
   else:
-      return render (request,'payment/summary.html') 
+      product = Saflora_Product.objects.get(id=id)
+      cart = Cart.objects.get(id=cart_id)
+      if cart.product.discount_price:
+         sub_total = int(cart.product.discount_price)*int(cart.quantity)
+      else:
+        sub_total = int(cart.product.price)*int(cart.quantity)    
+
+      try:
+         user = Saflora_user.objects.get(id=request.user.id)
+      except:
+        user = "None"  
+      
+      variant= cart.product.variant.all()
+      for i in variant:
+         variant = i
+
+      cart.total_price = sub_total + 30
+      cart.save()
+
+      context = { 
+         'cart':cart,
+         'user':user,
+         'sub_total':sub_total,
+         'variant':variant,
+         'Total':sub_total + 30
+      }
+      return render (request,'payment/summary.html',context) 
 
 def validate_khalti_payment(request,cart_id):
    if request.method  != "POST":  
@@ -111,29 +150,30 @@ def validate_khalti_payment(request,cart_id):
            else:
             status = Payment_Records.Status.FAILED
             messages.error(request,'Invalid Payment Session')
-            return redirect("home:in_home")
+            return redirect("home:products_list")
            
            payment_record.service_provider_status = status
            payment_record.transaction_id = response['transaction_id']
            payment_record.fee = float(response['fee'])/100
            payment_record.status = Payment_Records.Status.COMPLETED
            print(f"Fee:{response['fee']}")
+           cart.paid_price = (float(recived_amount)/100) + float(response['fee'])/100
            cart.save()
            payment_record.save()
 
        else:
             messages.error(request,"Missguided payment !")
-            return redirect('home:in_home') 
+            return redirect('home:products_list') 
     except:
        messages.error(request,"Payment Does not exist")
-       return render("home:in_home")
+       return render("home:products_list")
     
-    print(response)
-    return redirect("home:in_home") # it is just for teting purpose !
+    messages.success(request,"payment recived ! , Please wait for our response")
+    return redirect("home:products_list") # it is just for teting purpose !
 """
 
  what we can do next is runa background process to delete unsucessful transaction ? 
-
+ 
 
 """
 # next we need to integrate esewa !
