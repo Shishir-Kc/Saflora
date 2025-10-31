@@ -73,6 +73,171 @@
         width: 20px;
         height: 20px;
       }
+      
+      /* Modal styles for popups */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
+      .modal.show {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        background-color: white;
+        padding: 30px;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        animation: slideUp 0.3s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+        font-size: 14px;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        font-family: inherit;
+        transition: border-color 0.3s;
+        box-sizing: border-box;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #2d6a4f;
+        box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .btn-primary {
+        flex: 1;
+        padding: 10px 16px;
+        background-color: #2d6a4f;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 14px;
+      }
+
+      .btn-primary:hover {
+        background-color: #1f4d36;
+      }
+
+      .btn-secondary {
+        flex: 1;
+        padding: 10px 16px;
+        background-color: #f0f0f0;
+        color: #333;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 14px;
+      }
+
+      .btn-secondary:hover {
+        background-color: #e8e8e8;
+      }
+
+      .btn-danger {
+        flex: 1;
+        padding: 10px 16px;
+        background-color: #fee;
+        color: #c33;
+        border: 1px solid #fcc;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 14px;
+      }
+
+      .btn-danger:hover {
+        background-color: #fdd;
+        border-color: #c33;
+      }
+
+      .modal-header {
+        font-size: 20px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .close-btn {
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        color: #999;
+        cursor: pointer;
+        border: none;
+        background: none;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .close-btn:hover {
+        color: #333;
+      }
     </style>
 {% endblock extra_css %}
 {% block content %}
@@ -87,7 +252,11 @@
               <h2 class="text-xl font-bold text-gray-900">
                 Personal Information
               </h2>
+              <!-- onclick now opens personal modal -->
               <button
+                id="editPersonalBtn"
+                type="button"
+                onclick="openPersonalModal()"
                 class="flex items-center gap-2 bg-gray-100 text-gray-700 px-4 py-2 rounded-md text-sm font-semibold hover:bg-gray-200"
               >
                 <i class="fas fa-pen text-xs"></i>
@@ -102,14 +271,12 @@
                 <p class="md:col-span-2 font-semibold text-gray-800">
                   {{user.get_full_name}}
                 </p>
-                <!-- {{ user.get_full_name }} -->
               </div>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                 <p class="text-gray-500">Email Address</p>
                 <p class="md:col-span-2 font-semibold text-gray-800">
                   {{user.email}}
                 </p>
-                <!-- {{ user.email }} -->
               </div>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                 <p class="text-gray-500">Phone Number</p>
@@ -131,23 +298,19 @@
               <!-- Address Item 1 -->
               <div class="flex justify-between items-center border-t pt-6">
                 <div>
-                  <h3 class="font-semibold text-gray-800">Home</h3>
-                  <!-- {{ address.type }} -->
+                  <h3 class="font-semibold text-gray-800">{{user.address_type|default:"home"}} </h3>
                   <p class="text-gray-600 mt-1">
                    {{user.address}}
                   </p>
-                  <!-- {{ address.full_address }} -->
                 </div>
+                <!-- buttons now open modal or delete via form submission -->
                 <div class="flex items-center space-x-2">
                   <button
+                    type="button"
+                    onclick="openAddressModal()"
                     class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-md hover:bg-gray-200"
                   >
                     <i class="fas fa-pen text-gray-600 text-sm"></i>
-                  </button>
-                  <button
-                    class="w-8 h-8 flex items-center justify-center bg-red-50 rounded-md hover:bg-red-100"
-                  >
-                    <i class="fas fa-trash text-red-500 text-sm"></i>
                   </button>
                 </div>
               </div>
@@ -158,4 +321,157 @@
         </div>
       </main>
     </div>
+
+    <!-- Personal Information Edit Modal -->
+    <div id="personalModal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <div class="modal-header">Edit Personal Information</div>
+          <button type="button" class="close-btn" onclick="closePersonalModal()">&times;</button>
+        </div>
+        <!-- Form now submits directly to Django without JavaScript interception -->
+        <form id="personalForm" method="POST" action='{% url "home:update_profile" %}'>
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input 
+              type="text" 
+              id="firstName" 
+              name="first_name" 
+              value="{{user.first_name}}" 
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input 
+              type="text" 
+              id="lastName" 
+              name="last_name" 
+              value="{{user.last_name}}" 
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              value="{{user.email}}" 
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input 
+              type="tel" 
+              id="phone" 
+              name="contact" 
+              value="{{user.contact}}" 
+              required
+            />
+          </div>
+          <div class="modal-actions">
+            <button 
+              type="button" 
+              class="btn-secondary" 
+              onclick="closePersonalModal()"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              class="btn-primary"
+            >
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Address Edit Modal -->
+    <div id="addressModal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <div class="modal-header">Edit Address</div>
+          <button type="button" class="close-btn" onclick="closeAddressModal()">&times;</button>
+        </div>
+        <!-- Form now submits directly to Django without JavaScript interception -->
+        <form id="addressForm" method="POST" action='{% url "home:update_address" %}'>
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="addressType">Address Type</label>
+            <input 
+              type="text" 
+              id="addressType" 
+              name="address_type" 
+              value='{{user.address_type|default:"home"}}' 
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="address">Full Address</label>
+            <textarea 
+              id="address" 
+              name="address" 
+              rows="3" 
+              required
+            >{{user.address}}</textarea>
+          </div>
+          <div class="modal-actions">
+
+            
+            <button 
+              type="button" 
+              class="btn-secondary" 
+              onclick="closeAddressModal()"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              class="btn-primary"
+            >
+              Save Address
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Removed all JavaScript fetch calls - only modal show/hide functionality remains -->
+    <script>
+      // Personal Information Modal Functions
+      function openPersonalModal() {
+        document.getElementById('personalModal').classList.add('show');
+      }
+
+      function closePersonalModal() {
+        document.getElementById('personalModal').classList.remove('show');
+      }
+
+      // Address Modal Functions
+      function openAddressModal() {
+        document.getElementById('addressModal').classList.add('show');
+      }
+
+      function closeAddressModal() {
+        document.getElementById('addressModal').classList.remove('show');
+      }
+
+      // Close modal when clicking outside of it
+      window.onclick = function(event) {
+        const personalModal = document.getElementById('personalModal');
+        const addressModal = document.getElementById('addressModal');
+        
+        if (event.target === personalModal) {
+          closePersonalModal();
+        }
+        if (event.target === addressModal) {
+          closeAddressModal();
+        }
+      }
+    </script>
 {% endblock content %}
