@@ -1,338 +1,681 @@
-
 {% extends "Home/base/navbar.html" %}
 {% block title %} Check-Out{% endblock title %}
-{% block content %} 
 {% load static %}
-{% comment %} {% load static tailwind_tags %}
-{% tailwind_css %} {% endcomment %}
+{% block extra_css %}
+<link
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+  rel="stylesheet"
+/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
+<style>
+  :root {
+    --primary: #2d6a4f;
+    --primary-dark: #1b4332;
+    --primary-light: #e8f5e9;
+    --neutral-bg: #f9f9f9;
+    --neutral-border: #eee;
+    --text-primary: #333;
+    --text-secondary: #666;
+  }
+  
+  body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background-color: var(--neutral-bg);
+    color: var(--text-primary);
+  }
 
-<head>
-  <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
-      rel="stylesheet"
+  .checkout-container {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 2rem auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+  }
+
+  .product-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    background: #f8f8f8;
+    border-radius: 12px;
+    border: 1px solid var(--neutral-border);
+    padding: 1rem;
+  }
+
+  .product-name {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .product-price {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+  }
+
+  .product-description {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .purchase-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .form-section-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--neutral-border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Fragrance selector with Tailwind-inspired styling */
+  .fragrance-selector {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .fragrance-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 0.75rem;
+    border: 2px solid var(--neutral-border);
+    background-color: white;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .fragrance-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .fragrance-btn.active {
+    background-color: var(--primary-light);
+    border-color: var(--primary);
+    color: var(--primary-dark);
+    box-shadow: 0 2px 4px rgba(45, 106, 79, 0.1);
+  }
+
+  .quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .quantity-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: 300;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .quantity-btn:hover {
+    background-color: #eee;
+  }
+
+  #quantity-input {
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .total-price-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 1rem;
+    background: var(--primary-light);
+    border-radius: 8px;
+    margin-top: 0.5rem;
+  }
+
+  #total-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .payment-options .payment-option {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border: 2px solid var(--neutral-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.3s, background-color 0.3s;
+    margin-bottom: 1rem;
+  }
+
+  .payment-options .payment-option:hover {
+    background-color: #f6f9f6;
+  }
+
+  .payment-options .payment-option.selected {
+    border-color: var(--primary);
+    background-color: var(--primary-light);
+  }
+
+  .payment-option input[type="radio"] {
+    display: none;
+  }
+
+  .payment-option-details {
+    margin-left: 1rem;
+  }
+
+  .payment-option-details .name {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .payment-option img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+
+  .buy-now-btn,
+  .add-to-cart-btn {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    text-decoration: none;
+    border: none;
+  }
+
+  .add-to-cart-btn {
+    background: white;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+  }
+
+  .add-to-cart-btn:hover {
+    background: var(--primary-light);
+    transform: translateY(-2px);
+  }
+
+  .buy-now-btn {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+  }
+
+  .buy-now-btn:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 12px rgba(45, 106, 79, 0.3);
+  }
+
+  .cart-summary {
+    background-color: #f6f9f6;
+    border: 1px solid var(--primary-light);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary);
+    transition: all 0.3s ease;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    margin-top: 1rem;
+  }
+
+  .cart-summary.visible {
+    opacity: 1;
+    max-height: 100px;
+  }
+
+  .toast-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary-dark);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s, bottom 0.3s;
+  }
+
+  .toast-notification.show {
+    opacity: 1;
+    visibility: visible;
+    bottom: 30px;
+  }
+
+  @media (max-width: 992px) {
+    .checkout-container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .checkout-container {
+      padding: 1rem;
+    }
+
+    .product-name {
+      font-size: 1.5rem;
+    }
+
+    .fragrance-selector {
+      flex-direction: column;
+    }
+
+    .fragrance-btn {
+      min-width: auto;
+    }
+  }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+{% load static %}
+
+<div class="checkout-container">
+  <!-- Left Side: Product Details -->
+  <div>
+    <img
+      src="{% if product.image %}{{product.image.url}}{% endif %}"
+      alt="{{product.name}}"
+      class="product-image"
+      id="buy-product-image"
     />
-<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
-<link rel="stylesheet" href="{% static 'css/check_out/check_out.css' %}">
-</head>
-    
-<div class="container">
-
-      <!-- Main Content -->
-      <main class="main-content">
-        <div class="checkout-container">
-          <!-- Left Side: Product Details -->
-          <div class="product-details-section">
-            <img
-              src="{% if product.image %} {{product.image.url}}{% endif %}"
-              alt="Product Image"
-              class="product-image"
-              id="buy-product-image"
-            />
-            <h1 class="product-name" id="buy-product-name">{{product.name}}</h1>
-            <div class="product-price" id="buy-product-price"> NPR {% if product.discount_price %} {{product.discount_price}} {% else %} {{product.price}} {% endif %}/Unit</div>
-            <p class="product-description" id="buy-product-description">
-              {{product.description}}
-            </p>
-          </div>
-
-          <!-- Right Side: Purchase Form -->
-          <form class="purchase-form" onsubmit="return false;">
-            <!-- Fragrance -->
-            <div>
-              <h3 class="form-section-title">1. Select Fragrance</h3>
-              <div class="fragrance-selector">
-                <button
-                  type="button"
-                  class="fragrance-btn"
-                  data-fragrance="lemon"
-                >
-                  <i class="fas fa-leaf"></i> Lemon
-                </button>
-                <button
-                  type="button"
-                  class="fragrance-btn"
-                  data-fragrance="jasmine"
-                >
-                  <i class="fas fa-spa"></i> Jasmine
-                </button>
-              </div>
-            </div>
-
-            <!-- Quantity -->
-            <div>
-              <h3 class="form-section-title">2. Choose Quantity</h3>
-              <div class="quantity-selector">
-                <button type="button" class="quantity-btn" id="decrease-qty">
-                  -
-                </button>
-                <input id="quantity-input" value="1" min="1" readonly />
-                <button type="button" class="quantity-btn" id="increase-qty">
-                  +
-                </button>
-              </div>
-            </div>
-
-            <!-- Total Price -->
-            <div class="total-price-section">
-              <span>Item Total:</span>
-              <span id="total-price">NPR 0</span>
-            </div>
-
-            <!-- Add to cart and cart summary -->
-            <div>
-              <button
-                type="button"
-                class="add-to-cart-btn"
-                id="add-to-cart-btn"
-              >
-                <i class="fas fa-cart-plus"></i> Add to Cart
-              </button>
-              <div class="cart-summary" id="cart-summary"></div>
-            </div>
-
-            <!-- Payment Method -->
-            <div>
-              <h3 class="form-section-title">3. Payment Method</h3>
-              <div class="payment-options">
-                <label class="payment-option" id="khalti-option">
-                  <input
-                    type="radio"
-                    name="payment_method"
-                    value="khalti"
-                    checked
-                  />
-                  <img src="{% static 'assets/icons/khalti.png' %}" alt="Khalti" />
-                  <div class="payment-option-details">
-                    <span class="name">Khalti Wallet</span>
-                  </div>
-                </label>
-                <label class="payment-option" id="cod-option">
-                  <input type="radio" name="payment_method" value="cod" />
-                  <img src="{% static 'assets/icons/COD.png' %}" alt="Cash on Delivery" />
-                  <div class="payment-option-details">
-                    <span class="name">Cash on Delivery</span>
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            <button type="button" class="buy-now-btn" id="confirm-purchase-btn">
-              <i class="fas fa-lock"></i> Confirm Purchase
-            </button>
-          </form>
-        </div>
-      </main>
+    <h1 class="product-name" id="buy-product-name">{{product.name}}</h1>
+    <div class="product-price" id="buy-product-price">
+      NPR {% if product.discount_price %}{{product.discount_price}}{% else %}{{product.price}}{% endif %}/Unit
     </div>
+    <p class="product-description" id="buy-product-description">
+      {{product.description}}
+    </p>
+  </div>
 
-    <!-- Toast Notification Element -->
-    <div id="toast" class="toast-notification">Item added to cart!</div>
+<!-- Change the form tag -->
+<form class="purchase-form" method="POST" action>
+  {% csrf_token %}
+  
+  <!-- Hidden fields to store selected values -->
+  <input type="hidden" name="product_id" id="selected-product-id" value="{{product.id}}">
+  <input type="hidden" name="quantity" id="selected-quantity" value="1">
+  
+  <!-- Fragrance selector -->
+  <div>
+    <h3 class="form-section-title">1. Select Fragrance</h3>
+    <div class="fragrance-selector" id="fragrance-container">
+      {% for prod in products %}
+      <button
+        type="button"
+        class="fragrance-btn {% if forloop.first %}active{% endif %}"
+        data-product-id="{{prod.id}}"
+        data-fragrance="{{prod.fragnence|lower}}"
+        data-name="{{prod.name}}"
+        data-price="{% if prod.discount_price %}{{prod.discount_price}}{% else %}{{prod.price}}{% endif %}"
+        data-image="{{prod.image.url}}"
+        data-description="{{prod.description}}"
+        data-stock="{{prod.stock}}"
+      >
+        <i class="fas fa-{% if 'lemon' in prod.fragnence|lower %}leaf{% else %}spa{% endif %}"></i>
+        {{prod.fragnence|title}}
+      </button>
+      {% endfor %}
+    </div>
+  </div>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        // --- 1. PRODUCT DATABASE ---
-        const productDatabase = {
-          powder: {
-            name: "Powdered Floor Cleaner",
-            fragrances: {
-              lemon: {
-                price: 100,
-                image: "img/lemon.jpg",
-                description:
-                  "Saflora’s Lemon Fragrance Powder Floor Cleaner combines powerful cleaning performance with the refreshing scent of lemon. Its unique powder formula removes dirt, grease, and stains effectively, leaving your floors spotless and bright. Lightweight, eco-friendly, and long-lasting, it’s the perfect choice for everyday cleaning.   ",
-              },
-              jasmine: {
-                price: 100,
-                image: "img/jasmine.jpg",
-                description:
-                  "Infused with the soothing aroma of jasmine, Saflora’s Jasmine Fragrance Powder Floor Cleaner keeps your home smelling pleasant while ensuring a hygienic, sparkling clean. Its powder-based formula makes it lightweight, cost-effective, and sustainable — a perfect choice for households that value freshness and purity.",
-              },
-            },
-          },
-          liquid: {
-            name: "Liquid Floor Cleaner",
-            fragrances: {
-              lemon: {
-                price: 100,
-                image: "img/liqiud.jpg",
-                description:
-                  "Saflora’s Lemon Liquid Floor Cleaner delivers a quick, streak-free shine and a burst of lemon freshness that keeps your home smelling clean all day. Its powerful formula removes tough stains and kills germs, ensuring both cleanliness and hygiene in every swipe.",
-              },
-              jasmine: {
-                price: 100,
-                image: "img/liquid.png",
-                description:
-                  "Enjoy the luxurious scent of jasmine while keeping your floors spotless with Saflora’s Jasmine Liquid Floor Cleaner. Its advanced cleaning agents remove dust, dirt, and bacteria, leaving behind a lingering floral fragrance that transforms your space into a soothing haven.",
-              },
-            },
-          },
+  <!-- Quantity -->
+  <div>
+    <h3 class="form-section-title">2. Choose Quantity</h3>
+    <div class="quantity-selector">
+      <button type="button" class="quantity-btn" id="decrease-qty">−</button>
+      <input id="quantity-input" name="quantity_display" value="1" min="1" readonly />
+      <button type="button" class="quantity-btn" id="increase-qty">+</button>
+    </div>
+  </div>
+  
+  <!-- Variant -->
+  <div>
+<h3 class="form-section-title">3. Choose Variant </h3>
+<div class="variant-selector">
+  <select id="variant-select" name="variant">
+    
+    {% if item.item_name == 'Liquid Floor Cleaner' %}
+    <option value="1L">1L</option>
+    {% else %}
+    <option value="50G">50G</option>
+
+    {% endif %}
+      
+
+  </select>
+</div>
+
+
+  <!-- Total Price -->
+  <div class="total-price-section">
+    <span>Item Total:</span>
+    <span id="total-price">NPR 0</span>
+  </div>
+
+  <!-- Payment Method -->
+  <div>
+    <h3 class="form-section-title">4. Payment Method</h3>
+    <div class="payment-options">
+      <label class="payment-option selected" id="khalti-option">
+        <input type="radio" name="payment_method" value="khalti" checked />
+        <img src="{% static 'assets/icons/khalti.png' %}" alt="Khalti" />
+        <div class="payment-option-details">
+          <span class="name">Khalti Wallet</span>
+        </div>
+      </label>
+      <label class="payment-option" id="cod-option">
+        <input type="radio" name="payment_method" value="cod" />
+        <img src="{% static 'assets/icons/COD.png' %}" alt="Cash on Delivery" />
+        <div class="payment-option-details">
+          <span class="name">Cash on Delivery</span>
+        </div>
+      </label>
+    </div>
+  </div>
+
+  <!-- Change type to "submit" -->
+  <button type="submit" class="buy-now-btn" id="confirm-purchase-btn">
+    <i class="fas fa-lock"></i> Confirm Purchase
+  </button>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    let currentProduct = null;
+
+    const elements = {
+      image: document.getElementById("buy-product-image"),
+      name: document.getElementById("buy-product-name"),
+      price: document.getElementById("buy-product-price"),
+      description: document.getElementById("buy-product-description"),
+      quantityInput: document.getElementById("quantity-input"),
+      selectedQuantity: document.getElementById("selected-quantity"),
+      selectedProductId: document.getElementById("selected-product-id"),
+      decreaseBtn: document.getElementById("decrease-qty"),
+      increaseBtn: document.getElementById("increase-qty"),
+      totalPrice: document.getElementById("total-price"),
+      fragranceBtns: document.querySelectorAll(".fragrance-btn"),
+    };
+
+    function initializeProduct() {
+      const firstBtn = elements.fragranceBtns[0];
+      if (firstBtn) {
+        currentProduct = {
+          id: firstBtn.dataset.productId,
+          name: firstBtn.dataset.name,
+          price: parseFloat(firstBtn.dataset.price),
+          image: firstBtn.dataset.image,
+          description: firstBtn.dataset.description,
+          stock: parseInt(firstBtn.dataset.stock),
+          fragrance: firstBtn.dataset.fragrance,
         };
+        elements.selectedProductId.value = currentProduct.id;
+        updateDisplay();
+      }
+    }
 
-        // --- 2. GLOBAL STATE ---
-        let cart = [];
-        let currentProductType = null;
-        let selectedFragrance = "lemon"; // Default fragrance
+    function updateDisplay() {
+      if (!currentProduct) return;
 
-        // --- 3. DOM ELEMENTS ---
-        const urlParams = new URLSearchParams(window.location.search);
-        const productId = urlParams.get("product");
-        currentProductType = productDatabase[productId];
+      elements.image.src = currentProduct.image;
+      elements.name.textContent = currentProduct.name;
+      elements.price.textContent = `NPR ${currentProduct.price}/Unit`;
+      elements.description.textContent = currentProduct.description;
 
-        const elements = {
-          image: document.getElementById("buy-product-image"),
-          name: document.getElementById("buy-product-name"),
-          price: document.getElementById("buy-product-price"),
-          description: document.getElementById("buy-product-description"),
-          quantityInput: document.getElementById("quantity-input"),
-          decreaseBtn: document.getElementById("decrease-qty"),
-          increaseBtn: document.getElementById("increase-qty"),
-          totalPrice: document.getElementById("total-price"),
-          fragranceBtns: document.querySelectorAll(".fragrance-btn"),
-          addToCartBtn: document.getElementById("add-to-cart-btn"),
-          confirmBtn: document.getElementById("confirm-purchase-btn"),
-          cartSummary: document.getElementById("cart-summary"),
-          toast: document.getElementById("toast"),
-          paymentOptions: document.querySelectorAll(".payment-option"),
+      elements.fragranceBtns.forEach((btn) => {
+        btn.classList.toggle(
+          "active",
+          btn.dataset.productId === currentProduct.id
+        );
+      });
+
+      updateTotalPrice();
+    }
+
+    function updateTotalPrice() {
+      const quantity = parseInt(elements.quantityInput.value);
+      const total = currentProduct.price * quantity;
+      elements.totalPrice.textContent = `NPR ${total}`;
+      // Update hidden field
+      elements.selectedQuantity.value = quantity;
+    }
+
+    // Event Listeners
+    elements.fragranceBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        currentProduct = {
+          id: btn.dataset.productId,
+          name: btn.dataset.name,
+          price: parseFloat(btn.dataset.price),
+          image: btn.dataset.image,
+          description: btn.dataset.description,
+          stock: parseInt(btn.dataset.stock),
+          fragrance: btn.dataset.fragrance,
         };
-
-        // --- 4. CORE FUNCTIONS ---
-        function updateDisplay() {
-          if (!currentProductType) return;
-          const fragranceData =
-            currentProductType.fragrances[selectedFragrance];
-
-          elements.image.src = fragranceData.image;
-          elements.name.textContent = `${currentProductType.name} (${
-            selectedFragrance.charAt(0).toUpperCase() +
-            selectedFragrance.slice(1)
-          })`;
-          elements.description.textContent = fragranceData.description;
-
-          elements.fragranceBtns.forEach((btn) => {
-            btn.classList.toggle(
-              "active",
-              btn.dataset.fragrance === selectedFragrance
-            );
-          });
-
-          updateTotalPrice();
-        }
-
-        function updateTotalPrice() {
-          if (!currentProductType) return;
-          const quantity = parseInt(elements.quantityInput.value);
-          const unitPrice =
-            currentProductType.fragrances[selectedFragrance].price;
-          const total = unitPrice * quantity;
-          elements.price.textContent = `NPR ${unitPrice} / unit`;
-          elements.totalPrice.textContent = `NPR ${total}`;
-        }
-
-        function updateCartSummary() {
-          if (cart.length > 0) {
-            const totalItems = cart.reduce(
-              (sum, item) => sum + item.quantity,
-              0
-            );
-            const cartTotal = cart.reduce(
-              (sum, item) => sum + item.unitPrice * item.quantity,
-              0
-            );
-            elements.cartSummary.innerHTML = `Your cart has ${totalItems} item(s). <br><strong>Cart Total: NPR ${cartTotal}</strong>`;
-            elements.cartSummary.classList.add("visible");
-          } else {
-            elements.cartSummary.classList.remove("visible");
-          }
-        }
-
-        function showToast(message) {
-          elements.toast.textContent = message;
-          elements.toast.classList.add("show");
-          setTimeout(() => {
-            elements.toast.classList.remove("show");
-          }, 2500);
-        }
-
-        // --- 5. EVENT LISTENERS ---
-
-
-        elements.fragranceBtns.forEach((btn) => {
-          btn.addEventListener("click", () => {
-            selectedFragrance = btn.dataset.fragrance;
-            updateDisplay();
-          });
-        });
-
-        elements.increaseBtn.addEventListener("click", () => {
-          elements.quantityInput.value =
-            parseInt(elements.quantityInput.value) + 1;
-          updateTotalPrice();
-        });
-        elements.decreaseBtn.addEventListener("click", () => {
-          let qty = parseInt(elements.quantityInput.value);
-          if (qty > 1) {
-            elements.quantityInput.value = qty - 1;
-            updateTotalPrice();
-          }
-        });
-
-        elements.addToCartBtn.addEventListener("click", () => {
-          const item = {
-            type: currentProductType.name,
-            fragrance: selectedFragrance,
-            quantity: parseInt(elements.quantityInput.value),
-            unitPrice: currentProductType.fragrances[selectedFragrance].price,
-          };
-          cart.push(item);
-          updateCartSummary();
-          showToast("Item added to cart!");
-          console.log("Cart contents:", cart); // For debugging
-        });
-
-        elements.paymentOptions.forEach((option) => {
-          option.addEventListener("click", () => {
-            elements.paymentOptions.forEach((opt) =>
-              opt.classList.remove("selected")
-            );
-            option.classList.add("selected");
-            option.querySelector('input[type="radio"]').checked = true;
-          });
-        });
-        document.getElementById("khalti-option").classList.add("selected");
-
-        elements.confirmBtn.addEventListener("click", () => {
-          if (cart.length === 0) {
-            showToast("Your cart is empty. Please add an item first.");
-            return;
-          }
-          const selectedPayment = document.querySelector(
-            'input[name="payment_method"]:checked'
-          ).value;
-          const purchaseDetails = {
-            items: cart.map(
-              (item) => `${item.quantity}x ${item.type} (${item.fragrance})`
-            ),
-            paymentMethod: selectedPayment,
-            totalAmount: `NPR ${cart.reduce(
-              (total, item) => total + item.unitPrice * item.quantity,
-              0
-            )}`,
-          };
-
-          alert(
-            `Thank you for your order!\n\n--- ORDER SUMMARY ---\n${JSON.stringify(
-              purchaseDetails,
-              null,
-              2
-            )}\n\nThis data would now be sent to your server.`
-          );
-
-          cart = []; // Clear cart after purchase
-          updateCartSummary();
-        });
-
-        // --- 6. INITIALIZE PAGE ---
+        elements.quantityInput.value = 1;
+        elements.selectedProductId.value = currentProduct.id;
         updateDisplay();
       });
-    </script>
-  </body>
+    });
+
+    elements.increaseBtn.addEventListener("click", () => {
+      elements.quantityInput.value = parseInt(elements.quantityInput.value) + 1;
+      updateTotalPrice();
+    });
+
+    elements.decreaseBtn.addEventListener("click", () => {
+      const qty = parseInt(elements.quantityInput.value);
+      if (qty > 1) {
+        elements.quantityInput.value = qty - 1;
+        updateTotalPrice();
+      }
+    });
+
+    initializeProduct();
+  });
+</script>
+</div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    let cart = [];
+    let currentProduct = null;
+
+    // DOM Elements
+    const elements = {
+      image: document.getElementById("buy-product-image"),
+      name: document.getElementById("buy-product-name"),
+      price: document.getElementById("buy-product-price"),
+      description: document.getElementById("buy-product-description"),
+      quantityInput: document.getElementById("quantity-input"),
+      decreaseBtn: document.getElementById("decrease-qty"),
+      increaseBtn: document.getElementById("increase-qty"),
+      totalPrice: document.getElementById("total-price"),
+      fragranceBtns: document.querySelectorAll(".fragrance-btn"),
+      confirmBtn: document.getElementById("confirm-purchase-btn"),
+      toast: document.getElementById("toast"),
+      paymentOptions: document.querySelectorAll(".payment-option"),
+    };
+
+    function initializeProduct() {
+      const firstBtn = elements.fragranceBtns[0];
+      if (firstBtn) {
+        currentProduct = {
+          id: firstBtn.dataset.productId,
+          name: firstBtn.dataset.name,
+          price: parseFloat(firstBtn.dataset.price),
+          image: firstBtn.dataset.image,
+          description: firstBtn.dataset.description,
+          stock: parseInt(firstBtn.dataset.stock),
+          fragrance: firstBtn.dataset.fragrance,
+        };
+        updateDisplay();
+      }
+    }
+
+    function updateDisplay() {
+      if (!currentProduct) return;
+
+      elements.image.src = currentProduct.image;
+      elements.name.textContent = currentProduct.name;
+      elements.price.textContent = `NPR ${currentProduct.price}/Unit`;
+      elements.description.textContent = currentProduct.description;
+
+      // Highlight active button
+      elements.fragranceBtns.forEach((btn) => {
+        btn.classList.toggle(
+          "active",
+          btn.dataset.productId === currentProduct.id
+        );
+      });
+
+      updateTotalPrice();
+    }
+
+    function updateTotalPrice() {
+      const quantity = parseInt(elements.quantityInput.value);
+      const total = currentProduct.price * quantity;
+      elements.totalPrice.textContent = `NPR ${total}`;
+    }
+
+    function showToast(message) {
+      elements.toast.textContent = message;
+      elements.toast.classList.add("show");
+      setTimeout(() => {
+        elements.toast.classList.remove("show");
+      }, 2500);
+    }
+
+    // Event Listeners
+    elements.fragranceBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        currentProduct = {
+          id: btn.dataset.productId,
+          name: btn.dataset.name,
+          price: parseFloat(btn.dataset.price),
+          image: btn.dataset.image,
+          description: btn.dataset.description,
+          stock: parseInt(btn.dataset.stock),
+          fragrance: btn.dataset.fragrance,
+        };
+        elements.quantityInput.value = 1;
+        updateDisplay();
+      });
+    });
+
+    elements.increaseBtn.addEventListener("click", () => {
+      elements.quantityInput.value =
+        parseInt(elements.quantityInput.value) + 1;
+      updateTotalPrice();
+    });
+
+    elements.decreaseBtn.addEventListener("click", () => {
+      const qty = parseInt(elements.quantityInput.value);
+      if (qty > 1) {
+        elements.quantityInput.value = qty - 1;
+        updateTotalPrice();
+      }
+    });
+
+    elements.paymentOptions.forEach((option) => {
+      option.addEventListener("click", () => {
+        elements.paymentOptions.forEach((opt) =>
+          opt.classList.remove("selected")
+        );
+        option.classList.add("selected");
+        option.querySelector('input[type="radio"]').checked = true;
+      });
+    });
+
+    elements.confirmBtn.addEventListener("click", () => {
+      if (currentProduct.stock <= 0) {
+        showToast("Product is out of stock");
+        return;
+      }
+
+      const item = {
+        id: currentProduct.id,
+        name: currentProduct.name,
+        fragrance: currentProduct.fragrance,
+        quantity: parseInt(elements.quantityInput.value),
+        price: currentProduct.price,
+      };
+
+      cart = [item];
+
+      const selectedPayment = document.querySelector(
+        'input[name="payment_method"]:checked'
+      ).value;
+
+      const purchaseDetails = {
+        items: cart,
+        paymentMethod: selectedPayment,
+        totalAmount: cart.reduce(
+          (total, item) => total + item.price * item.quantity,
+          0
+        ),
+      };
+
+
+      cart = [];
+    });
+
+    // Initialize page with first product
+    initializeProduct();
+  });
+</script>
+
 {% endblock content %}
