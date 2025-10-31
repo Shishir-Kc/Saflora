@@ -353,15 +353,16 @@
 
     <main>
       <!-- Hero Section -->
-      <section id="hero" class="hero">
-        <div class="container">
-          <img src="" alt="Saflora graphics" /><!--TODO:Hero graphics -->
-          <div class="hero-buttons">
-            <a href='{% url "home:products_list" %}'class="btn btn-primary btn-lg">Order Saflora Now</a>
+  <section id="hero" class="hero">
+    <div class="container" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+        <img src="{% static 'assets/images/strtegy.svg' %}" alt="Saflora graphics" />
+        <div class="hero-buttons" style="margin-top: 20px;">
+            <a href='{% url "home:products_list" %}' class="btn btn-primary btn-lg">Order Saflora Now</a>
             <a href='{% url "home:about_us" %}' class="btn btn-secondary btn-lg">Learn More</a>
-          </div>
         </div>
-      </section>
+    </div>
+</section>
+
 
       <!-- Features Section -->
       <section id="features" class="features">
