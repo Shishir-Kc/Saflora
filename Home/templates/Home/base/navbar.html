@@ -16,6 +16,8 @@
     />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+</head>
     <style>
       * {
         margin: 0;
@@ -162,6 +164,129 @@
         transform: rotate(-45deg) translate(7px, -7px);
       }
 
+      /* Modern notification system styling */
+      .notifications-container {
+        position: fixed;
+        top: 90px;
+        right: 20px;
+        z-index: 9999;
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .notification {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 16px;
+        border-radius: 8px;
+        background: white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border-left: 4px solid;
+        animation: slideIn 0.3s ease;
+        min-width: 320px;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideOut {
+        from {
+          transform: translateX(0);
+          opacity: 1;
+        }
+        to {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+      }
+
+      .notification.removing {
+        animation: slideOut 0.3s ease forwards;
+      }
+
+      /* Success notification */
+      .notification.success {
+        border-left-color: #28a745;
+        background-color: #f0f9f4;
+      }
+
+      .notification.success .icon {
+        color: #28a745;
+      }
+
+      /* Error notification */
+      .notification.error {
+        border-left-color: #dc3545;
+        background-color: #fef5f5;
+      }
+
+      .notification.error .icon {
+        color: #dc3545;
+      }
+
+      /* Warning notification */
+      .notification.warning {
+        border-left-color: #ffc107;
+        background-color: #fffbf0;
+      }
+
+      .notification.warning .icon {
+        color: #ffc107;
+      }
+
+      /* Info notification */
+      .notification.info {
+        border-left-color: #17a2b8;
+        background-color: #f0f8fb;
+      }
+
+      .notification.info .icon {
+        color: #17a2b8;
+      }
+
+      .notification .icon {
+        font-size: 20px;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      .notification-content {
+        flex: 1;
+      }
+
+      .notification-message {
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        line-height: 1.4;
+      }
+
+      .notification-close {
+        background: none;
+        border: none;
+        color: #999;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 0;
+        flex-shrink: 0;
+        transition: color 0.2s ease;
+      }
+
+      .notification-close:hover {
+        color: #333;
+      }
+
       .main-content {
         padding: 20px;
         min-height: calc(100vh - 70px);
@@ -210,6 +335,18 @@
         .main-content {
           padding: 15px;
         }
+
+        /* Adjust notifications for mobile */
+        .notifications-container {
+          top: 80px;
+          right: 10px;
+          left: 10px;
+          max-width: none;
+        }
+
+        .notification {
+          min-width: auto;
+        }
       }
 
       @media (max-width: 480px) {
@@ -239,6 +376,34 @@
   </head>
   {% endblock head %}
   <body>
+    
+    <!-- Modern notifications container for Django messages -->
+    <div class="notifications-container" id="notificationsContainer">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="notification {{ message.tags }}" data-notification>
+            <div class="icon">
+              {% if 'error' in message.tags %}
+                <i class="fas fa-exclamation-circle"></i>
+              {% elif 'success' in message.tags %}
+                <i class="fas fa-check-circle"></i>
+              {% elif 'warning' in message.tags %}
+                <i class="fas fa-exclamation-triangle"></i>
+              {% else %}
+                <i class="fas fa-info-circle"></i>
+              {% endif %}
+            </div>
+            <div class="notification-content">
+              <div class="notification-message">{{ message }}</div>
+            </div>
+            <button class="notification-close" onclick="this.parentElement.remove();">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+
     <!-- Modern horizontal navbar -->
     <nav class="navbar">
       <div class="navbar-container">
@@ -293,7 +458,7 @@
           <a href='{% url "home:user_profile" %}' title="Profile">
             <span class="material-icons">person</span>
           </a>
-          <a href="#" title="Cart">
+          <a href='{% url "home:cart" %}' title="Cart">
             <span class="material-icons">shopping_cart</span>
           </a>
         </div>
@@ -331,6 +496,14 @@
             hamburger.classList.remove('active');
             navbarMenu.classList.remove('active');
           }
+        });
+
+        const notifications = document.querySelectorAll('[data-notification]');
+        notifications.forEach(notification => {
+          setTimeout(() => {
+            notification.classList.add('removing');
+            setTimeout(() => notification.remove(), 300);
+          }, 5000);
         });
       });
     </script>
