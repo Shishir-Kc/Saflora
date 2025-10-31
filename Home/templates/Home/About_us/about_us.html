@@ -3,7 +3,7 @@
 
 {% block title %}About Us - Saflora{% endblock title %}
 
-{% block content %}
+{% block extra_css %}
 <style>
   /* Added custom animations for scroll effects and hover interactions */
   @keyframes fadeInUp {
@@ -101,6 +101,9 @@
     animation: float 2s ease-in-out infinite;
   }
 </style>
+{% endblock extra_css %}
+
+{% block content %}
 
 <div class="bg-amber-50 min-h-screen">
   <!-- Hero Section -->
