@@ -39,3 +39,15 @@ class Saflora_Product(models.Model):
         return self.name
     
 
+class Saflora_Base_Product(models.Model):
+    id = models.UUIDField(default=uuid.uuid4,primary_key=True,editable=False)
+    item_name = models.CharField(verbose_name="item_name")
+    item_image = models.ImageField(upload_to='item_image')
+    item_description = models.TextField()
+    items_variants = models.ManyToManyField(Saflora_Product)
+    price = models.FloatField(default=0.0)
+    def __str__(self):
+        return f"{self.item_name}"
+    
+    class Meta:
+        verbose_name = "Saflora item"
