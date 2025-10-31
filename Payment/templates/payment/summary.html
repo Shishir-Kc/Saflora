@@ -1,28 +1,501 @@
-{% load static tailwind_tags %}
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello Tailwind + Django</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Summary</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet"
+  />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    <!-- This loads the compiled Tailwind CSS -->
-    {% tailwind_css %}
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f6f9f6;
+      overflow-x: hidden;
+    }
+
+    /* Modern horizontal navbar styling */
+    .navbar {
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid #e8f5e8;
+    }
+
+    .navbar-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #2d6a4f;
+      font-weight: 700;
+      font-size: 22px;
+      transition: opacity 0.3s ease;
+    }
+
+    .navbar-logo:hover {
+      opacity: 0.8;
+    }
+
+    .navbar-logo img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .navbar-menu {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      list-style: none;
+    }
+
+    .navbar-menu a {
+      text-decoration: none;
+      color: #2d6a4f;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .navbar-menu a:hover {
+      background-color: #e8f5e8;
+      color: #1b4332;
+    }
+
+    .navbar-menu a.active {
+      background-color: #d4edda;
+      color: #1b4332;
+      font-weight: 600;
+    }
+
+    .navbar-menu .material-icons {
+      font-size: 20px;
+    }
+
+    .navbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .navbar-actions a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #f0f0f0;
+      color: #2d6a4f;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 20px;
+    }
+
+    .navbar-actions a:hover {
+      background-color: #e8f5e8;
+      transform: scale(1.05);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background-color: #2d6a4f;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(10px, 10px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -7px);
+    }
+
+    @media (max-width: 768px) {
+      .hamburger {
+        display: flex;
+      }
+
+      .navbar-menu {
+        position: absolute;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        gap: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar-menu.active {
+        max-height: 500px;
+      }
+
+      .navbar-menu a {
+        padding: 14px 20px;
+        border-radius: 0;
+        width: 100%;
+        border-bottom: 1px solid #f0f0f0;
+      }
+
+      .navbar-actions {
+        gap: 8px;
+      }
+
+      .navbar-actions a {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .navbar-container {
+        padding: 0 15px;
+      }
+
+      .navbar-logo {
+        font-size: 18px;
+        gap: 8px;
+      }
+
+      .navbar-logo img {
+        width: 40px;
+        height: 40px;
+      }
+
+      .navbar-menu a {
+        font-size: 13px;
+        padding: 12px 16px;
+      }
+    }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-900 min-h-screen flex flex-col items-center justify-center">
 
-    <h1 class="text-3xl font-bold text-blue-500 mb-6">
-        Hello, Tailwind + Django!
-    </h1>
+<body class="bg-gray-50 text-gray-800">
+  <!-- Integrated navbar from base.html -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="{% url 'home:in_home' %}" class="navbar-logo">
+        <img
+          src="{% static 'assets/images/saflora.png' %}"
+          alt="Saflora Logo"
+        />
+        <span>Saflora</span>
+      </a>
 
-    <form method="POST" class="space-y-4">
+      <button class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="navbar-menu" id="navbarMenu">
+        <a href="{% url 'home:in_home' %}">
+          <li style="display: flex; align-items: center; gap: 8px;">
+            <span class="material-icons">home</span>
+            <span>Home</span>
+          </li>
+        </a>
+        <a href="{% url 'home:about_us' %}">
+          <li style="display: flex; align-items: center; gap: 8px;">
+            <span class="material-icons">info</span>
+            <span>About Us</span>
+          </li>
+        </a>
+        <a href="{% url 'home:products_list' %}">
+          <li style="display: flex; align-items: center; gap: 8px;">
+            <span class="material-icons">shopping_bag</span>
+            <span>Products</span>
+          </li>
+        </a>
+        <a href="{% url 'home:how_to_use' %}">
+          <li style="display: flex; align-items: center; gap: 8px;">
+            <span class="material-icons">help</span>
+            <span>How to Use</span>
+          </li>
+        </a>
+        <a href="{% url 'home:contact' %}">
+          <li style="display: flex; align-items: center; gap: 8px;">
+            <span class="material-icons">phone</span>
+            <span>Contact</span>
+          </li>
+        </a>
+      </ul>
+
+      <div class="navbar-actions">
+        <a href='{% url "home:user_profile" %}' title="Profile">
+          <span class="material-icons">person</span>
+        </a>
+        <a href='{% url "home:cart" %}' title="Cart">
+          <span class="material-icons">shopping_cart</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="flex min-h-screen">
+    <main class="w-full p-10">
+      <h1 class="text-4xl font-bold mb-8">Order Summary</h1>
+      
+      <!-- Wrap entire form in a single payment form -->
+      <form method="POST"  class="space-y-8">
         {% csrf_token %}
-        <button type="submit" 
-                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded">
-            Pay
-        </button> 
-    </form>
 
+        <div class="grid grid-cols-3 gap-8">
+          <div class="col-span-2 flex flex-col gap-8">
+            <!-- Customer Details Section -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <h2 class="text-lg font-semibold mb-4">Customer Details</h2>
+              
+              {% if user == "None" %}
+                <!-- Form fields for guest checkout -->
+                <div class="space-y-4">
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                      <input 
+                        type="text" 
+                        name="full_name" 
+                        placeholder="Enter your full name"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-2">Contact Number</label>
+                      <input 
+                        type="tel" 
+                        name="contact" 
+                        placeholder="Enter your contact number"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                    <input 
+                      type="email" 
+                      name="email" 
+                      placeholder="Enter your email address"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Shipping Address</label>
+                    <input 
+                      type="text" 
+                      name="address" 
+                      placeholder="Enter your complete shipping address"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">City</label>
+                    <input 
+                      type="text" 
+                      name="city" 
+                      placeholder="Enter your city"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      required
+                    />
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-2">State/Province</label>
+                      <input 
+                        type="text" 
+                        name="state" 
+                        placeholder="Enter state/province"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-2">Postal Code</label>
+                      <input 
+                        type="text" 
+                        name="postal_code" 
+                        placeholder="Enter postal code"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+              {% else %}
+                <!-- Hidden form fields for logged-in users with their data -->
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <p class="text-sm text-gray-500">Name</p>
+                    <p class="font-medium">{{user.get_full_name}}</p>
+                    <input type="hidden" name="full_name" value="{{user.get_full_name}}" />
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Email</p>
+                    <p class="font-medium">{{user.email}}</p>
+                    <input type="hidden" name="email" value="{{user.email}}" />
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <p class="text-sm text-gray-500">Shipping Address</p>
+                  <p class="font-medium">{{user.address}}</p>
+                  <input type="hidden" name="address" value="{{user.address}}" />
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- Your Order Section -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <h2 class="text-lg font-semibold mb-4">Your Order</h2>
+              <div class="space-y-4">
+                <div class="flex justify-between items-center border-b border-gray-200 pb-4">
+                  <div class="flex items-center gap-4">
+                    <img src="{{cart.product.image.url}}" alt="{{cart.product.name}}"
+                      class="w-16 h-16 object-cover bg-gray-100 p-1 rounded-md" />
+                    <div>
+                      <p class="font-semibold">
+                       {{cart.product.name}}
+                      </p>
+                      <p class="text-sm text-gray-500">{{variant}}</p>
+                      <p class="text-sm text-gray-500">Qty: {{cart.quantity}}</p>
+                    </div>
+                  </div>
+                  <p class="font-semibold text-lg">Rs.{{sub_total}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Price Summary and Payment Button -->
+          <div class="col-span-1">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <h2 class="text-lg font-semibold mb-6">Price Summary</h2>
+              <div class="space-y-3">
+                <div class="flex justify-between text-gray-600">
+                  <span>Subtotal</span>
+                  <span>Rs.{{sub_total}}</span>
+                </div>
+                <div class="flex justify-between text-gray-600">
+                  <span>Delivery</span>
+                  <span>Rs.30</span>
+                </div>
+              </div>
+              <hr class="my-4 border-dashed" />
+              <div class="flex justify-between font-bold text-xl">
+                <span>Total</span>
+                <span>Rs.{{Total}}</span>
+              </div>
+              
+              <!-- Button is now a form submit button -->
+              <button 
+                type="submit"
+                class="w-full bg-green-500 text-white py-3 rounded-lg mt-6 font-semibold hover:bg-green-600 transition-colors">
+                Proceed to Payment
+              </button>
+              
+              <div class="flex items-center justify-center gap-2 mt-4 text-sm text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <span>Secure SSL Checkout</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <!-- Hamburger menu toggle functionality -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburger = document.getElementById('hamburger');
+      const navbarMenu = document.getElementById('navbarMenu');
+      
+      hamburger.addEventListener('click', function() {
+        hamburger.classList.toggle('active');
+        navbarMenu.classList.toggle('active');
+      });
+
+      const navLinks = navbarMenu.querySelectorAll('a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          hamburger.classList.remove('active');
+          navbarMenu.classList.remove('active');
+        });
+      });
+
+      document.addEventListener('click', function(event) {
+        if (!event.target.closest('.navbar')) {
+          hamburger.classList.remove('active');
+          navbarMenu.classList.remove('active');
+        }
+      });
+    });
+  </script>
 </body>
+
 </html>
