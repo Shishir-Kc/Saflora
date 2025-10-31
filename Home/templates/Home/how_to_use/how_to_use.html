@@ -2,7 +2,7 @@
 {% block title %}How To Use - Saflora{% endblock title %}
 {% load static %}
 
-{% block content %}
+{% block extra_css %}
 <style>
   * {
     margin: 0;
@@ -524,10 +524,13 @@
 
     .cta-button {
       padding: 14px 30px;
-      font-size: 14px;
+      font-.size: 14px;
     }
   }
 </style>
+{% endblock extra_css %}
+
+{% block content %}
 
 <!-- Hero Section -->
 <div class="hero-section">
