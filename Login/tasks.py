@@ -12,7 +12,16 @@ def send_verification_email(email, code):
     send_mail(subject, message, from_email, recipient_list)
     print("Email sent to ", email)
     return True
-    
+
+@shared_task
+def send_purchase_notification_saflora():
+    subject = 'Product Pruchased ! '
+    message = f'congrats  got 1 order '
+    from_email = 'test@gmail.com'
+    recipient_list = ['kcmr925@gmail.com']
+    send_mail(subject, message, from_email, recipient_list)
+    print("Email sent to ", 'kcmr925@gmail.com')
+    return True
 
 @shared_task
 def clean_used_otps():
