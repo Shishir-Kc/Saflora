@@ -3,6 +3,7 @@ from celery import shared_task
 from .models import Verification_code
 from django.utils import timezone
 
+
 @shared_task
 def send_verification_email(email, code):
     subject = 'Your Verification Code'
@@ -22,6 +23,9 @@ def send_purchase_notification_saflora():
     send_mail(subject, message, from_email, recipient_list)
     print("Email sent to ", 'kcmr925@gmail.com')
     return True
+
+
+
 
 @shared_task
 def clean_used_otps():
