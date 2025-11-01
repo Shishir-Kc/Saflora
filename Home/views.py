@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from Product.models import Saflora_Product,Saflora_Base_Product
-from Accounts.models import Cart,Saflora_user
+from Accounts.models import Cart,Saflora_user,Location
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -21,7 +21,7 @@ def products_list(request):
    return render (request,'Home/Products/products.html',context)
 
 
-def check_out(request,id,cart_id=None):
+def check_out(request,id,cart_id=None,item_id=None):
     user = request.user
     if request.user.is_anonymous:
         user = Saflora_user.objects.get(username='AnonymousUser')
@@ -44,6 +44,9 @@ def check_out(request,id,cart_id=None):
             cart.save()
         else:
          cart = Cart.objects.create(product=product,user=user,cart_status=Cart.Status.IN_CART,quantity=quantity,variant=variant)
+         item = Saflora_Base_Product.objects.get(items_variants=product.id)
+         cart.item = item
+         cart.save()
         
         if payment_method == "khalti":
             return redirect("payment:Khalti_payment",id=product.id,cart_id=cart.id)
@@ -71,9 +74,10 @@ def user_profile(request):
         return redirect("login:user_login")
     if not user.address:
         messages.error(request,"Please save Your address before purchasing any product !")
-        
+    wards = range(1, 21)
     context = {
-        'user':user
+        'user':user,
+      
     }
     return render(request,'Home/profile/profile.html',context=context)
 
@@ -121,9 +125,17 @@ def update_address(request):
     if request.method == "POST":
         new_address = request.POST.get('address')
         new_address_type = request.POST.get('address_type')
+        new_area = request.POST.get("area")
         user = Saflora_user.objects.get(username=request.user)
         user.address = new_address
         user.address_type = new_address_type
+        try:
+            location = Location.objects.get(name=new_area)
+            user.location = location
+            user.save()
+        except:
+            messages.error(request,"invalid loaction !")
+            return redirect("home:user_profile")
         user.save()
         messages.success(request,"Updated Address .")
         return redirect("home:user_profile")
