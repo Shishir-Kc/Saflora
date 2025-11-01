@@ -80,6 +80,7 @@ def khalti_payment(request,id,cart_id):
 
      return redirect (return_url)
   else:
+      amount =0
       product = Saflora_Product.objects.get(id=id)
       cart = Cart.objects.get(id=cart_id)
       if cart.product.discount_price:
@@ -95,16 +96,18 @@ def khalti_payment(request,id,cart_id):
       variant= cart.product.variant.all()
       for i in variant:
          variant = i
-
-      cart.total_price = sub_total + 30
+      if not user.location.name == "itahari-4" or user.location.name =="ithari-5":
+         amount = 30
+      cart.total_price = sub_total + amount
       cart.save()
-
+      
+      
       context = { 
          'cart':cart,
          'user':user,
          'sub_total':sub_total,
          'variant':variant,
-         'Total':sub_total + 30
+         'Total':sub_total + amount
       }
       return render (request,'payment/summary.html',context) 
 
