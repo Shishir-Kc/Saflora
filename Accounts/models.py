@@ -3,12 +3,22 @@ from django.contrib.auth.models import AbstractUser
 import uuid
 from Product.models import Saflora_Product,Saflora_Base_Product
 
+class Location(models.Model):
+    name = models.TextField(default='itahari')
+    class Meta:
+        verbose_name  = "location"
+
+    def __str__(self):
+        return self.name
+    
+
 class Saflora_user(AbstractUser):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     contact = models.IntegerField(null=True, blank=True)
     address = models.TextField(null=True, blank=True)
     address_type = models.TextField(null=True)
     hear_about_us = models.CharField(max_length=20,default='Others')
+    location = models.OneToOneField(Location,on_delete=models.CASCADE,null=True)
 
 
 class Cart(models.Model):
