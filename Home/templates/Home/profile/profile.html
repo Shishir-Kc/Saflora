@@ -3,78 +3,24 @@
 
 {% block title %}Your Profile - Saflora{% endblock title %}
 {% block extra_css %}
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for Icons -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    />
     <style>
-      /* Custom styles to match your project */
-      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
-      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-
-      body {
-        font-family: "Inter", sans-serif;
-        background-color: #f8f9fa; /* Light gray background */
+      /* Modal animations */
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
       }
 
-      .sidebar {
-        width: 220px;
-        background: #f6f9f6;
-        padding: 20px 15px;
-        border-right: 1px solid #eee;
-        flex-shrink: 0;
-        height: 100vh;
-        position: sticky;
-        top: 0;
+      @keyframes slideUp {
+        from {
+          transform: translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
       }
-      .sidebar .logo {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 30px;
-      }
-      .sidebar .logo img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-      }
-      .sidebar .logo h3 {
-        font-family: "Poppins", sans-serif;
-        color: #2d6a4f;
-        font-size: 24px;
-        font-weight: 400;
-      }
-      .sidebar nav ul {
-        list-style: none;
-        padding: 0;
-      }
-      .sidebar nav ul a {
-        text-decoration: none;
-        color: inherit;
-      }
-      .sidebar nav ul li {
-        padding: 12px 5px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: #2d6a4f;
-        font-size: 15px;
-        cursor: pointer;
-        border-radius: 8px;
-        transition: background-color 0.3s;
-      }
-      .sidebar nav ul li:hover {
-        background-color: #e8f5e9;
-      }
-      .sidebar nav .icons {
-        width: 20px;
-        height: 20px;
-      }
-      
-      /* Modal styles for popups */
+
       .modal {
         display: none;
         position: fixed;
@@ -103,375 +49,371 @@
         animation: slideUp 0.3s ease-in-out;
       }
 
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
+      /* Custom dropdown styles for modern appearance */
+      .custom-select-wrapper {
+        position: relative;
       }
 
-      @keyframes slideUp {
-        from {
-          transform: translateY(50px);
-          opacity: 0;
-        }
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
-      }
-
-      .form-group {
-        margin-bottom: 20px;
-      }
-
-      .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #333;
-        font-size: 14px;
-      }
-
-      .form-group input,
-      .form-group textarea {
+      .custom-select {
         width: 100%;
-        padding: 10px 12px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        font-size: 14px;
-        font-family: inherit;
-        transition: border-color 0.3s;
-        box-sizing: border-box;
+        padding: 12px 16px;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        background-color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        appearance: none;
+        padding-right: 40px;
+        font-weight: 500;
+        color: #1f2937;
       }
 
-      .form-group input:focus,
-      .form-group textarea:focus {
+      .custom-select:hover {
+        border-color: #d1d5db;
+        background-color: #fafbfc;
+      }
+
+      .custom-select:focus {
+        outline: none;
+        border-color: #10b981;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+      }
+
+      .custom-select-icon {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        transition: transform 0.3s ease;
+        color: #6b7280;
+        font-size: 12px;
+      }
+
+      .custom-select:focus ~ .custom-select-icon {
+        transform: translateY(-50%) rotate(180deg);
+        color: #10b981;
+      }
+
+      /* Dropdown option styling */
+      .custom-select option {
+        padding: 12px;
+        background-color: white;
+        color: #1f2937;
+        font-weight: 500;
+      }
+
+      .custom-select option:hover {
+        background-color: #ecfdf5;
+        color: #10b981;
+      }
+
+      .custom-select option:checked {
+        background: linear-gradient(#10b981, #10b981);
+        background-color: #10b981;
+        color: white;
+      }
+
+      /* Focus styles for accessibility */
+      input:focus,
+      textarea:focus {
         outline: none;
         border-color: #2d6a4f;
         box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
       }
 
-      .modal-actions {
-        display: flex;
-        gap: 12px;
-        margin-top: 24px;
-      }
+      /* Mobile responsive adjustments */
+      @media (max-width: 768px) {
+        .modal-content {
+          padding: 24px;
+          width: 95%;
+          border-radius: 16px;
+        }
 
-      .btn-primary {
-        flex: 1;
-        padding: 10px 16px;
-        background-color: #2d6a4f;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        font-size: 14px;
-      }
+        .custom-select {
+          font-size: 16px;
+          padding: 14px 16px;
+          padding-right: 44px;
+        }
 
-      .btn-primary:hover {
-        background-color: #1f4d36;
-      }
-
-      .btn-secondary {
-        flex: 1;
-        padding: 10px 16px;
-        background-color: #f0f0f0;
-        color: #333;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-size: 14px;
-      }
-
-      .btn-secondary:hover {
-        background-color: #e8e8e8;
-      }
-
-      .btn-danger {
-        flex: 1;
-        padding: 10px 16px;
-        background-color: #fee;
-        color: #c33;
-        border: 1px solid #fcc;
-        border-radius: 6px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-size: 14px;
-      }
-
-      .btn-danger:hover {
-        background-color: #fdd;
-        border-color: #c33;
-      }
-
-      .modal-header {
-        font-size: 20px;
-        font-weight: 700;
-        color: #333;
-        margin-bottom: 20px;
-      }
-
-      .close-btn {
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        color: #999;
-        cursor: pointer;
-        border: none;
-        background: none;
-        padding: 0;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .close-btn:hover {
-        color: #333;
+        .custom-select-icon {
+          right: 12px;
+        }
       }
     </style>
 {% endblock extra_css %}
+
 {% block content %}
-  
-    <div class="flex">
-      <!-- Main Content Area -->
-      <main class="flex-1 p-8 md:p-12">
-        <div class="max-w-4xl mx-auto">
-          <!-- Personal Information Card -->
-          <div class="bg-white p-6 rounded-lg shadow-sm">
-            <div class="flex justify-between items-center">
-              <h2 class="text-xl font-bold text-gray-900">
-                Personal Information
-              </h2>
-              <!-- onclick now opens personal modal -->
+  <div class="flex">
+    <!-- Main Content Area -->
+    <main class="flex-1 p-8 md:p-12">
+      <div class="max-w-4xl mx-auto space-y-8">
+        
+        <!-- Personal Information Card -->
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-gray-900">Personal Information</h2>
+            <button
+              onclick="openPersonalModal()"
+              class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm font-semibold transition-colors"
+            >
+              <i class="fas fa-pen text-xs"></i>
+              Edit
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+              <p class="text-gray-500 font-medium">Full Name</p>
+              <p class="md:col-span-2 font-semibold text-gray-800">{{ user.get_full_name }}</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+              <p class="text-gray-500 font-medium">Email Address</p>
+              <p class="md:col-span-2 font-semibold text-gray-800">{{ user.email }}</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+              <p class="text-gray-500 font-medium">Phone Number</p>
+              <p class="md:col-span-2 font-semibold text-gray-800">{{ user.contact }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Saved Addresses Card -->
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-gray-900">Saved Addresses</h2>
+          </div>
+
+          <!-- Address List -->
+          <div class="space-y-6">
+            <div class="flex justify-between items-start border-t pt-6">
+              <div>
+                <h3 class="font-semibold text-gray-800 capitalize">{{ user.address_type|default:"home" }}</h3>
+                <p class="text-gray-600 mt-2">{{ user.address }}</p>
+              </div>
               <button
-                id="editPersonalBtn"
-                type="button"
-                onclick="openPersonalModal()"
-                class="flex items-center gap-2 bg-gray-100 text-gray-700 px-4 py-2 rounded-md text-sm font-semibold hover:bg-gray-200"
+                onclick="openAddressModal()"
+                class="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-md transition-colors flex-shrink-0"
+                aria-label="Edit address"
               >
-                <i class="fas fa-pen text-xs"></i>
-                Edit
+                <i class="fas fa-pen text-gray-600 text-sm"></i>
               </button>
             </div>
-
-            <div class="mt-6 space-y-4">
-              <!-- DJANGO: You'll get this data from {{ user }} object -->
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-                <p class="text-gray-500">Full Name</p>
-                <p class="md:col-span-2 font-semibold text-gray-800">
-                  {{user.get_full_name}}
-                </p>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-                <p class="text-gray-500">Email Address</p>
-                <p class="md:col-span-2 font-semibold text-gray-800">
-                  {{user.email}}
-                </p>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-                <p class="text-gray-500">Phone Number</p>
-                <p class="md:col-span-2 font-semibold text-gray-800">
-                  {{user.contact}}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Saved Addresses Card -->
-          <div class="bg-white p-6 rounded-lg shadow-sm mt-8">
-            <div class="flex justify-between items-center">
-              <h2 class="text-xl font-bold text-gray-900">Saved Addresses</h2>
-            </div>
-
-            <!-- Address List Container -->
-            <div class="mt-6 space-y-6">
-              <!-- Address Item 1 -->
-              <div class="flex justify-between items-center border-t pt-6">
-                <div>
-                  <h3 class="font-semibold text-gray-800">{{user.address_type|default:"home"}} </h3>
-                  <p class="text-gray-600 mt-1">
-                   {{user.address}}
-                  </p>
-                </div>
-                <!-- buttons now open modal or delete via form submission -->
-                <div class="flex items-center space-x-2">
-                  <button
-                    type="button"
-                    onclick="openAddressModal()"
-                    class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-md hover:bg-gray-200"
-                  >
-                    <i class="fas fa-pen text-gray-600 text-sm"></i>
-                  </button>
-                </div>
-              </div>
-
-              </div>
-            </div>
           </div>
         </div>
-      </main>
-    </div>
-
-    <!-- Personal Information Edit Modal -->
-    <div id="personalModal" class="modal">
-      <div class="modal-content">
-        <div class="flex justify-between items-center mb-6">
-          <div class="modal-header">Edit Personal Information</div>
-          <button type="button" class="close-btn" onclick="closePersonalModal()">&times;</button>
-        </div>
-        <!-- Form now submits directly to Django without JavaScript interception -->
-        <form id="personalForm" method="POST" action='{% url "home:update_profile" %}'>
-          {% csrf_token %}
-          <div class="form-group">
-            <label for="firstName">First Name</label>
-            <input 
-              type="text" 
-              id="firstName" 
-              name="first_name" 
-              value="{{user.first_name}}" 
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="lastName">Last Name</label>
-            <input 
-              type="text" 
-              id="lastName" 
-              name="last_name" 
-              value="{{user.last_name}}" 
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input 
-              type="email" 
-              id="email" 
-              name="email" 
-              value="{{user.email}}" 
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <input 
-              type="tel" 
-              id="phone" 
-              name="contact" 
-              value="{{user.contact}}" 
-              required
-            />
-          </div>
-          <div class="modal-actions">
-            <button 
-              type="button" 
-              class="btn-secondary" 
-              onclick="closePersonalModal()"
-            >
-              Cancel
-            </button>
-            <button 
-              type="submit" 
-              class="btn-primary"
-            >
-              Save Changes
-            </button>
-          </div>
-        </form>
       </div>
-    </div>
+    </main>
+  </div>
 
-    <!-- Address Edit Modal -->
-    <div id="addressModal" class="modal">
-      <div class="modal-content">
-        <div class="flex justify-between items-center mb-6">
-          <div class="modal-header">Edit Address</div>
-          <button type="button" class="close-btn" onclick="closeAddressModal()">&times;</button>
-        </div>
-        <!-- Form now submits directly to Django without JavaScript interception -->
-        <form id="addressForm" method="POST" action='{% url "home:update_address" %}'>
-          {% csrf_token %}
-          <div class="form-group">
-            <label for="addressType">Address Type</label>
-            <input 
-              type="text" 
-              id="addressType" 
-              name="address_type" 
-              value='{{user.address_type|default:"home"}}' 
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="address">Full Address</label>
-            <textarea 
-              id="address" 
-              name="address" 
-              rows="3" 
-              required
-            >{{user.address}}</textarea>
-          </div>
-          <div class="modal-actions">
-
-            
-            <button 
-              type="button" 
-              class="btn-secondary" 
-              onclick="closeAddressModal()"
-            >
-              Cancel
-            </button>
-            <button 
-              type="submit" 
-              class="btn-primary"
-            >
-              Save Address
-            </button>
-          </div>
-        </form>
+  <!-- Personal Information Edit Modal -->
+  <div id="personalModal" class="modal">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-lg font-bold text-gray-900">Edit Personal Information</h3>
+        <button type="button" class="text-2xl text-gray-400 hover:text-gray-600" onclick="closePersonalModal()">&times;</button>
       </div>
-    </div>
-
-    <!-- Removed all JavaScript fetch calls - only modal show/hide functionality remains -->
-    <script>
-      // Personal Information Modal Functions
-      function openPersonalModal() {
-        document.getElementById('personalModal').classList.add('show');
-      }
-
-      function closePersonalModal() {
-        document.getElementById('personalModal').classList.remove('show');
-      }
-
-      // Address Modal Functions
-      function openAddressModal() {
-        document.getElementById('addressModal').classList.add('show');
-      }
-
-      function closeAddressModal() {
-        document.getElementById('addressModal').classList.remove('show');
-      }
-
-      // Close modal when clicking outside of it
-      window.onclick = function(event) {
-        const personalModal = document.getElementById('personalModal');
-        const addressModal = document.getElementById('addressModal');
+      
+      <form method="POST" action="{% url 'home:update_profile' %}">
+        {% csrf_token %}
         
-        if (event.target === personalModal) {
-          closePersonalModal();
-        }
-        if (event.target === addressModal) {
-          closeAddressModal();
-        }
+        <div class="mb-5">
+          <label for="firstName" class="block text-sm font-semibold text-gray-700 mb-2">First Name</label>
+          <input 
+            type="text" 
+            id="firstName" 
+            name="first_name" 
+            value="{{ user.first_name }}" 
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            required
+          />
+        </div>
+        
+        <div class="mb-5">
+          <label for="lastName" class="block text-sm font-semibold text-gray-700 mb-2">Last Name</label>
+          <input 
+            type="text" 
+            id="lastName" 
+            name="last_name" 
+            value="{{ user.last_name }}" 
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            required
+          />
+        </div>
+        
+        <div class="mb-5">
+          <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            value="{{ user.email }}" 
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            required
+          />
+        </div>
+        
+        <div class="mb-6">
+          <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
+          <input 
+            type="tel" 
+            id="phone" 
+            name="contact" 
+            value="{{ user.contact }}" 
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            required
+          />
+        </div>
+        
+        <div class="flex gap-3">
+          <button 
+            type="button" 
+            onclick="closePersonalModal()"
+            class="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-semibold text-sm transition-colors"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit"
+            class="flex-1 px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg font-semibold text-sm transition-colors"
+          >
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Address Edit Modal -->
+  <div id="addressModal" class="modal">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-lg font-bold text-gray-900">Edit Address</h3>
+        <button type="button" class="text-2xl text-gray-400 hover:text-gray-600" onclick="closeAddressModal()">&times;</button>
+      </div>
+      
+      <form method="POST" action="{% url 'home:update_address' %}">
+        {% csrf_token %}
+        
+        <div class="mb-5">
+          <label for="addressType" class="block text-sm font-semibold text-gray-700 mb-2">Address Type</label>
+          <input 
+            type="text" 
+            id="addressType" 
+            name="address_type" 
+            value="{{ user.address_type|default:'home' }}" 
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            required
+          />
+        </div>
+        
+        <div class="mb-5">
+          <label for="area" class="block text-sm font-semibold text-gray-700 mb-2">Select Area</label>
+          <!-- Modern custom styled select dropdown with all 20 areas manually written -->
+          <div class="custom-select-wrapper">
+            <select
+              id="area"
+              name="area"
+              class="custom-select"
+              required
+            >
+              <option value="">Select Area</option>
+              <option value="itahari-1" {% if user.location.name == 'itahari-1' %}selected{% endif %}>Itahari-1</option>
+              <option value="itahari-2" {% if user.location.name == 'itahari-2' %}selected{% endif %}>Itahari-2</option>
+              <option value="itahari-3" {% if user.location.name == 'itahari-3' %}selected{% endif %}>Itahari-3</option>
+              <option value="itahari-4" {% if user.location.name == 'itahari-4' %}selected{% endif %}>Itahari-4</option>
+              <option value="itahari-5" {% if user.location.name == 'itahari-5' %}selected{% endif %}>Itahari-5</option>
+              <option value="itahari-6" {% if user.location.name == 'itahari-6' %}selected{% endif %}>Itahari-6</option>
+              <option value="itahari-7" {% if user.location.name == 'itahari-7' %}selected{% endif %}>Itahari-7</option>
+              <option value="itahari-8" {% if user.location.name == 'itahari-8' %}selected{% endif %}>Itahari-8</option>
+              <option value="itahari-9" {% if user.location.name == 'itahari-9' %}selected{% endif %}>Itahari-9</option>
+              <option value="itahari-10" {% if user.location.name == 'itahari-10' %}selected{% endif %}>Itahari-10</option>
+              <option value="itahari-11" {% if user.location.name == 'itahari-11' %}selected{% endif %}>Itahari-11</option>
+              <option value="itahari-12" {% if user.location.name == 'itahari-12' %}selected{% endif %}>Itahari-12</option>
+              <option value="itahari-13" {% if user.location.name == 'itahari-13' %}selected{% endif %}>Itahari-13</option>
+              <option value="itahari-14" {% if user.location.name == 'itahari-14' %}selected{% endif %}>Itahari-14</option>
+              <option value="itahari-15" {% if user.location.name == 'itahari-15' %}selected{% endif %}>Itahari-15</option>
+              <option value="itahari-16" {% if user.location.name == 'itahari-16' %}selected{% endif %}>Itahari-16</option>
+              <option value="itahari-17" {% if user.location.name == 'itahari-17' %}selected{% endif %}>Itahari-17</option>
+              <option value="itahari-18" {% if user.location.name == 'itahari-18' %}selected{% endif %}>Itahari-18</option>
+              <option value="itahari-19" {% if user.location.name == 'itahari-19' %}selected{% endif %}>Itahari-19</option>
+              <option value="itahari-20" {% if user.location.name == 'itahari-20' %}selected{% endif %}>Itahari-20</option>
+            </select>
+            <i class="fas fa-chevron-down custom-select-icon"></i>
+          </div>
+        </div>
+        
+        <div class="mb-6">
+          <label for="address" class="block text-sm font-semibold text-gray-700 mb-2">Full Address</label>
+          <textarea 
+            id="address" 
+            name="address" 
+            rows="3" 
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm resize-none"
+            required
+          >{{ user.address }}</textarea>
+        </div>
+        
+        <div class="flex gap-3">
+          <button 
+            type="button" 
+            onclick="closeAddressModal()"
+            class="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-semibold text-sm transition-colors"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit"
+            class="flex-1 px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg font-semibold text-sm transition-colors"
+          >
+            Save Address
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Modal management functions
+    function openPersonalModal() {
+      document.getElementById('personalModal').classList.add('show');
+    }
+
+    function closePersonalModal() {
+      document.getElementById('personalModal').classList.remove('show');
+    }
+
+    function openAddressModal() {
+      document.getElementById('addressModal').classList.add('show');
+    }
+
+    function closeAddressModal() {
+      document.getElementById('addressModal').classList.remove('show');
+    }
+
+    // Close modal when clicking outside of it
+    window.addEventListener('click', function(event) {
+      const personalModal = document.getElementById('personalModal');
+      const addressModal = document.getElementById('addressModal');
+      
+      if (event.target === personalModal) {
+        closePersonalModal();
       }
-    </script>
+      if (event.target === addressModal) {
+        closeAddressModal();
+      }
+    });
+
+    // Smooth animation for dropdown icon on focus/blur
+    const areaSelect = document.getElementById('area');
+    if (areaSelect) {
+      areaSelect.addEventListener('focus', function() {
+        this.parentElement.querySelector('.custom-select-icon').style.transform = 'translateY(-50%) rotate(180deg)';
+      });
+
+      areaSelect.addEventListener('blur', function() {
+        this.parentElement.querySelector('.custom-select-icon').style.transform = 'translateY(-50%) rotate(0deg)';
+      });
+    }
+  </script>
 {% endblock content %}
