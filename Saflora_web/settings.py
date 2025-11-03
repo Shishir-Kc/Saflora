@@ -13,8 +13,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os 
-from celery.schedules import crontab
+
+from datetime import timedelta
 load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -167,8 +169,12 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 
 
 CELERY_BEAT_SCHEDULE = {
+    'verify-payment-statements-every-10-mins': {
+        'task': 'Login.tasks.verify_payment_statements',
+        'schedule': timedelta(minutes=1),  # every 1 minutes
+    },
     'cleanup-used-otps-every-5-mins': {
         'task': 'Login.tasks.clean_used_otps',
-        'schedule': crontab(minute='*/5'),  
+        'schedule': timedelta(minutes=5),  
     },
 }
