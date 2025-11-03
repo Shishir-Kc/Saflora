@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Summary</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f9fc;
+      margin: 0;
+      padding: 0;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 30px auto;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .header {
+      background: #3bf169ff;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .logo {
+      max-width: 120px;
+    }
+    .content {
+      padding: 20px;
+    }
+    h2 {
+      color: #333;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 13px;
+      color: #777;
+      background: #f6f9fc;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <img src="cid:logo" alt="Company Logo" class="logo" />
+      <h1>Order Summary</h1>
+    </div>
+
+<div class="content">
+  <h2>Customer Information</h2>
+  <table>
+    <tr><th>Name</th><td>{{ customer_name }}</td></tr>
+    <tr><th>Email</th><td>{{ customer_email }}</td></tr>
+    <tr><th>Contact</th><td>{{ customer_contact }}</td></tr>
+  </table>
+
+  <h2>Item Information</h2>
+  <table>
+    <tr><th>Base Product</th><td>{{ base_product }}</td></tr>
+    <tr><th>Item</th><td>{{ item_name }}</td></tr>
+    <tr><th>Quantity</th><td>{{ quantity }}</td></tr>
+    <tr><th>Item Price</th><td>{{ item_price }}</td></tr>
+    <tr><th>Added to Cart</th><td>{{item_added_at }}</td></tr>
+  </table>
+
+  <h2>Payment Details</h2>
+  <table>
+    <tr><th>Payment Method</th><td>{{ payment_method }}</td></tr>
+    <tr><th>Paid Price</th><td>{{ paid_price }}</td></tr>
+    <tr><th>Total Price</th><td>{{ total_price }}</td></tr>
+  </table>
+
+  <h2>Location</h2>
+  <table>
+    <tr><th>Address</th><td>{{ address }}</td></tr>
+    <tr><th>Location</th><td>{{ location }}</td></tr>
+    <tr><th>Address Type</th><td>{{ address_type }}</td></tr>
+    <tr><th>Province</th><td>{{ province }}</td></tr>
+    <tr><th>Postal Code</th><td>{{ postal_code }}</td></tr>
+  </table>
+</div>
+
+
+    <div class="footer">
+      © {{ current_year }} Saflora PVT.LTD  — All Rights Reserved
+    </div>
+  </div>
+</body>
+</html>
