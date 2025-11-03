@@ -7,7 +7,7 @@ from .tools import does_user_exists,is_code_expired,is_code_valid
 from .models import Verification_code
 from Accounts.models import Saflora_user
 from .tasks import send_verification_email
-
+from django.urls import reverse
 
 def user_login(request):
     if request.method == "POST":
@@ -83,32 +83,52 @@ def forgot_pass(request):
         if not does_user_exists(email=email):
 
             messages.error(request,'User does not exists ! ')
+            print("user dead !")
             return redirect("login:forgot_pass")
         
         request.session['pending_email'] = email
+
         try:
-         is_send = send_verification_email.delay(email=[email],code=Verification_code.generate_code(email=email).code)
+         print('yo sending mail  . .')
+         link = reverse('login:otp_verify')
+         full_link = request.build_absolute_uri(link)
+         send_verification_email.delay(email=email,code=Verification_code.generate_code(email=email).code,url=full_link)
+         print("sending you to enter otp !")
          return redirect("login:otp_verify")
         except Exception as e:
+            print("i am here again !!")
+            print(e)
             messages.error(request,"Error Email Could not be sent ! ")
             return render(request,"reset_pass/email.html",)
 
     return render (request,"reset_pass/email.html")
 
+
 def rsend_otp(request):
-    email = request.session['pending_email']
     try:
-         is_send = send_verification_email.delay(email=[email],code=Verification_code.generate_code(email=email).code)
+     email = request.session['pending_email']
+    except:
+        messages.error(request,'Session expired')
+        return redirect("login:forgot_pass")
+    try:
+         link = reverse('login:otp_verify')
+         full_link = request.build_absolute_uri(link)
+         is_send = send_verification_email.delay(email=email,code=Verification_code.generate_code(email=email).code,url=full_link)
          messages.success(request,"OTP Resent Successfully ! ")
          return redirect("login:otp_verify")
     except Exception as e:
+            print(e)
             messages.error(request,"Error Email Could not be sent ! ")
             return redirect("login:otp_verify")
 
 def verify_otp(request):
     if request.method == "POST":
         code = request.POST.get("code")
-        email = request.session['pending_email']
+        try:
+         email = request.session['pending_email']
+        except:
+            messages.error(request,'invalid Session')
+            return redirect('login:user_login')
         try:
          if is_code_valid(email=email,code=code):
             reset_user_pass = Verification_code(email=email,code=code)
