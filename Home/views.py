@@ -4,7 +4,7 @@ from Accounts.models import Cart,Saflora_user,Location
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-# @login_required
+
 def in_home(request):
     return render(request,'Home/Landing_page/landing_page.html')
 
@@ -23,40 +23,43 @@ def products_list(request):
 
 def check_out(request,id,cart_id=None,item_id=None):
     user = request.user
-    if request.user.is_anonymous:
-        user = Saflora_user.objects.get(username='AnonymousUser')
-    
     if request.method == "POST":
         payment_method = request.POST.get('payment_method')
         quantity = request.POST.get('quantity_display')
         product_id = request.POST.get("product_id")
         variant = request.POST.get('variant')
 
-        # try:
-        print('---------------')
-        print(product_id)
-        product = Saflora_Product.objects.get(id=product_id)
-        if Cart.objects.filter(id=cart_id).exists():
+        try:
+         product = Saflora_Product.objects.get(id=product_id)
+         if Cart.objects.filter(id=cart_id).exists():
             cart = Cart.objects.get(id=cart_id)
             cart.product = product
             cart.quantity = quantity
             cart.variant = variant
+            if request.user.is_authenticated:
+             cart.user = request.user
             cart.save()
-        else:
-         cart = Cart.objects.create(product=product,user=user,cart_status=Cart.Status.IN_CART,quantity=quantity,variant=variant)
-         item = Saflora_Base_Product.objects.get(items_variants=product.id)
-         cart.item = item
-         cart.save()
+         else:
+          cart = Cart.objects.create(product=product,cart_status=Cart.Status.IN_CART,quantity=quantity,variant=variant)
+          item = Saflora_Base_Product.objects.get(items_variants=product.id)
+          cart.item = item
+          if request.user.is_authenticated:
+           cart.user = request.user
+          cart.save()
         
-        if payment_method == "khalti":
+         if payment_method == "khalti":
+            cart.payment_method = Cart.Payment_Method.ONLINE
+            cart.save()
             return redirect("payment:Khalti_payment",id=product.id,cart_id=cart.id)
-        elif payment_method == "cod":
-            return # need to add a proper cod method 
-        # except:
+         elif payment_method == "cod":
+            cart.payment_method = Cart.Payment_Method.COD
+            cart.save()
+            return redirect("payment:Khalti_payment",id=product.id,cart_id=cart.id)
+        
+        except:
             
-            # return redirect("home:products_list")
+            return redirect("home:products_list")
     else:
-     print("get")
      item = Saflora_Base_Product.objects.get(id=id)
      products = item.items_variants.all()
      context = {
@@ -65,6 +68,7 @@ def check_out(request,id,cart_id=None,item_id=None):
 
      }
      return render (request,'Home/check_out/check_out.html',context)
+    
 @login_required
 def user_profile(request):
     try:
@@ -133,7 +137,9 @@ def update_address(request):
             location = Location.objects.get(name=new_area)
             user.location = location
             user.save()
-        except:
+        except Exception as e:
+            
+            print(e)
             messages.error(request,"invalid loaction !")
             return redirect("home:user_profile")
         user.save()
