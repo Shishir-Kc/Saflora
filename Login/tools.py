@@ -6,10 +6,8 @@ from django.utils import timezone
 def does_user_exists(email):
     try:
         user = Saflora_user.objects.get(email=email)
-        
         return True
     except Saflora_user.DoesNotExist:
-        print("Does not exists")
         return False
     
 def is_code_expired(email,code:str):
