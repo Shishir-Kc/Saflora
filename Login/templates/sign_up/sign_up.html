@@ -1,490 +1,419 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Saflora — Sign Up</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css"
-    />
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.js"
-      defer
-    ></script>
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <style>
-      :root {
-        --bg-1: #f6fff8;
-        --bg-2: #e6fff0;
-        --accent-1: #1aa06a;
-        --accent-2: #6bd39a;
-        --muted: #6b6f76;
-        --card: #ffffff;
-        --glass: rgba(255, 255, 255, 0.6);
-        --radius: 18px;
-        --shadow: 0 8px 30px rgba(20, 40, 30, 0.08);
-      }
-      * {
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        height: 100%;
-        background: linear-gradient(
-          135deg,
-          rgba(107, 211, 154, 0.19),
-          rgba(26, 160, 106, 0.06)
-        );
-      }
-      body {
-        margin: 0;
-        font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto,
-          "Helvetica Neue", Arial;
-        color: #123;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 36px;
-      }
-      .container {
-        width: 100%;
-        max-width: 1100px;
-        display: grid;
-        grid-template-columns: 1fr 420px;
-        gap: 32px;
-        align-items: center;
-      }
-      .left {
-        border-radius: 24px;
-        min-height: 420px;
-        display: flex;
-        flex-direction: column;
-        gap: 28px;
-        align-items: center;
-      }
-      .brand {
-        width: 120px;
-        height: 120px;
-        border-radius: 20px;
-        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: 700;
-        font-size: 28px;
-        box-shadow: 0 10px 30px rgba(26, 160, 106, 0.18);
-        flex-shrink: 0;
-      }
-      .left-content {
-        color: #0b3b2a;
-      }
-      .left-content p {
-        margin: 0 0 18px 0;
-        color: var(--muted);
-        text-align: center;
-        line-height: 1.45;
-        max-width: 520px;
-      }
-      .features {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-      .feature {
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 12px;
-        padding: 10px 14px;
-        font-weight: 600;
-        color: #0a4b36;
-        box-shadow: 0 6px 18px rgba(15, 40, 20, 0.04);
-        font-size: 13px;
-      }
-      .shape {
-        position: absolute;
-        left: 8%;
-        top: 6%;
-        width: 260px;
-        height: 260px;
-        filter: blur(36px);
-        opacity: 0.12;
-        background: radial-gradient(
-          circle at 30% 30%,
-          var(--accent-2),
-          var(--accent-1) 60%,
-          transparent 70%
-        );
-        border-radius: 48%;
-        transform: rotate(18deg);
-        pointer-events: none;
-      }
-      .card {
-        background: linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.9),
-          rgba(255, 255, 255, 0.8)
-        );
-        border-radius: var(--radius);
-        padding: 34px;
-        box-shadow: var(--shadow);
-        backdrop-filter: blur(6px);
-        border: 1px solid rgba(20, 50, 30, 0.04);
-      }
-      .card h2 {
-        margin: 0;
-        font-size: 32px;
-        color: #17ba81;
-      }
-      .card p {
-        margin: 0 0 20px 0;
-        color: var(--muted);
-        font-size: 14px;
-      }
-      .form-row {
-        margin-bottom: 14px;
-      }
-      .flex-row {
-        display: flex;
-        gap: 12px;
-      }
-      .input {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background: rgba(246, 255, 248, 0.9);
-        border-radius: 12px;
-        padding: 10px 12px;
-        border: 1px solid rgba(15, 40, 20, 0.06);
-      }
-      .input input,
-      .input select {
-        border: 0;
-        outline: 0;
-        font-size: 15px;
-        background: transparent;
-        width: 100%;
-        color: #083523;
-      }
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        width: 100%;
-        padding: 12px 18px;
-        border-radius: 12px;
-        font-weight: 600;
-        cursor: pointer;
-        border: 0;
-        background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
-        color: white;
-        box-shadow: 0 8px 24px rgba(26, 160, 106, 0.18);
-        transition: transform 0.16s ease, box-shadow 0.16s ease;
-      }
-      .btn:active {
-        transform: translateY(1px);
-      }
-      .signup {
-        margin-top: 16px;
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        justify-content: center;
-      }
-      .signup a {
-        color: var(--accent-1);
-        font-weight: 600;
-        text-decoration: none;
-      }
-      @media (max-width: 980px) {
-        .flex-row {
-          flex-direction: column;
+        * {
+            font-family: 'Poppins', sans-serif;
         }
-        .container {
-          grid-template-columns: 1fr;
-          padding: 0;
-        }
-        .left {
-          order: 2;
-          margin-top: 6px;
-        }
-        .card {
-          order: 1;
-        }
-        .left {
-          min-height: 200px;
-          padding: 22px;
-        }
-        .brand {
-          width: 88px;
-          height: 88px;
-          font-size: 22px;
-        }
-      }
-
-      /* Custom toast styles matching the Saflora brand */
-      .toastify {
-        font-family: "Poppins", sans-serif;
-        padding: 16px 20px;
-        border-radius: 12px;
-        box-shadow: 0 8px 30px rgba(20, 40, 30, 0.15);
-        font-weight: 500;
-        font-size: 15px;
-      }
-      .toastify.success {
-        background: linear-gradient(135deg, #1aa06a, #6bd39a);
-      }
-      .toastify.error {
-        background: linear-gradient(135deg, #dc2626, #ef4444);
-      }
-      .toastify.warning {
-        background: linear-gradient(135deg, #f59e0b, #fbbf24);
-      }
-      .toastify.info {
-        background: linear-gradient(135deg, #3b82f6, #60a5fa);
-      }
+        /* Password strength indicator colors */
+        .strength-weak { width: 33%; background-color: #ef4444; }
+        .strength-fair { width: 66%; background-color: #f59e0b; }
+        .strength-good { width: 100%; background-color: #3b82f6; }
+        .strength-strong { width: 100%; background-color: #10b981; }
     </style>
-  </head>
-  <body>
-    <div class="shape" aria-hidden="true"></div>
-    <div class="container" role="main">
-      <section class="left">
-        <img
-          style="width: 30%"
-          src="{% static 'Login/images/saflora.png' %}"
-          alt="Saflora Logo"
-        />
-        <div class="left-content">
-          <p>
-            Eco-friendly powder floor cleaner crafted in Nepal. Gentle on Floor,
-            tough on dirt — Introducing clean and fresh solution for household
-          </p>
-          <div class="features" aria-hidden="true">
-            <div class="feature">Affordable</div>
-            <div class="feature">Cleaning Property</div>
-            <div class="feature">Fresh herbal scent</div>
-          </div>
+</head>
+<body class="bg-gradient-to-br from-green-50 via-white to-emerald-50 min-h-screen flex items-center justify-center p-4 sm:p-6">
+    
+    <div class="w-full max-w-5xl">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+            
+            <!-- Left Section -->
+            <section class="flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
+                <div class="mb-6 lg:mb-8">
+                    <img 
+                        src="{% static 'Login/images/saflora.png' %}" 
+                        alt="Saflora Logo"
+                        class="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 mx-auto lg:mx-0"
+                    />
+                </div>
+                
+                <div class="space-y-4 lg:space-y-6">
+                    <p class="text-gray-700 text-sm sm:text-base leading-relaxed max-w-sm">
+                        Eco-friendly powder floor cleaner crafted in Nepal. Gentle on floors, tough on dirt — Introducing a clean and fresh solution for your household.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-2 justify-center lg:justify-start">
+                        <span class="bg-white px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-emerald-700 shadow-sm">Affordable</span>
+                        <span class="bg-white px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-emerald-700 shadow-sm">Cleaning Power</span>
+                        <span class="bg-white px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-emerald-700 shadow-sm">Fresh Herbal Scent</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Section - Form -->
+            <aside class="bg-white bg-opacity-90 backdrop-blur-sm rounded-2xl shadow-lg p-6 sm:p-8 lg:p-10 border border-emerald-100">
+                <h2 class="text-2xl sm:text-3xl font-bold text-emerald-600 mb-2">Create Account</h2>
+                <p class="text-gray-600 text-sm sm:text-base mb-6">Sign up to start managing orders, products, and more</p>
+
+                <form method="POST" autocomplete="on" novalidate class="space-y-4">
+                    {% csrf_token %}
+                    
+                    <!-- Username -->
+                    <div>
+                        <label for="username" class="block text-xs font-semibold text-gray-700 mb-2">Username *</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Enter username"
+                            required
+                            class="w-full px-4 py-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                        />
+                        <p class="text-xs text-gray-500 mt-1">3-20 characters, letters and numbers only</p>
+                    </div>
+
+                    <!-- First & Last Name -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="firstname" class="block text-xs font-semibold text-gray-700 mb-2">First Name *</label>
+                            <input
+                                type="text"
+                                id="firstname"
+                                name="firstname"
+                                placeholder="First name"
+                                required
+                                class="w-full px-4 py-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                            />
+                        </div>
+                        <div>
+                            <label for="lastname" class="block text-xs font-semibold text-gray-700 mb-2">Last Name *</label>
+                            <input
+                                type="text"
+                                id="lastname"
+                                name="lastname"
+                                placeholder="Last name"
+                                required
+                                class="w-full px-4 py-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Contact & Address -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="contact" class="block text-xs font-semibold text-gray-700 mb-2">Contact Number *</label>
+                            <input
+                                type="text"
+                                id="contact"
+                                name="contact"
+                                placeholder="10-digit number"
+                                maxlength="10"
+                                required
+                                class="w-full px-4 py-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                            />
+                            <div class="flex items-center justify-between mt-1">
+                                <p class="text-xs text-gray-500">Exactly 10 digits</p>
+                                <span id="contactCount" class="text-xs font-medium text-gray-500">0/10</span>
+                            </div>
+                            <p id="contactError" class="text-xs text-red-600 mt-1 hidden"></p>
+                        </div>
+                        <div>
+                            <label for="address" class="block text-xs font-semibold text-gray-700 mb-2">Address *</label>
+                            <input
+                                type="text"
+                                id="address"
+                                name="address"
+                                placeholder="Street address"
+                                required
+                                class="w-full px-4 py-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label for="email" class="block text-xs font-semibold text-gray-700 mb-2">Email Address *</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="your.email@example.com"
+                            required
+                            class="w-full px-4 py-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                        />
+                        <p id="emailError" class="text-xs text-red-600 mt-1 hidden"></p>
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label for="password" class="block text-xs font-semibold text-gray-700 mb-2">Password *</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Create a strong password"
+                            required
+                            minlength="8"
+                            class="w-full px-4 py-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                        />
+                        
+                        <!-- Password Strength Indicator -->
+                        <div class="mt-3 space-y-2">
+                            <div class="flex gap-1">
+                                <div id="strengthBar" class="h-2 bg-gray-200 rounded-full flex-grow"></div>
+                            </div>
+                            <p id="strengthText" class="text-xs font-medium text-gray-600">Password strength: Not checked</p>
+                            <ul class="text-xs text-gray-600 space-y-1">
+                                <li id="requirement-length" class="flex items-center gap-2">
+                                    <span id="icon-length" class="text-gray-400">✓</span> At least 8 characters
+                                </li>
+                                <li id="requirement-upper" class="flex items-center gap-2">
+                                    <span id="icon-upper" class="text-gray-400">✓</span> One uppercase letter
+                                </li>
+                                <li id="requirement-lower" class="flex items-center gap-2">
+                                    <span id="icon-lower" class="text-gray-400">✓</span> One lowercase letter
+                                </li>
+                                <li id="requirement-number" class="flex items-center gap-2">
+                                    <span id="icon-number" class="text-gray-400">✓</span> One number
+                                </li>
+                                <li id="requirement-special" class="flex items-center gap-2">
+                                    <span id="icon-special" class="text-gray-400">✓</span> One special character (@$!%*?&)
+                                </li>
+                            </ul>
+                        </div>
+                        <p id="passwordError" class="text-xs text-red-600 mt-2 hidden"></p>
+                    </div>
+
+                    <!-- Referral -->
+                    <div>
+                        <label for="referral" class="block text-xs font-semibold text-gray-700 mb-2">How did you hear about us? *</label>
+                        <select
+                            id="referral"
+                            name="referral"
+                            required
+                            class="w-full px-4 py-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                        >
+                            <option value="" disabled selected>Select an option</option>
+                            <option value="friend">Friend</option>
+                            <option value="social">Social Media</option>
+                            <option value="ad">Advertisement</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Referral Other -->
+                    <div id="referralOtherDiv" class="hidden">
+                        <label for="referralOther" class="block text-xs font-semibold text-gray-700 mb-2">Please specify *</label>
+                        <input
+                            type="text"
+                            id="referralOther"
+                            name="referralOther"
+                            placeholder="Tell us where you heard about us"
+                            class="w-full px-4 py-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                        />
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button
+                        type="submit"
+                        class="w-full mt-6 px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:from-emerald-700 hover:to-teal-700 transition transform hover:scale-105 active:scale-95"
+                    >
+                        Create Account
+                    </button>
+
+                    <!-- Login Link -->
+                    <div class="text-center text-sm text-gray-600 mt-4">
+                        Already have an account?
+                        <a href='{% url "login:user_login" %}' class="text-emerald-600 font-semibold hover:text-emerald-700 transition">
+                            Log In
+                        </a>
+                    </div>
+                </form>
+            </aside>
         </div>
-      </section>
-
-      <aside class="card" aria-label="Sign Up form">
-        <h2>Create Account</h2>
-        <p>Sign up to start managing orders, products, and more</p>
-
-        <form id="signupForm" autocomplete="on" novalidate>
-          <!-- Username -->
-          <div class="form-row">
-            <div class="input">
-              <input
-                type="text"
-                name="username"
-                placeholder="Username"
-                required
-              />
-            </div>
-          </div>
-
-          First & Last Name
-          <div class="form-row flex-row">
-            <div class="input">
-              <input
-                type="text"
-                name="firstname"
-                placeholder="First Name"
-                required
-              />
-            </div>
-            <div class="input">
-              <input
-                type="text"
-                name="lastname"
-                placeholder="Last Name"
-                required
-              />
-            </div>
-          </div>
-
-          Contact & Address
-          <div class="form-row flex-row">
-            <div class="input">
-              <input
-                id="contactInput"
-                type="text"
-                class="contact"
-                name="contact"
-                placeholder="Contact"
-                required
-              />
-            </div>
-            <div class="input">
-              <input
-                type="text"
-                name="address"
-                placeholder="Address"
-                required
-              />
-            </div>
-          </div>
-
-          Email
-          <div class="form-row">
-            <div class="input">
-              <input type="email" name="email" placeholder="Email" required />
-            </div>
-          </div>
-
-          Password
-          <div class="form-row">
-            <div class="input">
-              <input
-                id="passwordInput"
-                type="password"
-                name="password"
-                placeholder="Password"
-                required
-                minlength="8"
-              />
-            </div>
-          </div>
-
-          Referral
-          <div class="form-row">
-            <div class="input">
-              <select id="referral" name="referral" required>
-                <option value="" disabled selected>
-                  Where did you hear about us?
-                </option>
-                <option value="friend">Friend</option>
-                <option value="social">Social Media</option>
-                <option value="ad">Advertisement</option>
-                <option value="other">Other</option>
-              </select>
-              <input
-                type="text"
-                id="referralOther"
-                name="referralOther"
-                placeholder="Please specify"
-                style="display: none; margin-top: 8px"
-              />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <button class="btn" type="submit">Sign Up</button>
-          </div>
-
-          <div class="signup">
-            <div style="color: var(--muted)">Already have an account?</div>
-            <a href='{% url "login:user_login" %}'>Log In</a>
-          </div>
-        </form>
-      </aside>
     </div>
 
-    <!-- Toastify JS CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
+    <!-- Validation & Real-time Feedback Script -->
     <script>
-      const signupForm = document.getElementById("signupForm");
-      const referral = document.getElementById("referral");
-      const contact = document.querySelector(".contact");
-      const referralOther = document.getElementById("referralOther");
+        // Contact Number Validation
+        const contactInput = document.getElementById('contact');
+        const contactCount = document.getElementById('contactCount');
+        const contactError = document.getElementById('contactError');
 
-      referral.addEventListener("change", () => {
-        referralOther.style.display =
-          referral.value === "other" ? "block" : "none";
-      });
+        contactInput.addEventListener('input', function(e) {
+            // Only allow digits
+            this.value = this.value.replace(/\D/g, '');
+            
+            // Update counter
+            contactCount.textContent = `${this.value.length}/10`;
+            
+            // Validate length
+            if (this.value.length === 10) {
+                contactInput.classList.remove('border-red-400');
+                contactInput.classList.add('border-green-400', 'ring-2', 'ring-green-400', 'ring-opacity-50');
+                contactError.classList.add('hidden');
+            } else if (this.value.length > 0) {
+                contactInput.classList.remove('border-green-400', 'ring-2', 'ring-green-400', 'ring-opacity-50');
+                contactInput.classList.add('border-red-400');
+                contactError.textContent = `Must be exactly 10 digits (${10 - this.value.length} remaining)`;
+                contactError.classList.remove('hidden');
+            } else {
+                contactInput.classList.remove('border-green-400', 'border-red-400', 'ring-2', 'ring-green-400', 'ring-opacity-50');
+                contactError.classList.add('hidden');
+            }
+        });
 
-      contact.addEventListener("input", () => {
-        contact.value = contact.value.replace(/\D/g, ""); // remove non-digits
-        if (contact.value.length > 10) {
-          contact.value = contact.value.slice(0, 10);
+        // Email Validation
+        const emailInput = document.getElementById('email');
+        const emailError = document.getElementById('emailError');
+
+        emailInput.addEventListener('blur', function() {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (this.value && !emailRegex.test(this.value)) {
+                emailInput.classList.add('border-red-400');
+                emailError.textContent = 'Please enter a valid email address';
+                emailError.classList.remove('hidden');
+            } else {
+                emailInput.classList.remove('border-red-400');
+                emailError.classList.add('hidden');
+            }
+        });
+
+        emailInput.addEventListener('input', function() {
+            if (this.value) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (emailRegex.test(this.value)) {
+                    emailInput.classList.remove('border-red-400');
+                    emailInput.classList.add('border-green-400');
+                    emailError.classList.add('hidden');
+                }
+            }
+        });
+
+        // Password Strength Validation
+        const passwordInput = document.getElementById('password');
+        const strengthBar = document.getElementById('strengthBar');
+        const strengthText = document.getElementById('strengthText');
+        const passwordError = document.getElementById('passwordError');
+
+        const requirements = {
+            'length': { regex: /.{8,}/, icon: 'icon-length', text: 'At least 8 characters' },
+            'upper': { regex: /[A-Z]/, icon: 'icon-upper', text: 'One uppercase letter' },
+            'lower': { regex: /[a-z]/, icon: 'icon-lower', text: 'One lowercase letter' },
+            'number': { regex: /\d/, icon: 'icon-number', text: 'One number' },
+            'special': { regex: /[@$!%*?&]/, icon: 'icon-special', text: 'One special character' }
+        };
+
+        function updatePasswordStrength() {
+            const password = passwordInput.value;
+            let metRequirements = 0;
+
+            // Check each requirement
+            Object.keys(requirements).forEach(key => {
+                const requirement = requirements[key];
+                const isMet = requirement.regex.test(password);
+                const icon = document.getElementById(requirement.icon);
+                const reqElement = document.getElementById(`requirement-${key}`);
+
+                if (isMet) {
+                    metRequirements++;
+                    icon.textContent = '✓';
+                    icon.className = 'text-green-600 font-bold';
+                    reqElement.classList.add('text-green-700');
+                    reqElement.classList.remove('text-gray-600');
+                } else {
+                    icon.textContent = '✗';
+                    icon.className = 'text-red-400';
+                    reqElement.classList.remove('text-green-700');
+                    reqElement.classList.add('text-gray-600');
+                }
+            });
+
+            // Update strength bar and text
+            strengthBar.innerHTML = '';
+            let strength = 'Weak';
+            let strengthClass = 'strength-weak';
+
+            if (metRequirements === 5) {
+                strength = 'Strong';
+                strengthClass = 'strength-strong';
+            } else if (metRequirements === 4) {
+                strength = 'Good';
+                strengthClass = 'strength-good';
+            } else if (metRequirements >= 2) {
+                strength = 'Fair';
+                strengthClass = 'strength-fair';
+            }
+
+            const bar = document.createElement('div');
+            bar.className = `${strengthClass} h-full rounded-full transition-all duration-300`;
+            strengthBar.appendChild(bar);
+
+            strengthText.textContent = password ? `Password strength: ${strength}` : 'Password strength: Not checked';
+
+            // Show error if weak
+            if (password && metRequirements < 5) {
+                passwordError.classList.add('hidden');
+            } else if (metRequirements === 5) {
+                passwordError.classList.add('hidden');
+            }
         }
-      });
 
-      function showToast(message, type = "success", duration = 3000) {
-        const bgColor = type === "error" ? "#e74c3c" : "#4CAF50";
-        Toastify({
-          text: message,
-          duration,
-          close: true,
-          gravity: "top",
-          position: "right",
-          backgroundColor: bgColor,
-          stopOnFocus: true,
-        }).showToast();
-      }
+        passwordInput.addEventListener('input', updatePasswordStrength);
 
-      function isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        // Referral "Other" field visibility
+        const referralSelect = document.getElementById('referral');
+        const referralOtherDiv = document.getElementById('referralOtherDiv');
+        const referralOtherInput = document.getElementById('referralOther');
 
-        return emailRegex.test(email);
-      }
+        referralSelect.addEventListener('change', function() {
+            if (this.value === 'other') {
+                referralOtherDiv.classList.remove('hidden');
+                referralOtherInput.required = true;
+            } else {
+                referralOtherDiv.classList.add('hidden');
+                referralOtherInput.required = false;
+                referralOtherInput.value = '';
+            }
+        });
 
-      function isStrongPassword(password) {
-        const passwordRegex =
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        // Form Validation on Submit
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
 
-        return passwordRegex.test(password);
-      }
+            // Validate contact
+            if (contactInput.value.length !== 10) {
+                contactInput.classList.add('border-red-400');
+                contactError.textContent = 'Contact number must be exactly 10 digits';
+                contactError.classList.remove('hidden');
+                isValid = false;
+            }
 
-      signupForm.addEventListener("submit", (e) => {
-        e.preventDefault();
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                emailInput.classList.add('border-red-400');
+                emailError.textContent = 'Please enter a valid email address';
+                emailError.classList.remove('hidden');
+                isValid = false;
+            }
 
-        const username = signupForm.username.value.trim();
-        const firstName = signupForm.firstName.value.trim();
-        const lastName = signupForm.lastName.value.trim();
-        const address = signupForm.address.value.trim();
-        const contactNum = contact.value.trim();
-        const email = signupForm.email.value.trim();
-        const password = signupForm.password.value.trim();
-        const referralValue = referral.value;
-        const referralOtherValue = referralOther.value.trim();
+            // Validate password strength
+            let metRequirements = 0;
+            Object.keys(requirements).forEach(key => {
+                if (requirements[key].regex.test(passwordInput.value)) {
+                    metRequirements++;
+                }
+            });
 
-        if (
-          !username ||
-          !firstName ||
-          !lastName ||
-          !address ||
-          !email ||
-          !password
-        ) {
-          showToast("Please fill out all required fields!", "error");
-          return;
-        }
+            if (metRequirements < 5) {
+                passwordInput.classList.add('border-red-400');
+                passwordError.textContent = 'Password does not meet all requirements';
+                passwordError.classList.remove('hidden');
+                isValid = false;
+            }
 
-        if (contactNum.length !== 10) {
-          showToast("Contact number must be exactly 10 digits!", "error");
-          return;
-        }
-
-        if (!isValidEmail(email)) {
-          showToast("Please enter a valid email address!", "error");
-          return;
-        }
-
-        if (!isStrongPassword(password)) {
-          showToast(
-            "Password must be 8+ chars, include upper, lower, number & special char!",
-            "error"
-          );
-          return;
-        }
-
-        if (referralValue === "other" && referralOtherValue === "") {
-          showToast("Please specify where you heard about us.", "error");
-          return;
-        }
-      });
+            if (!isValid) {
+                e.preventDefault();
+            }
+        });
     </script>
-  </body>
+</body>
 </html>
