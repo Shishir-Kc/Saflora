@@ -213,9 +213,10 @@ def validate_khalti_payment(request,cart_id):
            cart = Cart.objects.get(id=cart_id)
            if recived_response == "Completed":
             status = Payment_Records.Status.COMPLETED
-           
+            payment_record.transaction_id = response['transaction_id']
             cart.cart_status = Cart.Status.PURCHASED
-               
+            cart.paid_price = (float(recived_amount)/100) + float(response['fee'])/100
+            cart.save()
            elif recived_response == "Pending":
               status = Payment_Records.Status.PENDING
            elif recived_response == "Refused":
@@ -230,12 +231,9 @@ def validate_khalti_payment(request,cart_id):
             return redirect("home:products_list")
            
            payment_record.service_provider_status = status
-           payment_record.transaction_id = response['transaction_id']
+           
            payment_record.fee = float(response['fee'])/100
            payment_record.status = status
-           
-           cart.paid_price = (float(recived_amount)/100) + float(response['fee'])/100
-           cart.save()
            payment_record.save()
            
        else:
