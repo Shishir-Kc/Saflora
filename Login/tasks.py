@@ -218,10 +218,15 @@ def verify_payment_statements():
         print("------------Status from Khalti-----------------------")
         if status_received == "Completed":
             status = Payment_Records.Status.COMPLETED
+            payment_record.transaction_id = received_response['transaction_id']
+            cart.paid_price = (float(received_amount)/100) + float(received_response['fee'])/100
+            cart.cart_status = Cart.Status.PURCHASED
+            cart.save()
             send_notification_saflora(cart_id=cart.id)
             send_notification_user(cart_id=cart.id)
         elif status_received == "Pending":
               status = Payment_Records.Status.PENDING
+              
         elif status_received == "Refused":
               status = Payment_Records.Status.FAILED
         elif status_received == "Expired":
@@ -234,11 +239,7 @@ def verify_payment_statements():
         payment_record.service_provider_status = status
         payment_record.fee = float(received_response['fee'])/100
         payment_record.status = status
-        payment_record.transaction_id = received_response['transaction_id']
         payment_record.payment_method = Payment_Records.Payment_Method.ONLINE
-        cart.paid_price = (float(received_amount)/100) + float(received_response['fee'])/100
-        cart.cart_status = Cart.Status.PURCHASED
-        cart.save()
         payment_record.save()
            
  
