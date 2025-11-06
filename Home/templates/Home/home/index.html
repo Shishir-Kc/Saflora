@@ -1,0 +1,183 @@
+{% extends "Home/base/navbar.html" %}
+{% load static %}
+
+{% block extra_css %} 
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+  }
+
+  body, html {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* <CHANGE> Made hero section full width and height */
+  .hero {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    margin-left: calc(-50vw + 50%);
+    background: url({% static 'assets/images/product.jpg' %}) no-repeat center center / cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* <CHANGE> Updated overlay to properly center content */
+  .overlay {
+    background-color: rgba(69, 123, 59, 0.7);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .overlay h2 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .overlay h2 span {
+    color: #fcbf49;
+  }
+
+  .overlay h4 {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin: 15px 0 20px 0;
+    font-weight: 500;
+  }
+
+  .overlay p {
+    max-width: 700px;
+    margin: 20px auto;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  .buttons {
+    margin-top: 30px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .buttons button {
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+  }
+
+  .orders {
+    background-color: #fcbf49;
+    color: #000;
+  }
+
+  .orders:hover {
+    background-color: #e5a83d;
+    transform: translateY(-2px);
+  }
+
+  .learn {
+    background-color: #ffffff;
+    color: #333;
+  }
+
+  .learn:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .hero {
+      height: 100vh;
+    }
+
+    .overlay {
+      padding: 30px 20px;
+    }
+
+    .overlay h2 {
+      font-size: 2.2rem;
+    }
+
+    .overlay h4 {
+      font-size: 1.2rem;
+    }
+
+    .overlay p {
+      font-size: 1rem;
+      max-width: 500px;
+    }
+
+    .buttons {
+      gap: 15px;
+    }
+
+    .buttons button {
+      padding: 12px 24px;
+      font-size: 0.95rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .overlay h2 {
+      font-size: 1.8rem;
+    }
+
+    .overlay h4 {
+      font-size: 1rem;
+    }
+
+    .overlay p {
+      font-size: 0.9rem;
+    }
+
+    .buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .buttons button {
+      width: 100%;
+    }
+  }
+</style>
+{% endblock extra_css %}
+
+{% block content %} 
+  <section class="hero">
+    <div class="overlay">
+      <h2><strong>A Smarter </strong> <span>Way to Clean</span></h2>
+      <h4>Powdered. Powerful. Purposeful.</h4>
+      <p>
+        Saflora delivers advanced cleaning without harsh chemicals.
+        Developed in Nepal to offer a safe, efficient, and sustainable
+        solution for everyday homes.
+      </p>
+      <div class="buttons">
+        <a href="product.html"><button class="orders">Explore Products - Today!</button></a>
+        <a href="about.html"><button class="learn">Learn About Our Study</button></a>
+      </div>
+    </div>
+  </section>
+{% endblock content %}
