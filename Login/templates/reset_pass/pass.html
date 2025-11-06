@@ -1,14 +1,9 @@
+{% extends "base/notification.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+{% block content %}
     <title>Saflora — Set New Password</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
-      rel="stylesheet"
-    />
+
     <style>
       :root {
         --bg-1: #f6fff8;
@@ -23,15 +18,9 @@
       }
       * {
         box-sizing: border-box;
-      }
-      html,
-      body {
-        height: 100%;
+        font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       }
       body {
-        margin: 0;
-        font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto,
-          "Helvetica Neue", Arial;
         background: linear-gradient(
           135deg,
           rgba(107, 211, 154, 0.19),
@@ -44,6 +33,8 @@
         align-items: center;
         justify-content: center;
         padding: 36px;
+        margin: 0;
+        min-height: 100vh;
       }
       .container {
         width: 100%;
@@ -113,6 +104,7 @@
         border-radius: 48%;
         transform: rotate(18deg);
         pointer-events: none;
+        z-index: 0;
       }
       .card {
         background: linear-gradient(
@@ -125,6 +117,8 @@
         box-shadow: var(--shadow);
         backdrop-filter: blur(6px);
         border: 1px solid rgba(20, 50, 30, 0.04);
+        position: relative;
+        z-index: 1;
       }
       .card h2 {
         margin: 0 0 10px 0;
@@ -210,8 +204,7 @@
         }
       }
     </style>
-  </head>
-  <body>
+
     <div class="shape" aria-hidden="true"></div>
     <div class="container" role="main">
       <section class="left" aria-labelledby="saflora-heading">
@@ -232,20 +225,13 @@
           </div>
         </div>
       </section>
-       {% comment %} {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %} {% endcomment %}
 
       <aside class="card" aria-label="New Password Form">
         <h2>Set a New Password</h2>
         <p>
           Create a strong new password for your account. Make sure it's secure!
         </p>
-        <form autocomplete="off" method ="POST" novalidate>
+        <form autocomplete="off" method="POST" novalidate>
           {% csrf_token %}
           <div class="form-row">
             <label for="password" style="display: none">New Password</label>
@@ -287,9 +273,7 @@
             </div>
           </div>
           <div class="form-row">
-            <label for="confirm-password" style="display: none"
-              >Confirm Password</label
-            >
+            <label for="confirm-password" style="display: none">Confirm Password</label>
             <div class="input" role="group" aria-labelledby="confirm-password">
               <svg
                 class="icon"
@@ -332,10 +316,9 @@
           </div>
           <div class="signup">
             <div style="color: var(--muted)">Changed your mind?</div>
-            <a href="login.html">Back to Login</a>
+            <a href='{% url "login:user_login" %}'>Back to Login</a>
           </div>
         </form>
       </aside>
     </div>
-  </body>
-</html>
+{% endblock content %}
