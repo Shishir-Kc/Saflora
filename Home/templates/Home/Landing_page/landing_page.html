@@ -151,23 +151,19 @@
         padding: 100px 0;
       }
 
-      .hero-title {
-        font-size: 3.5rem;
-        font-weight: 700;
-        margin-bottom: 10px;
+      .hero .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
       }
 
-      .hero-subtitle {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #555;
-        margin-bottom: 20px;
-      }
-
-      .hero-description {
-        max-width: 600px;
-        margin: 0 auto 30px auto;
-        font-size: 1.1rem;
+      .hero-image {
+        width: 100%;
+        max-width: 2000px; /* Large on desktop */
+        height: auto;
+        margin: 0 auto 30px;
+        display: block;
       }
 
       .hero-buttons {
@@ -178,7 +174,7 @@
 
       /* --- Features Section --- */
       .features {
-        padding: 0 0;
+        padding: 80px 0;
       }
 
       .features-grid {
@@ -189,7 +185,7 @@
 
       .feature-item {
         background: #fff;
-        padding: 10px;
+        padding: 30px 20px;
         text-align: center;
         border-radius: 8px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
@@ -230,16 +226,10 @@
       }
 
       .team-photo {
-        width: 120px;
-        height: 120px;
+        width: 150px;
+        height: 150px;
         border-radius: 50%;
-        background-color: var(--primary-color);
-        color: #fff;
-        font-size: 4rem;
-        font-weight: 700;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        object-fit: cover;
         margin: 0 auto 20px auto;
         box-shadow: 0 0 0 5px #fff, 0 0 0 7px var(--primary-color);
       }
@@ -313,8 +303,24 @@
           font-size: 2.5rem;
         }
 
+        .hero-image {
+          max-width: 300px; /* Smaller on mobile */
+          margin-bottom: 20px;
+        }
+
         .team-grid {
           grid-template-columns: 1fr;
+        }
+
+        .hero-buttons {
+          flex-direction: column;
+          align-items: center;
+          gap: 15px;
+        }
+
+        .btn-lg {
+          width: 100%;
+          max-width: 300px;
         }
       }
     </style>
@@ -353,16 +359,15 @@
 
     <main>
       <!-- Hero Section -->
-  <section id="hero" class="hero">
-    <div class="container" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-        <img src="{% static 'assets/images/strtegy.svg' %}" alt="Saflora graphics" />
-        <div class="hero-buttons" style="margin-top: 20px;">
+      <section id="hero" class="hero">
+        <div class="container">
+          <img src="{% static 'assets/images/hero.svg' %}" alt="Saflora graphics" class="hero-image" />
+          <div class="hero-buttons">
             <a href='{% url "home:products_list" %}' class="btn btn-primary btn-lg">Order Saflora Now</a>
             <a href='{% url "home:about_us" %}' class="btn btn-secondary btn-lg">Learn More</a>
+          </div>
         </div>
-    </div>
-</section>
-
+      </section>
 
       <!-- Features Section -->
       <section id="features" class="features">
@@ -373,32 +378,28 @@
               <i class="fas fa-users feature-icon"></i>
               <h3>Student Innovation</h3>
               <p>
-                Proudly made by passionate +2 students dedicated to a cleaner
-                future.
+                Proudly made by passionate +2 students dedicated to a cleaner future.
               </p>
             </div>
             <div class="feature-item">
               <i class="fas fa-leaf feature-icon"></i>
               <h3>Eco-Friendly Approach</h3>
               <p>
-                Our safe and eco-friendly paper packaging protect your floor and
-                the planet.
+                Our safe and eco-friendly paper packaging protect your floor and the planet.
               </p>
             </div>
             <div class="feature-item">
               <i class="fa-solid fa-soap feature-icon"></i>
               <h3>Effective on All Floors</h3>
               <p>
-                Tough on dirt, gentle on surfaces. Our formula is tested and
-                effective on all floor types.
+                Tough on dirt, gentle on surfaces. Our formula is tested and effective on all floor types.
               </p>
             </div>
             <div class="feature-item">
               <i class="fas fa-hand-holding-dollar feature-icon"></i>
               <h3>Affordable for Families</h3>
               <p>
-                We believe a clean home shouldn't be a luxury. Quality cleaning
-                at a fair price.
+                We believe a clean home shouldn't be a luxury. Quality cleaning at a fair price.
               </p>
             </div>
           </div>
@@ -414,53 +415,39 @@
             <div class="team-member">
               <img
                 class="team-photo"
-                style="width: 150px; height: 150px"
                 src="{% static 'assets/co_founders/rishab.jpg' %}"
                 alt="Rishab Thapa"
-              /><!--TODO:add   photo -->
+              />
               <h3>Rishab Thapa</h3>
-              <h4 style="font-weight: bold">
-                Co-Founder | Product Development
-              </h4>
+              <h4 style="font-weight: bold">Co-Founder | Product Development</h4>
               <p>
-                A science enthusiast, he leads product development. His
-                innovative approach ensures Saflora is effective, eco-friendly,
-                and safe. ❤️ Established quality standards.
+                A science enthusiast, he leads product development. His innovative approach ensures Saflora is effective, eco-friendly, and safe. ❤️ Established quality standards.
               </p>
             </div>
             <!-- Sudha Basnet -->
             <div class="team-member">
               <img
                 class="team-photo"
-                style="width: 150px; height: 150px"
                 src="{% static 'assets/co_founders/sudha.jpg' %}"
                 alt="Sudha Basnet"
-              /><!--TODO:add   photo -->
-
+              />
               <h3>Sudha Basnet</h3>
               <h4 style="font-weight: bold">Co-Founder | Finance Manager</h4>
               <p>
-                A natural leader, she manages Saflora's finances and operations,
-                ensuring the business runs smoothly while keeping prices
-                affordable. ❤️ Built our community network.
+                A natural leader, she manages Saflora's finances and operations, ensuring the business runs smoothly while keeping prices affordable. ❤️ Built our community network.
               </p>
             </div>
             <!-- Shreya Rai -->
             <div class="team-member">
               <img
                 class="team-photo"
-                style="width: 150px; height: 150px"
                 src="{% static 'assets/co_founders/shreya.png' %}"
                 alt="Shreya Rai"
-              /><!--TODO:add   photo -->
+              />
               <h3>Shreya Rai</h3>
-              <h4 style="font-weight: bold">
-                Co-Founder | Marketing & Content
-              </h4>
+              <h4 style="font-weight: bold">Co-Founder | Marketing & Content</h4>
               <p>
-                A creative force, she handles marketing and social media. Her
-                passion for storytelling connects us with families across Nepal.
-                ❤️ Grew our online presence.
+                A creative force, she handles marketing and social media. Her passion for storytelling connects us with families across Nepal. ❤️ Grew our online presence.
               </p>
             </div>
           </div>
@@ -473,19 +460,14 @@
           <h2 class="section-title">Get in Touch with Team Saflora</h2>
           <div class="contact-info">
             <p>
-              <i class="fas fa-phone"></i> +977-9767385582 | +977-9764467555 |
-              +977-9842621150
+              <i class="fas fa-phone"></i> +977-9767385582 | +977-9764467555 | +977-9842621150
             </p>
             <p><i class="fas fa-envelope"></i> saflora.nepal@gmail.com</p>
             <p><i class="fas fa-map-marker-alt"></i> Itahari, Nepal</p>
           </div>
           <div class="social-media">
-            <a href="#" aria-label="Facebook"
-              ><i class="fab fa-facebook-f"></i
-            ></a>
-            <a href="#" aria-label="Instagram"
-              ><i class="fab fa-instagram"></i
-            ></a>
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
             <a href="#" aria-label="Tiktok"><i class="fab fa-tiktok"></i></a>
           </div>
         </div>
@@ -495,10 +477,7 @@
     <!-- Footer -->
     <footer class="footer">
       <div class="container">
-        <p>
-          &copy; 2024 Saflora | Made with passion in Nepal by Shreya, Sudha &
-          Rishab.
-        </p>
+        <p>&copy; 2024 Saflora | Made with passion in Nepal by Shreya, Sudha & Rishab.</p>
       </div>
     </footer>
 
