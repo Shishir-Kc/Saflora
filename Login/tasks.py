@@ -23,7 +23,6 @@ load_dotenv()
 
 @shared_task
 def send_verification_email(email, code,url=None):
-   print(email)
    try: 
     user = Saflora_user.objects.get(email=email)
     subject = 'Your Verification Code'
@@ -48,7 +47,7 @@ def send_verification_email(email, code,url=None):
         msg.attach(logo)
     msg.send()
    except Exception as e:
-     print(e)
+     logger.warning('failed to send email')
 
 
 @shared_task
@@ -116,7 +115,6 @@ def send_purchase_notification_saflora(message,data):
 
 
     except Exception as e:
-        print('Error sending purchase notification:', e)
         import traceback; print(traceback.format_exc())
         return False
 
@@ -162,8 +160,8 @@ def send_order_confirmation(customer_email, customer_name,order_date,cart_id,tot
         msg.attach(logo)
     msg.send()
    except Exception as e:
-        print("-----------------error------------")
-        print(e)
+
+        logger.warning('failed to send order confirmation to user')
 
 @shared_task
 def clean_used_otps():
@@ -174,7 +172,7 @@ def clean_used_otps():
     now = timezone.now()
     deleted,_ =  Verification_code.objects.filter(is_used= True).delete()
     expired, _ = Verification_code.objects.filter(expires_at__lt =now).delete()
-    print(f"deleted {deleted} + {expired} opt(s)")
+    
 
 
 @shared_task
@@ -215,7 +213,7 @@ def verify_payment_statements():
          continue
         status_received = received_response['status']
         received_amount = received_response['total_amount']
-        print("------------Status from Khalti-----------------------")
+
         if status_received == "Completed":
             status = Payment_Records.Status.COMPLETED
             payment_record.transaction_id = received_response['transaction_id']
