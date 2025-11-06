@@ -6,7 +6,7 @@ from datetime import timedelta,datetime
 from django.utils import timezone
 
 def expires_at():
-   return timezone.now() + timedelta(minutes=1)
+   return timezone.now() + timedelta(minutes=60)
 
 class Payment_Records(models.Model):
     class Status(models.TextChoices):
