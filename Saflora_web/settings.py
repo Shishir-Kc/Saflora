@@ -65,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'Login.middlewares.is_Loggedin'
 ]
 
 ROOT_URLCONF = 'Saflora_web.urls'
@@ -171,7 +172,7 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_BEAT_SCHEDULE = {
     'verify-payment-statements-every-10-mins': {
         'task': 'Login.tasks.verify_payment_statements',
-        'schedule': timedelta(minutes=1),  # every 1 minutes
+        'schedule': timedelta(minutes=61),  # every 61 minutes
     },
     'cleanup-used-otps-every-5-mins': {
         'task': 'Login.tasks.clean_used_otps',
