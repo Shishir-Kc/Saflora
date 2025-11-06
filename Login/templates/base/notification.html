@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Saflora {% block title %} {% endblock title %}</title>
+      <link rel="shortcut icon" href="{% static 'Login/images/saflora.png' %}" type="image/x-icon" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        success: '#10B981',
+                        info: '#3B82F6',
+                        warning: '#F59E0B',
+                        error: '#EF4444'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .notification-slide {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .notification-exit {
+            animation: slideOut 0.3s ease-in forwards;
+        }
+        @keyframes slideOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-100%); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <!-- Notification Container -->
+    <div id="notification-container" class="fixed top-0 left-0 right-0 z-50 flex flex-col items-center px-4 pt-4 pointer-events-none">
+        <!-- Django messages will appear here -->
+    </div>
+
+    {% block content %}
+
+    {% endblock %}
+
+    <script>
+        const DEFAULT_DURATION = 5000;
+        const CONTAINER_ID = 'notification-container';
+        
+        const MESSAGE_COLORS = {
+            'success': 'bg-success',
+            'info': 'bg-info',
+            'warning': 'bg-warning',
+            'error': 'bg-error',
+            'debug': 'bg-gray-500',
+            'default': 'bg-gray-700'
+        };
+
+        function createNotification(message, type = 'default', duration = DEFAULT_DURATION) {
+            const container = document.getElementById(CONTAINER_ID);
+            const notification = document.createElement('div');
+            const bgColor = MESSAGE_COLORS[type] || MESSAGE_COLORS.default;
+            
+            notification.className = `notification-slide mb-3 px-4 py-3 rounded-lg text-white shadow-lg max-w-md w-full pointer-events-auto ${bgColor} flex justify-between items-center`;
+            notification.innerHTML = `
+                <span class="flex-1 break-words pr-3">${message}</span>
+                <button class="focus:outline-none" aria-label="Close notification">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-80 hover:opacity-100" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            `;
+            
+            container.appendChild(notification);
+            
+            const autoDismiss = setTimeout(() => {
+                dismissNotification(notification);
+            }, duration);
+            
+            const closeButton = notification.querySelector('button');
+            closeButton.addEventListener('click', () => {
+                clearTimeout(autoDismiss);
+                dismissNotification(notification);
+            });
+        }
+
+        function dismissNotification(notification) {
+            notification.classList.remove('notification-slide');
+            notification.classList.add('notification-exit');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }
+
+        // ✅ INTEGRATE WITH DJANGO MESSAGES HERE
+        document.addEventListener('DOMContentLoaded', () => {
+            {% if messages %}
+                {% for message in messages %}
+                    createNotification("{{ message|escapejs }}", "{{ message.tags|default:'default' }}");
+                {% endfor %}
+            {% endif %}
+        });
+    </script>
+</body>
+</html>
