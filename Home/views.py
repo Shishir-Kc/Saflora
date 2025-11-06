@@ -8,13 +8,14 @@ from django.contrib.auth.decorators import login_required
 def in_home(request):
     return render(request,'Home/Landing_page/landing_page.html')
 
+def index_home(request):
+   return render(request,'Home/home/index.html')
 
 def base_navbar(request):
     return render(request,'Home/base/navbar.html')
 
 def products_list(request):
    items = Saflora_Base_Product.objects.all()
-   print(items)
    context = {
        'items':items
    }
