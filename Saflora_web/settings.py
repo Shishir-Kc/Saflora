@@ -47,10 +47,7 @@ INSTALLED_APPS = [
     'Accounts',
     'Product',
     'Payment',    
-# Tailwind
 
-    'tailwind',
-    'theme',
 
 ]
 
