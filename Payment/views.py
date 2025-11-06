@@ -9,7 +9,6 @@ from Accounts.models import Saflora_user,Saflora_Product,Cart,AnonymousUser
 from django.contrib import messages
 from .models import Payment_Records
 from .tools import send_notification_saflora,send_notification_user
-import logging
 load_dotenv()
 
 
@@ -113,7 +112,6 @@ def khalti_payment(request,id,cart_id):
         messages.success(request,'Your order has been placed !')
         send_notification_saflora(cart_id=cart_id)
         send_notification_user(cart_id=cart_id)
-        print("Triggering notification for cart", cart_id)
         return redirect('home:products_list')
      
      amount = (int(amount)*100) # converting rupeese in paisa 
@@ -137,14 +135,12 @@ def khalti_payment(request,id,cart_id):
      }
      try:
          response = requests.request("POST", url, headers=headers, data=payload)
-         print("-------------------------")
-         print(response)
+
          payment.pidx=response.json()['pidx']
          payment.status = payment.Status.INITIATED
          payment.provider = payment.Payment_Provider.KHALTI
          payment.payment_method = Payment_Records.Payment_Method.ONLINE
-         payment.save() 
-         print("PAYMENT SAVED")        
+         payment.save()      
          return_url = (response.json()['payment_url'])
      except KeyError:
          messages.error(request,'Some thing went wrong ! ')
@@ -216,6 +212,7 @@ def validate_khalti_payment(request,cart_id):
             payment_record.transaction_id = response['transaction_id']
             cart.cart_status = Cart.Status.PURCHASED
             cart.paid_price = (float(recived_amount)/100) + float(response['fee'])/100
+            messages.success(request,"Order has been placed !")
             cart.save()
            elif recived_response == "Pending":
               status = Payment_Records.Status.PENDING
@@ -224,6 +221,7 @@ def validate_khalti_payment(request,cart_id):
            elif recived_response == "Expired":
               status = Payment_Records.Status.FAILED
            elif recived_response == "User canceled":
+              messages.error(request,"Order has been cancled !")
               status = Payment_Records.Status.FAILED
            else:
             status = Payment_Records.Status.FAILED
@@ -247,9 +245,9 @@ def validate_khalti_payment(request,cart_id):
     if payment_record.status == Payment_Records.Status.COMPLETED and payment_record.service_provider_status == Payment_Records.Status.COMPLETED:
       send_notification_saflora(cart_id=cart_id)
       send_notification_user(cart_id=cart_id)
-    print("Triggering notification for cart", cart_id)
 
-    messages.success(request,"Order has been placed !")
+
+   
     return redirect("home:products_list") 
 
 
