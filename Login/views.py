@@ -83,20 +83,20 @@ def forgot_pass(request):
         if not does_user_exists(email=email):
 
             messages.error(request,'User does not exists ! ')
-            print("user dead !")
+           
             return redirect("login:forgot_pass")
         
         request.session['pending_email'] = email
 
         try:
-         print('yo sending mail  . .')
+        
          link = reverse('login:otp_verify')
          full_link = request.build_absolute_uri(link)
          send_verification_email.delay(email=email,code=Verification_code.generate_code(email=email).code,url=full_link)
-         print("sending you to enter otp !")
+         
          return redirect("login:otp_verify")
         except Exception as e:
-            print("i am here again !!")
+            
             print(e)
             messages.error(request,"Error Email Could not be sent ! ")
             return render(request,"reset_pass/email.html",)
