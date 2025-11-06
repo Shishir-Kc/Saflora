@@ -12,6 +12,8 @@ from .views import (in_home,
                     update_address,
                     update_profile,
                     delete_cart,
+                    index_home
+
                     )
 
 
@@ -19,11 +21,12 @@ app_name = "home"
 
 
 urlpatterns = [
-    path('',in_home,name="in_home"),
+    path('',index_home,name="home"),
+    path('landing_page/Saflora',in_home,name="in_home"),
     path('navbar/',base_navbar,name="base_navbar"),
     path('products/view/',products_list,name="products_list"),
     path('checkout/<uuid:id>/payment/',check_out,name="check_out"),
-     path('checkout/<uuid:id>/payment/<uuid:cart_id>/',check_out,name="check_out_cart"),
+    path('checkout/<uuid:id>/payment/<uuid:cart_id>/',check_out,name="check_out_cart"),
     path('user/profile/view/',user_profile,name="user_profile"),
     path('about-us/', about_us, name='about_us'),
     path('contact/', contact, name='contact'),
