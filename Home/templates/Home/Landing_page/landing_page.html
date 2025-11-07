@@ -214,39 +214,91 @@
         background-color: #f9f9f9;
       }
 
+      /* Added animations from about_us.html */
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes scaleIn {
+        from { opacity: 0; transform: scale(0.9); }
+        to { opacity: 1; transform: scale(1); }
+      }
+
+      .animate-scale-in { animation: scaleIn 0.6s ease-out forwards; opacity: 0; }
+      .animate-scale-in:nth-child(1) { animation-delay: 0.1s; }
+      .animate-scale-in:nth-child(2) { animation-delay: 0.2s; }
+      .animate-scale-in:nth-child(3) { animation-delay: 0.3s; }
+
       .team-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 30px;
       }
 
-      .team-member {
-        text-align: center;
-        padding: 20px;
+      /* Updated team-card styles with hover overlay effect */
+      .team-card {
+        position: relative;
+        height: 380px;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        cursor: pointer;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
 
-      .team-photo {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
+      .team-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      }
+
+      .team-card img {
+        width: 100%;
+        height: 100%;
         object-fit: cover;
-        margin: 0 auto 20px auto;
-        box-shadow: 0 0 0 5px #fff, 0 0 0 7px var(--primary-color);
+        transition: transform 0.3s ease;
       }
 
-      .team-member h3 {
+      .team-card:hover img {
+        transform: scale(1.05);
+      }
+
+      .card-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.7) 40%, transparent 100%);
+        padding: 40px 20px 20px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        transform: translateY(100%);
+        transition: transform 0.4s ease;
+      }
+
+      .team-card:hover .card-overlay {
+        transform: translateY(0);
+      }
+
+      .card-overlay > div:first-child {
         font-size: 1.5rem;
+        font-weight: bold;
       }
 
-      .team-member h4 {
-        font-size: 1rem;
-        color: #555;
-        font-weight: 400;
-        margin-bottom: 10px;
+      .card-overlay > div:nth-child(2) {
+        font-size: 0.9rem;
+        color: #ccc;
+        margin-top: 0.5rem;
       }
 
-      .team-member p {
-        font-size: 0.95rem;
+      .card-overlay > div:nth-child(3) {
+        font-size: 0.9rem;
+        color: #ddd;
+        margin-top: 1rem;
+        line-height: 1.4;
       }
 
       /* --- Contact & Footer --- */
@@ -410,47 +462,7 @@
       <section id="team" class="team">
         <div class="container">
           <h2 class="section-title">Meet the Young Minds Behind Saflora</h2>
-          <div class="team-grid">
-            <!-- Rishab Thapa -->
-            <div class="team-member">
-              <img
-                class="team-photo"
-                src="{% static 'assets/co_founders/rishab.jpg' %}"
-                alt="Rishab Thapa"
-              />
-              <h3>Rishab Thapa</h3>
-              <h4 style="font-weight: bold">Co-Founder | Product Development</h4>
-              <p>
-                A science enthusiast, he leads product development. His innovative approach ensures Saflora is effective, eco-friendly, and safe. ❤️ Established quality standards.
-              </p>
-            </div>
-            <!-- Sudha Basnet -->
-            <div class="team-member">
-              <img
-                class="team-photo"
-                src="{% static 'assets/co_founders/sudha.jpg' %}"
-                alt="Sudha Basnet"
-              />
-              <h3>Sudha Basnet</h3>
-              <h4 style="font-weight: bold">Co-Founder | Finance Manager</h4>
-              <p>
-                A natural leader, she manages Saflora's finances and operations, ensuring the business runs smoothly while keeping prices affordable. ❤️ Built our community network.
-              </p>
-            </div>
-            <!-- Shreya Rai -->
-            <div class="team-member">
-              <img
-                class="team-photo"
-                src="{% static 'assets/co_founders/shreya.png' %}"
-                alt="Shreya Rai"
-              />
-              <h3>Shreya Rai</h3>
-              <h4 style="font-weight: bold">Co-Founder | Marketing & Content</h4>
-              <p>
-                A creative force, she handles marketing and social media. Her passion for storytelling connects us with families across Nepal. ❤️ Grew our online presence.
-              </p>
-            </div>
-          </div>
+          <div class="team-grid" id="teamContainer"></div>
         </div>
       </section>
 
@@ -466,23 +478,55 @@
             <p><i class="fas fa-map-marker-alt"></i> Itahari, Nepal</p>
           </div>
           <div class="social-media">
-            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="#" aria-label="Tiktok"><i class="fab fa-tiktok"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61573528025906" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/saflora_nepal/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@saflora__" aria-label="Tiktok"><i class="fab fa-tiktok"></i></a>
           </div>
         </div>
       </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="container">
-        <p>&copy; 2024 Saflora | Made with passion in Nepal by Shreya, Sudha & Rishab.</p>
-      </div>
-    </footer>
+
 
     <!-- Embedded JavaScript -->
     <script>
+      const teamMembers = [
+        {
+          name: "Shreya Rai",
+          title: "Co-Founder | Marketing & Content",
+          description: "A creative force, she handles marketing and social media. Her passion for storytelling connects us with families across Nepal.",
+          image: "{% static 'assets/co_founders/shreya.png' %}"
+        },
+        {
+          name: "Sudha Basnet",
+          title: "Co-Founder | Finance Manager",
+          description: "A natural leader, she manages Saflora's finances and operations, ensuring the business runs smoothly while keeping prices affordable.",
+          image: "{% static 'assets/co_founders/sudha.jpg' %}"
+        },
+        {
+          name: "Rishab Thapa",
+          title: "Co-Founder",
+          description: "A science enthusiast, he leads product development. His innovative approach ensures Saflora is effective, eco-friendly, and safe.",
+          image: "{% static 'assets/co_founders/rishab.jpg' %}"
+        }
+      ];
+
+      const container = document.getElementById('teamContainer');
+      teamMembers.forEach((member, index) => {
+        const card = document.createElement('div');
+        card.className = 'team-card animate-scale-in';
+        card.innerHTML = `
+          <img src="${member.image}" alt="${member.name}">
+          <div class="card-overlay">
+            <div>${member.name}</div>
+            <div>${member.title}</div>
+            <div>${member.description}</div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      // Smooth scroll for navigation links
       document.addEventListener("DOMContentLoaded", function () {
         const navLinks = document.querySelectorAll(".nav-link");
 
