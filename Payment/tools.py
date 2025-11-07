@@ -17,6 +17,7 @@ def send_notification_saflora(cart_id):
             address_type = user.address_type
             email = user.email
             contact = user.contact
+            province = user.province.name
         else:
             user_full_name = user_cart.anonymous_user.full_name
             address = user_cart.anonymous_user.shipping_address
