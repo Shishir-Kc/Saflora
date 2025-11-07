@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    {% block head %} 
+    {% block head %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Saflora{% endblock title %}</title>
@@ -14,11 +14,9 @@
       href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       rel="stylesheet"
     />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <link rel="shortcut icon" href="{% static 'assets/images/saflora.png' %}" type="image/x-icon" />
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
-</head>
     <style>
       * {
         margin: 0;
@@ -30,9 +28,12 @@
         font-family: 'Poppins', sans-serif;
         background-color: #f6f9f6;
         overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
       }
 
-      /* Modern horizontal navbar styling */
+      /* Navbar & Notification Styles (unchanged) */
       .navbar {
         background: white;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -165,7 +166,6 @@
         transform: rotate(-45deg) translate(7px, -7px);
       }
 
-      /* Modern notification system styling */
       .notifications-container {
         position: fixed;
         top: 90px;
@@ -216,44 +216,21 @@
         animation: slideOut 0.3s ease forwards;
       }
 
-      /* Success notification */
       .notification.success {
         border-left-color: #28a745;
         background-color: #f0f9f4;
       }
-
-      .notification.success .icon {
-        color: #28a745;
-      }
-
-      /* Error notification */
       .notification.error {
         border-left-color: #dc3545;
         background-color: #fef5f5;
       }
-
-      .notification.error .icon {
-        color: #dc3545;
-      }
-
-      /* Warning notification */
       .notification.warning {
         border-left-color: #ffc107;
         background-color: #fffbf0;
       }
-
-      .notification.warning .icon {
-        color: #ffc107;
-      }
-
-      /* Info notification */
       .notification.info {
         border-left-color: #17a2b8;
         background-color: #f0f8fb;
-      }
-
-      .notification.info .icon {
-        color: #17a2b8;
       }
 
       .notification .icon {
@@ -290,7 +267,98 @@
 
       .main-content {
         padding: 20px;
-        min-height: calc(100vh - 70px);
+        flex: 1;
+      }
+
+      /* Modern Footer */
+      .footer {
+        background: #2d6a4f;
+        color: #e0f0e8;
+        padding: 48px 20px 32px;
+        font-family: 'Poppins', sans-serif;
+      }
+
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 32px;
+      }
+
+      .footer-section h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: white;
+      }
+
+      .footer-links {
+        list-style: none;
+      }
+
+      .footer-links li {
+        margin-bottom: 10px;
+      }
+
+      .footer-links a {
+        color: #c8e6d0;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: color 0.2s;
+      }
+
+      .footer-links a:hover {
+        color: white;
+      }
+
+      .footer-contact p {
+        margin: 6px 0;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .footer-contact i {
+        color: #a8e6b9;
+        width: 18px;
+        text-align: center;
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .social-icons a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        font-size: 16px;
+        transition: all 0.3s ease;
+      }
+
+      .social-icons a:hover {
+        background: white;
+        color: #2d6a4f;
+        transform: translateY(-2px);
+      }
+
+      .footer-bottom {
+        max-width: 1200px;
+        margin: 40px auto 0;
+        padding-top: 24px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
+        font-size: 0.9rem;
+        color: #b0d9c2;
       }
 
       @media (max-width: 768px) {
@@ -323,21 +391,6 @@
           border-bottom: 1px solid #f0f0f0;
         }
 
-        .navbar-actions {
-          gap: 8px;
-        }
-
-        .navbar-actions a {
-          width: 36px;
-          height: 36px;
-          font-size: 18px;
-        }
-
-        .main-content {
-          padding: 15px;
-        }
-
-        /* Adjust notifications for mobile */
         .notifications-container {
           top: 80px;
           right: 10px;
@@ -349,36 +402,12 @@
           min-width: auto;
         }
       }
-
-      @media (max-width: 480px) {
-        .navbar-container {
-          padding: 0 15px;
-        }
-
-        .navbar-logo {
-          font-size: 18px;
-          gap: 8px;
-        }
-
-        .navbar-logo img {
-          width: 40px;
-          height: 40px;
-        }
-
-        .navbar-menu a {
-          font-size: 13px;
-          padding: 12px 16px;
-        }
-      }
     </style>
-
     {% block extra_css %}{% endblock %}
-
   </head>
   {% endblock head %}
   <body>
-    
-    <!-- Modern notifications container for Django messages -->
+    <!-- Notifications -->
     <div class="notifications-container" id="notificationsContainer">
       {% if messages %}
         {% for message in messages %}
@@ -405,14 +434,11 @@
       {% endif %}
     </div>
 
-    <!-- Modern horizontal navbar -->
+    <!-- Navbar -->
     <nav class="navbar">
       <div class="navbar-container">
         <a href="{% url 'home:in_home' %}" class="navbar-logo">
-          <img
-            src="{% static 'assets/images/saflora.png' %}"
-            alt="Saflora Logo"
-          />
+          <img src="{% static 'assets/images/saflora.png' %}" alt="Saflora Logo" />
           <span>Saflora</span>
         </a>
 
@@ -424,34 +450,19 @@
 
         <ul class="navbar-menu" id="navbarMenu">
           <a href="{% url 'home:in_home' %}">
-            <li style="display: flex; align-items: center; gap: 8px;">
-              <span class="material-icons">home</span>
-              <span>Home</span>
-            </li>
+            <li><span class="material-icons">home</span> Home</li>
           </a>
           <a href="{% url 'home:about_us' %}">
-            <li style="display: flex; align-items: center; gap: 8px;">
-              <span class="material-icons">info</span>
-              <span>About Us</span>
-            </li>
+            <li><span class="material-icons">info</span> About Us</li>
           </a>
           <a href="{% url 'home:products_list' %}">
-            <li style="display: flex; align-items: center; gap: 8px;">
-              <span class="material-icons">shopping_bag</span>
-              <span>Products</span>
-            </li>
+            <li><span class="material-icons">shopping_bag</span> Products</li>
           </a>
           <a href="{% url 'home:how_to_use' %}">
-            <li style="display: flex; align-items: center; gap: 8px;">
-              <span class="material-icons">help</span>
-              <span>How to Use</span>
-            </li>
+            <li><span class="material-icons">help</span> How to Use</li>
           </a>
           <a href="{% url 'home:contact' %}">
-            <li style="display: flex; align-items: center; gap: 8px;">
-              <span class="material-icons">phone</span>
-              <span>Contact</span>
-            </li>
+            <li><span class="material-icons">phone</span> Contact</li>
           </a>
         </ul>
 
@@ -466,11 +477,51 @@
       </div>
     </nav>
 
+    <!-- Main Content -->
     <div class="main-content" id="mainContent">
-      {% block content %}
-      
-      {% endblock content %}
+      {% block content %}{% endblock content %}
     </div>
+
+    <!-- Modern Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>About Saflora</h3>
+          <p class="text-sm">
+            Eco-friendly powder floor cleaner crafted in Nepal. Gentle on floors, tough on dirt.
+          </p>
+          <div class="social-icons">
+            <a href="https://www.facebook.com/profile.php?id=61573528025906" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/saflora_nepal/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@saflora__" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="{% url 'home:in_home' %}">Home</a></li>
+            <li><a href="{% url 'home:about_us' %}">About Us</a></li>
+            <li><a href="{% url 'home:products_list' %}">Products</a></li>
+            <li><a href="{% url 'home:how_to_use' %}">How to Use</a></li>
+            <li><a href="{% url 'home:contact' %}">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3>Contact Us</h3>
+          <div class="footer-contact">
+            <p><i class="fas fa-phone"></i> +977-9767385582</p>
+            <p><i class="fas fa-envelope"></i> saflora.nepal@gmail.com</p>
+            <p><i class="fas fa-map-marker-alt"></i> Itahari, Nepal</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        &copy; 2025 Saflora | Made with passion in Nepal by Shreya, Sudha & Rishab.
+      </div>
+    </footer>
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {
@@ -482,7 +533,6 @@
           navbarMenu.classList.toggle('active');
         });
 
-        // Close menu when a link is clicked
         const navLinks = navbarMenu.querySelectorAll('a');
         navLinks.forEach(link => {
           link.addEventListener('click', function() {
@@ -491,7 +541,6 @@
           });
         });
 
-        // Close menu when clicking outside
         document.addEventListener('click', function(event) {
           if (!event.target.closest('.navbar')) {
             hamburger.classList.remove('active');
