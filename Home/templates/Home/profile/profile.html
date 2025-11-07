@@ -96,7 +96,6 @@
         color: #10b981;
       }
 
-      /* Dropdown option styling */
       .custom-select option {
         padding: 12px;
         background-color: white;
@@ -115,7 +114,6 @@
         color: white;
       }
 
-      /* Focus styles for accessibility */
       input:focus,
       textarea:focus {
         outline: none;
@@ -123,7 +121,6 @@
         box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
       }
 
-      /* Mobile responsive adjustments */
       @media (max-width: 768px) {
         .modal-content {
           padding: 24px;
@@ -139,6 +136,20 @@
 
         .custom-select-icon {
           right: 12px;
+        }
+      }
+
+      /* Session buttons container */
+      .session-buttons {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+        flex-wrap: wrap;
+      }
+
+      @media (max-width: 640px) {
+        .session-buttons {
+          flex-direction: column;
         }
       }
     </style>
@@ -185,7 +196,6 @@
             <h2 class="text-xl font-bold text-gray-900">Saved Addresses</h2>
           </div>
 
-          <!-- Address List -->
           <div class="space-y-6">
             <div class="flex justify-between items-start border-t pt-6">
               <div>
@@ -200,6 +210,18 @@
                 <i class="fas fa-pen text-gray-600 text-sm"></i>
               </button>
             </div>
+          </div>
+        </div>
+
+        <!-- Login / Logout Section -->
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <h2 class="text-xl font-bold text-gray-900 mb-4">Account Session</h2>
+          <div class="session-buttons">
+            <a href='{% url "login:user_logout" %}' class="flex-1">
+              <button class="w-full px-4 py-2 bg-gray-100 hover:bg-red-200 text-gray-700 rounded-lg font-semibold text-sm transition-colors shadow-sm">
+                Log Out
+              </button>
+            </a>
           </div>
         </div>
       </div>
@@ -309,7 +331,6 @@
         
         <div class="mb-5">
           <label for="area" class="block text-sm font-semibold text-gray-700 mb-2">Select Area</label>
-          <!-- Modern custom styled select dropdown with all 20 areas manually written -->
           <div class="custom-select-wrapper">
             <select
               id="area"
@@ -318,26 +339,27 @@
               required
             >
               <option value="">Select Area</option>
-              <option value="itahari-1" {% if user.location.name == 'itahari-1' %}selected{% endif %}>Itahari-1</option>
-              <option value="itahari-2" {% if user.location.name == 'itahari-2' %}selected{% endif %}>Itahari-2</option>
-              <option value="itahari-3" {% if user.location.name == 'itahari-3' %}selected{% endif %}>Itahari-3</option>
-              <option value="itahari-4" {% if user.location.name == 'itahari-4' %}selected{% endif %}>Itahari-4</option>
-              <option value="itahari-5" {% if user.location.name == 'itahari-5' %}selected{% endif %}>Itahari-5</option>
-              <option value="itahari-6" {% if user.location.name == 'itahari-6' %}selected{% endif %}>Itahari-6</option>
-              <option value="itahari-7" {% if user.location.name == 'itahari-7' %}selected{% endif %}>Itahari-7</option>
-              <option value="itahari-8" {% if user.location.name == 'itahari-8' %}selected{% endif %}>Itahari-8</option>
-              <option value="itahari-9" {% if user.location.name == 'itahari-9' %}selected{% endif %}>Itahari-9</option>
-              <option value="itahari-10" {% if user.location.name == 'itahari-10' %}selected{% endif %}>Itahari-10</option>
-              <option value="itahari-11" {% if user.location.name == 'itahari-11' %}selected{% endif %}>Itahari-11</option>
-              <option value="itahari-12" {% if user.location.name == 'itahari-12' %}selected{% endif %}>Itahari-12</option>
-              <option value="itahari-13" {% if user.location.name == 'itahari-13' %}selected{% endif %}>Itahari-13</option>
-              <option value="itahari-14" {% if user.location.name == 'itahari-14' %}selected{% endif %}>Itahari-14</option>
-              <option value="itahari-15" {% if user.location.name == 'itahari-15' %}selected{% endif %}>Itahari-15</option>
-              <option value="itahari-16" {% if user.location.name == 'itahari-16' %}selected{% endif %}>Itahari-16</option>
-              <option value="itahari-17" {% if user.location.name == 'itahari-17' %}selected{% endif %}>Itahari-17</option>
-              <option value="itahari-18" {% if user.location.name == 'itahari-18' %}selected{% endif %}>Itahari-18</option>
-              <option value="itahari-19" {% if user.location.name == 'itahari-19' %}selected{% endif %}>Itahari-19</option>
-              <option value="itahari-20" {% if user.location.name == 'itahari-20' %}selected{% endif %}>Itahari-20</option>
+              {% for location in locations %} 
+               <option value="{{location.id}}" {% if user.location.name == location.name %}selected{% endif %}>{{location.name}}</option>
+              {% endfor %}
+            </select>
+            <i class="fas fa-chevron-down custom-select-icon"></i>
+          </div>
+        </div>
+        
+        <div class="mb-5">
+          <label for="province" class="block text-sm font-semibold text-gray-700 mb-2">Select Province</label>
+          <div class="custom-select-wrapper">
+            <select
+              id="province"
+              name="province"
+              class="custom-select"
+              required
+            >
+              <option value="">Select Province</option>
+              {% for province in provinces %} 
+              <option value="{{province.id}}" {% if user.province.name == province.name %}selected{% endif %}>{{province.name}}</option>
+              {% endfor %}
             </select>
             <i class="fas fa-chevron-down custom-select-icon"></i>
           </div>
@@ -374,7 +396,6 @@
   </div>
 
   <script>
-    // Modal management functions
     function openPersonalModal() {
       document.getElementById('personalModal').classList.add('show');
     }
@@ -391,7 +412,6 @@
       document.getElementById('addressModal').classList.remove('show');
     }
 
-    // Close modal when clicking outside of it
     window.addEventListener('click', function(event) {
       const personalModal = document.getElementById('personalModal');
       const addressModal = document.getElementById('addressModal');
@@ -404,7 +424,6 @@
       }
     });
 
-    // Smooth animation for dropdown icon on focus/blur
     const areaSelect = document.getElementById('area');
     if (areaSelect) {
       areaSelect.addEventListener('focus', function() {
