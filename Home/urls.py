@@ -21,8 +21,8 @@ app_name = "home"
 
 
 urlpatterns = [
-    path('',index_home,name="home"),
-    path('landing_page/Saflora',in_home,name="in_home"),
+    path('home/',index_home,name="home"),
+    path('',in_home,name="in_home"),
     path('navbar/',base_navbar,name="base_navbar"),
     path('products/view/',products_list,name="products_list"),
     path('checkout/<uuid:id>/payment/',check_out,name="check_out"),
