@@ -105,17 +105,6 @@
       color: white;
     }
 
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-   .hamburger img{
-      width: 30px;
-      height: 30px;
-      display: block;
-      margin: auto;
-   }
 /* --------------- */
 * {
             margin: 0;
@@ -503,7 +492,7 @@
 
         /* Footer */
         .footer {
-            background: #1f2937;
+            /* background: #1f2937; */
             color: white;
             padding: 2rem 0;
             text-align: center;
