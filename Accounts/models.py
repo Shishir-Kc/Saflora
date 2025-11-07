@@ -11,6 +11,12 @@ class Location(models.Model):
     def __str__(self):
         return self.name
     
+class Province(models.Model):
+    name = models.TextField(default='n/a')
+    class Meta:
+        verbose_name = 'Province'
+    def __str__(self):
+        return self.name
 
 class Saflora_user(AbstractUser):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
@@ -19,6 +25,7 @@ class Saflora_user(AbstractUser):
     address_type = models.TextField(null=True)
     hear_about_us = models.CharField(max_length=20,default='Others')
     location = models.ForeignKey(Location,on_delete=models.CASCADE,null=True)
+    province = models.ForeignKey(Province,on_delete=models.CASCADE,null=True)
 
 class AnonymousUser(models.Model):
     id = models.UUIDField(default=uuid.uuid4,primary_key=True,editable=False)
@@ -27,7 +34,7 @@ class AnonymousUser(models.Model):
     email = models.EmailField()
     shipping_address = models.CharField()
     city = models.TextField()
-    province = models.CharField()
+    province = models.ForeignKey(Province,on_delete=models.CASCADE)
     postal_code = models.IntegerField()
 
     class Meta:
