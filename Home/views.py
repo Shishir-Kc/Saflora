@@ -3,18 +3,28 @@ from Product.models import Saflora_Product,Saflora_Base_Product
 from Accounts.models import Cart,Saflora_user,Location
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
+from Accounts.models import Province,Location
 
 def in_home(request):
+    if request.user.is_authenticated:
+        return redirect('home:home')
+    
     return render(request,'Home/Landing_page/landing_page.html')
 
 def index_home(request):
+   if not request.user.is_authenticated:
+    return redirect('home:in_home')
    return render(request,'Home/home/index.html')
 
 def base_navbar(request):
     return render(request,'Home/base/navbar.html')
 
 def products_list(request):
+   if request.user.is_authenticated:
+      user = Saflora_user.objects.get(username=request.user)
+      if not user.address or not user.province:
+        messages.error(request,"Please save Your address before purchasing any product !")
+
    items = Saflora_Base_Product.objects.all()
    context = {
        'items':items
@@ -24,6 +34,11 @@ def products_list(request):
 
 def check_out(request,id,cart_id=None,item_id=None):
     user = request.user
+    if request.user.is_authenticated:
+      user = Saflora_user.objects.get(username=user)
+      if not user.address or not user.province:
+        
+        return redirect("home:user_profile")
     if request.method == "POST":
         payment_method = request.POST.get('payment_method')
         quantity = request.POST.get('quantity_display')
@@ -77,13 +92,18 @@ def user_profile(request):
     except Saflora_user.DoesNotExist:
         messages.error(request,"Create an account to view your information !")
         return redirect("login:user_login")
-    if not user.address:
-        messages.error(request,"Please save Your address before purchasing any product !")
-    wards = range(1, 21)
+    if not user.address or not user.province:
+        messages.error(request,"Please save Your address / Province before purchasing any product !")
+
+    locations = Location.objects.all()
+    print(locations)
+    provinces = Province.objects.all()
     context = {
         'user':user,
-      
+        'provinces':provinces,
+        'locations':locations
     }
+
     return render(request,'Home/profile/profile.html',context=context)
 
 def about_us(request):
@@ -131,11 +151,14 @@ def update_address(request):
         new_address = request.POST.get('address')
         new_address_type = request.POST.get('address_type')
         new_area = request.POST.get("area")
+        new_province = request.POST.get('province')
         user = Saflora_user.objects.get(username=request.user)
+        province = Province.objects.get(id=new_province)
+        user.province = province
         user.address = new_address
         user.address_type = new_address_type
         try:
-            location = Location.objects.get(name=new_area)
+            location = Location.objects.get(id=new_area)
             user.location = location
             user.save()
         except Exception as e:
