@@ -5,11 +5,13 @@ import requests
 from django.urls import reverse
 from dotenv import load_dotenv
 import os 
-from Accounts.models import Saflora_user,Saflora_Product,Cart,AnonymousUser
+from Accounts.models import Saflora_user,Saflora_Product,Cart,AnonymousUser,Province
 from django.contrib import messages
 from .models import Payment_Records
+import logging
 from .tools import send_notification_saflora,send_notification_user
 load_dotenv()
+logger = logging.getLogger('__name__')
 
 
 
@@ -39,11 +41,12 @@ def khalti_payment(request,id,cart_id):
         email = request.POST.get('email')
         address = request.POST.get('address')
         city = request.POST.get("city")
-        province = request.POST.get('province')
+        province_id= request.POST.get('province')
         postal_code = request.POST.get('postal_code')
+        province = Province.objects.get(id=province_id)
 
        except: # - > this will run if there is incomplete imformation !
-        logging.warning('incomplete user information !')
+        logger.warning('incomplete user information !')
         messages.error(request,'please provide full information !')
         return redirect("payment:Khalti_payment")
        
@@ -73,7 +76,7 @@ def khalti_payment(request,id,cart_id):
            anonymous_user = AnonymousUser.objects.create(full_name=full_name,contact_number=contact_number,email=email,shipping_address=address,province=province,city=city,postal_code=postal_code)
        except Exception as e: # - > failsafe will run when it fails to create a user 
          messages.error(request,'Something went wrong!')
-         logging.warning("error finding or creating user !")
+         logger.warning("error finding or creating user !",e)
          return redirect("home:products_list")
    
         
@@ -165,19 +168,23 @@ def khalti_payment(request,id,cart_id):
       for i in variant:
          variant = i
       if request.user.is_authenticated:
-       if not user.location.name == "itahari-4" or user.location.name =="ithari-5":
+       try:
+        if not user.location.name == "itahari-4" or not user.location.name =="ithari-5":
          amount = 30
+       except:
+          return redirect('home:user_profile')
       else:
          amount = 30
       cart.total_price = sub_total + amount
       cart.save()
-      
+      provinces = Province.objects.all()
       context = { 
          'cart':cart,
          'user':user,
          'sub_total':sub_total,
          'variant':variant,
-         'Total':sub_total + amount
+         'Total':sub_total + amount,
+         'provinces':provinces
       }
       return render (request,'payment/summary.html',context) 
 
