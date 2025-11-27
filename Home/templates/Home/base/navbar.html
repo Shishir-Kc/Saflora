@@ -221,8 +221,36 @@
         background-color: #f0f9f4;
       }
       .notification.error {
-        border-left-color: #dc3545;
-        background-color: #fef5f5;
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        border-left: none;
+        color: white;
+        box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.5);
+      }
+      
+      .notification.error .notification-message {
+        color: white;
+        font-weight: 600;
+      }
+
+      .notification.error .icon {
+        background: rgba(255, 255, 255, 0.2);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
+
+      .notification.error .notification-close {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      
+      .notification.error .notification-close:hover {
+        color: white;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
       }
       .notification.warning {
         border-left-color: #ffc107;

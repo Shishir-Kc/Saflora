@@ -4,6 +4,7 @@ from Accounts.models import Cart,Saflora_user,Location
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from Accounts.models import Province,Location
+from .tools import check_address
 
 def in_home(request):
     if request.user.is_authenticated:
@@ -37,8 +38,12 @@ def check_out(request,id,cart_id=None,item_id=None):
     if request.user.is_authenticated:
       user = Saflora_user.objects.get(username=user)
       if not user.address or not user.province:
-        
         return redirect("home:user_profile")
+      print(check_address(province_id=user.province.id,area_id=user.location.id))       
+      if not check_address(province_id=user.province.id,area_id=user.location.id):
+         messages.error(request,'Invalid Location !')
+         return redirect("home:user_profile")
+
     if request.method == "POST":
         payment_method = request.POST.get('payment_method')
         quantity = request.POST.get('quantity_display')
@@ -96,12 +101,13 @@ def user_profile(request):
         messages.error(request,"Please save Your address / Province before purchasing any product !")
 
     locations = Location.objects.all()
-    print(locations)
     provinces = Province.objects.all()
     context = {
         'user':user,
         'provinces':provinces,
-        'locations':locations
+        'locations':locations,
+        'language':user.language
+        
     }
 
     return render(request,'Home/profile/profile.html',context=context)
@@ -145,6 +151,7 @@ def update_profile(request):
     else:
         messages.error(request,'Something went wrong')
         return redirect("home:user_profile")
+    
 @login_required
 def update_address(request):
     if request.method == "POST":
@@ -152,17 +159,21 @@ def update_address(request):
         new_address_type = request.POST.get('address_type')
         new_area = request.POST.get("area")
         new_province = request.POST.get('province')
-        user = Saflora_user.objects.get(username=request.user)
+        if not check_address(province_id=new_province,area_id=new_area):
+            messages.error(request,'Invalid Location')
+            return redirect('home:user_profile')
+        
         province = Province.objects.get(id=new_province)
+        user = Saflora_user.objects.get(username=request.user)
         user.province = province
         user.address = new_address
         user.address_type = new_address_type
+
         try:
             location = Location.objects.get(id=new_area)
             user.location = location
             user.save()
         except Exception as e:
-            
             print(e)
             messages.error(request,"invalid loaction !")
             return redirect("home:user_profile")
@@ -173,6 +184,23 @@ def update_address(request):
         messages.error(request,'Something went wrong')
         return redirect("home:user_profile")
     
+
+@login_required
+def update_language_preference(request):
+    if request.method == "POST":
+        preferred_language = request.POST.get('preferred_language')
+        print(preferred_language)
+        user = Saflora_user.objects.get(username=request.user)
+        if preferred_language == 'ne':
+           user.language = Saflora_user.Prefered_Language.NEPALI
+        elif preferred_language == 'en':
+              user.language = Saflora_user.Prefered_Language.ENGLISH
+        messages.success(request,"Language Preference Updated !")
+        user.save()
+        return redirect("home:user_profile")
+    else:
+        messages.error(request,'Something went wrong')
+        return redirect("home:user_profile")    
 
 
 @login_required
@@ -202,3 +230,5 @@ def delete_cart(request,id):
         messages.error(request,'Cart does not exists !')
         return redirect("home:cart")
     
+
+

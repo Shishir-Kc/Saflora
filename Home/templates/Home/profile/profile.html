@@ -114,6 +114,147 @@
         color: white;
       }
 
+      /* Language toggle styles */
+      .language-toggle {
+        display: inline-flex;
+        background-color: #f3f4f6;
+        border-radius: 8px;
+        padding: 4px;
+        gap: 4px;
+      }
+
+      .language-option {
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-color: transparent;
+        color: #6b7280;
+        border: none;
+        position: relative;
+      }
+
+      .language-option:hover {
+        color: #374151;
+      }
+
+      .language-option.active {
+        background-color: white;
+        color: #10b981;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .language-flag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .flag-icon {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      /* Tooltip styles */
+      .tooltip-wrapper {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .tooltip-trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .info-icon {
+        width: 16px;
+        height: 16px;
+        background-color: #e5e7eb;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: help;
+        transition: all 0.2s ease;
+        color: #6b7280;
+        font-size: 11px;
+      }
+
+      .info-icon:hover {
+        background-color: #10b981;
+        color: white;
+        transform: scale(1.1);
+      }
+
+      .tooltip {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-8px);
+        background-color: #1f2937;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        pointer-events: none;
+        z-index: 100;
+        max-width: 250px;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.4;
+      }
+
+      .tooltip::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 5px 5px 0 5px;
+        border-color: #1f2937 transparent transparent transparent;
+      }
+
+      .tooltip-wrapper:hover .tooltip,
+      .info-icon:hover ~ .tooltip {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(-12px);
+      }
+
+      /* Alternative tooltip position for mobile */
+      @media (max-width: 640px) {
+        .tooltip {
+          bottom: auto;
+          top: 100%;
+          transform: translateX(-50%) translateY(8px);
+        }
+
+        .tooltip::after {
+          top: auto;
+          bottom: 100%;
+          border-width: 0 5px 5px 5px;
+          border-color: transparent transparent #1f2937 transparent;
+        }
+
+        .tooltip-wrapper:hover .tooltip,
+        .info-icon:hover ~ .tooltip {
+          transform: translateX(-50%) translateY(12px);
+        }
+      }
+
       input:focus,
       textarea:focus {
         outline: none;
@@ -136,6 +277,11 @@
 
         .custom-select-icon {
           right: 12px;
+        }
+
+        .language-option {
+          padding: 6px 12px;
+          font-size: 13px;
         }
       }
 
@@ -186,6 +332,58 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
               <p class="text-gray-500 font-medium">Phone Number</p>
               <p class="md:col-span-2 font-semibold text-gray-800">{{ user.contact }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preferences Card -->
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-gray-900">Preferences</h2>
+            <button
+              onclick="openPreferencesModal()"
+              class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm font-semibold transition-colors"
+            >
+              <i class="fas fa-cog text-xs"></i>
+              Edit
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+              <div class="tooltip-wrapper">
+                <div class="tooltip-trigger">
+                  <p class="text-gray-500 font-medium">Preferred Language</p>
+                  <span class="info-icon">
+                    <i class="fas fa-info" style="font-size: 9px;"></i>
+                  </span>
+                  <div class="tooltip">
+                    We will use the language you selected to send emails and notifications
+                  </div>
+                </div>
+              </div>
+              <div class="md:col-span-2">
+                <div class="language-toggle">
+                  <button 
+                    class="language-option {% if language == 'ENGLISH' or not user.language %}active{% endif %}"
+                    onclick="changeLanguage('en')"
+                    type="button"
+                  >
+                    <span class="language-flag">
+                      🇬🇧 English
+                    </span>
+                  </button>
+                  <button 
+                    class="language-option {% if language == 'NEPALI' %}active{% endif %}"
+                    onclick="changeLanguage('ne')"
+                    type="button"
+                  >
+                    <span class="language-flag">
+                      🇳🇵 नेपाली 
+                    </span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -306,6 +504,59 @@
     </div>
   </div>
 
+  <!-- Preferences Edit Modal -->
+  <div id="preferencesModal" class="modal">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-lg font-bold text-gray-900">Edit Preferences</h3>
+        <button type="button" class="text-2xl text-gray-400 hover:text-gray-600" onclick="closePreferencesModal()">&times;</button>
+      </div>
+      
+      <form method="POST" action="{% url 'home:update_preferences' %}">
+        {% csrf_token %}
+        
+        <div class="mb-6">
+          <label class="block text-sm font-semibold text-gray-700 mb-3">Preferred Language</label>
+          <div class="custom-select-wrapper">
+            <select
+              id="languageSelect"
+              name="preferred_language"
+              class="custom-select"
+              required
+            >
+              <option value="en" {% if user.preferred_language == 'en' or not user.preferred_language %}selected{% endif %}>
+                🇬🇧 English
+              </option>
+              <option value="ne" {% if user.preferred_language == 'ne' %}selected{% endif %}>
+                🇳🇵 नेपाली (Nepali)
+              </option>
+            </select>
+            <i class="fas fa-chevron-down custom-select-icon"></i>
+          </div>
+          <p class="mt-2 text-xs text-gray-500">
+            We will use the language you selected to send emails and notifications
+          </p>
+        </div>
+        
+        <div class="flex gap-3">
+          <button 
+            type="button" 
+            onclick="closePreferencesModal()"
+            class="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-semibold text-sm transition-colors"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit"
+            class="flex-1 px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg font-semibold text-sm transition-colors"
+          >
+            Save Preferences
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Address Edit Modal -->
   <div id="addressModal" class="modal">
     <div class="modal-content">
@@ -395,6 +646,12 @@
     </div>
   </div>
 
+  <!-- Quick Language Change Form (Hidden) -->
+  <form id="quickLanguageForm" method="POST" action="{% url 'home:update_preferences' %}" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" name="preferred_language" id="quickLanguageInput">
+  </form>
+
   <script>
     function openPersonalModal() {
       document.getElementById('personalModal').classList.add('show');
@@ -402,6 +659,14 @@
 
     function closePersonalModal() {
       document.getElementById('personalModal').classList.remove('show');
+    }
+
+    function openPreferencesModal() {
+      document.getElementById('preferencesModal').classList.add('show');
+    }
+
+    function closePreferencesModal() {
+      document.getElementById('preferencesModal').classList.remove('show');
     }
 
     function openAddressModal() {
@@ -412,27 +677,54 @@
       document.getElementById('addressModal').classList.remove('show');
     }
 
+    // Quick language change function
+    function changeLanguage(lang) {
+      // Update UI immediately
+      const buttons = document.querySelectorAll('.language-option');
+      buttons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.textContent.includes(lang === 'en' ? 'English' : 'नेपाली')) {
+          btn.classList.add('active');
+        }
+      });
+
+      // Submit form to save preference
+      document.getElementById('quickLanguageInput').value = lang;
+      document.getElementById('quickLanguageForm').submit();
+    }
+
     window.addEventListener('click', function(event) {
       const personalModal = document.getElementById('personalModal');
+      const preferencesModal = document.getElementById('preferencesModal');
       const addressModal = document.getElementById('addressModal');
       
       if (event.target === personalModal) {
         closePersonalModal();
+      }
+      if (event.target === preferencesModal) {
+        closePreferencesModal();
       }
       if (event.target === addressModal) {
         closeAddressModal();
       }
     });
 
-    const areaSelect = document.getElementById('area');
-    if (areaSelect) {
-      areaSelect.addEventListener('focus', function() {
-        this.parentElement.querySelector('.custom-select-icon').style.transform = 'translateY(-50%) rotate(180deg)';
+    // Handle custom select focus animations
+    const selectElements = document.querySelectorAll('.custom-select');
+    selectElements.forEach(select => {
+      select.addEventListener('focus', function() {
+        const icon = this.parentElement.querySelector('.custom-select-icon');
+        if (icon) {
+          icon.style.transform = 'translateY(-50%) rotate(180deg)';
+        }
       });
 
-      areaSelect.addEventListener('blur', function() {
-        this.parentElement.querySelector('.custom-select-icon').style.transform = 'translateY(-50%) rotate(0deg)';
+      select.addEventListener('blur', function() {
+        const icon = this.parentElement.querySelector('.custom-select-icon');
+        if (icon) {
+          icon.style.transform = 'translateY(-50%) rotate(0deg)';
+        }
       });
-    }
+    });
   </script>
 {% endblock content %}

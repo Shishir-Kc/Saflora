@@ -12,7 +12,8 @@ from .views import (in_home,
                     update_address,
                     update_profile,
                     delete_cart,
-                    index_home
+                    index_home,
+                    update_language_preference
 
                     )
 
@@ -35,6 +36,7 @@ urlpatterns = [
     path('user/cart/add/<uuid:product_id>/',add_to_cart,name="add_to_cart"),
     path('user/update/account/',update_profile,name="update_profile"),
     path('user/update/address/',update_address,name="update_address"),
-    path('user/delete/cart/<uuid:id>/',delete_cart,name="delete_cart")
+    path('user/delete/cart/<uuid:id>/',delete_cart,name="delete_cart"),
+    path('user/update/preferences/',update_language_preference,name="update_preferences"),
     
 ]

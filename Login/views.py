@@ -8,6 +8,7 @@ from .models import Verification_code
 from Accounts.models import Saflora_user
 from .tasks import send_verification_email
 from django.urls import reverse
+from django.db.models import Q
 
 def user_login(request):
     if request.method == "POST":
@@ -45,12 +46,18 @@ def user_signup(request):
         hear_about_us = request.POST.get("referralOther")
         user_first_name = request.POST.get('firstname')
         user_last_name = request.POST.get('lastname')
+        user_language = request.POST.get('preferred_language')
         # Server-side Validation
+        if user_language == "en":
+            language = Saflora_user.Prefered_Language.ENGLISH
+        elif user_language == "ne":
+            language = Saflora_user.Prefered_Language.NEPALI
       
         if len(user_contact)< 10 or len(user_contact)>10:
             messages.error(request,"Please enter valid contact number ")
             
             return render(request, "sign_up/sign_up.html") #ok from server! 
+        
         if '@' not in user_email:
             messages.error(request,"Enter a valid email !")
          
@@ -59,22 +66,23 @@ def user_signup(request):
             messages.error(request,"Username already taken !")
             return render(request, "sign_up/sign_up.html")
 
-        if Saflora_user.objects.filter(email=user_email,contact=user_contact).exists():
-            messages.error(request,"User with that email already exists !")
+        if Saflora_user.objects.filter(Q(email=user_email)|Q(contact=user_contact)).exists():
+            messages.error(request,"User with that email or number  already exists !")
             return render(request, "sign_up/sign_up.html")
         else:
-            user  = Saflora_user.objects.create_user(username=username,email=user_email,password=user_password,contact = user_contact,address=user_address,hear_about_us=hear_about_us,first_name = user_first_name,last_name=user_last_name)
-
+            user  = Saflora_user.objects.create_user(username=username,email=user_email,password=user_password,contact = user_contact,address=user_address,hear_about_us=hear_about_us,first_name = user_first_name,last_name=user_last_name,language=language)
+            
             user.save()
-            messages.success(request,"Account created please login  ")
-            return redirect("login:user_login")
+            login(request,user)
+            messages.success(request,"Account Created Successfully ! ")
+            return redirect("home:in_home")
         
     return render(request, "sign_up/sign_up.html")
 
 
 def user_logout(request):
     logout(request)
-    return render(request,"login/login.html")    
+    return redirect("login:user_login") 
 
 
 def forgot_pass(request):

@@ -29,8 +29,15 @@ def send_verification_email(email, code,url=None):
     from_email ='Saflora@gmail.com'
     to = [email]
     message = f'Your verification code is: {code}'
+    if user.language == Saflora_user.Prefered_Language.NEPALI:
+       file_path = 'reset_pass/nep_send_email.html'
+    elif user.language == Saflora_user.Prefered_Language.ENGLISH:
+         file_path = 'reset_pass/send_email.html'
+    else:
+       file_path = 'reset_pass/send_email.html'
+
     html_content = render_to_string(
-        'reset_pass/send_email.html',
+        file_path,
         {
             'user_name':user.get_full_name(),
             'otp_code':code,
@@ -137,9 +144,17 @@ def send_order_confirmation(customer_email, customer_name,order_date,cart_id,tot
     For questions, contact us at saflora.nepal@gmail.com.
     """
 
+    user = Saflora_user.objects.get(email=customer_email)
+    if user.language == Saflora_user.Prefered_Language.NEPALI:
+       file_path = 'payment/nep_comformation.html'
+    elif user.language == Saflora_user.Prefered_Language.ENGLISH:
+         file_path = 'payment/confirmation.html'
+    else:
+       file_path = 'payment/confirmation.html'
     # Render the HTML template
+    
     html_content = render_to_string(
-        'payment/confirmation.html',
+        file_path,
         {
             'customer_name': customer_name,
             'current_year': datetime.now().year,

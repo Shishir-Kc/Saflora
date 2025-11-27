@@ -6,7 +6,7 @@
   href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
   rel="stylesheet"
 />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
+<link rel="stylesheet" href="  https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css  "/>
 <style>
   :root {
     --primary: #2d6a4f;
@@ -339,7 +339,6 @@
     </p>
   </div>
 
-<!-- Change the form tag -->
 <form class="purchase-form" method="POST" action>
   {% csrf_token %}
   
@@ -389,14 +388,13 @@
     {% if item.item_name == 'Liquid Floor Cleaner' %}
     <option value="1L">1L</option>
     {% else %}
-    <option value="50G">50G</option>
+    <option value="70G">70G</option>
 
     {% endif %}
       
 
   </select>
 </div>
-
 
   <!-- Total Price -->
   <div class="total-price-section">
@@ -425,114 +423,17 @@
     </div>
   </div>
 
-  <!-- Change type to "submit" -->
   <button type="submit" class="buy-now-btn" id="confirm-purchase-btn">
     <i class="fas fa-lock"></i> Confirm Purchase
   </button>
 </form>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    let currentProduct = null;
-
-    const elements = {
-      image: document.getElementById("buy-product-image"),
-      name: document.getElementById("buy-product-name"),
-      price: document.getElementById("buy-product-price"),
-      description: document.getElementById("buy-product-description"),
-      quantityInput: document.getElementById("quantity-input"),
-      selectedQuantity: document.getElementById("selected-quantity"),
-      selectedProductId: document.getElementById("selected-product-id"),
-      decreaseBtn: document.getElementById("decrease-qty"),
-      increaseBtn: document.getElementById("increase-qty"),
-      totalPrice: document.getElementById("total-price"),
-      fragranceBtns: document.querySelectorAll(".fragrance-btn"),
-    };
-
-    function initializeProduct() {
-      const firstBtn = elements.fragranceBtns[0];
-      if (firstBtn) {
-        currentProduct = {
-          id: firstBtn.dataset.productId,
-          name: firstBtn.dataset.name,
-          price: parseFloat(firstBtn.dataset.price),
-          image: firstBtn.dataset.image,
-          description: firstBtn.dataset.description,
-          stock: parseInt(firstBtn.dataset.stock),
-          fragrance: firstBtn.dataset.fragrance,
-        };
-        elements.selectedProductId.value = currentProduct.id;
-        updateDisplay();
-      }
-    }
-
-    function updateDisplay() {
-      if (!currentProduct) return;
-
-      elements.image.src = currentProduct.image;
-      elements.name.textContent = currentProduct.name;
-      elements.price.textContent = `NPR ${currentProduct.price}/Unit`;
-      elements.description.textContent = currentProduct.description;
-
-      elements.fragranceBtns.forEach((btn) => {
-        btn.classList.toggle(
-          "active",
-          btn.dataset.productId === currentProduct.id
-        );
-      });
-
-      updateTotalPrice();
-    }
-
-    function updateTotalPrice() {
-      const quantity = parseInt(elements.quantityInput.value);
-      const total = currentProduct.price * quantity;
-      elements.totalPrice.textContent = `NPR ${total}`;
-      // Update hidden field
-      elements.selectedQuantity.value = quantity;
-    }
-
-    // Event Listeners
-    elements.fragranceBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        currentProduct = {
-          id: btn.dataset.productId,
-          name: btn.dataset.name,
-          price: parseFloat(btn.dataset.price),
-          image: btn.dataset.image,
-          description: btn.dataset.description,
-          stock: parseInt(btn.dataset.stock),
-          fragrance: btn.dataset.fragrance,
-        };
-        elements.quantityInput.value = 1;
-        elements.selectedProductId.value = currentProduct.id;
-        updateDisplay();
-      });
-    });
-
-    elements.increaseBtn.addEventListener("click", () => {
-      elements.quantityInput.value = parseInt(elements.quantityInput.value) + 1;
-      updateTotalPrice();
-    });
-
-    elements.decreaseBtn.addEventListener("click", () => {
-      const qty = parseInt(elements.quantityInput.value);
-      if (qty > 1) {
-        elements.quantityInput.value = qty - 1;
-        updateTotalPrice();
-      }
-    });
-
-    initializeProduct();
-  });
-</script>
-</div>
-
+<div id="toast" class="toast-notification"></div>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    let cart = [];
     let currentProduct = null;
+    let cart = []; // Initialize cart
 
     // DOM Elements
     const elements = {
@@ -541,6 +442,8 @@
       price: document.getElementById("buy-product-price"),
       description: document.getElementById("buy-product-description"),
       quantityInput: document.getElementById("quantity-input"),
+      selectedQuantity: document.getElementById("selected-quantity"), // Hidden input
+      selectedProductId: document.getElementById("selected-product-id"), // Hidden input
       decreaseBtn: document.getElementById("decrease-qty"),
       increaseBtn: document.getElementById("increase-qty"),
       totalPrice: document.getElementById("total-price"),
@@ -548,6 +451,7 @@
       confirmBtn: document.getElementById("confirm-purchase-btn"),
       toast: document.getElementById("toast"),
       paymentOptions: document.querySelectorAll(".payment-option"),
+      variantSelect: document.getElementById("variant-select"), // Added variant select
     };
 
     function initializeProduct() {
@@ -562,6 +466,7 @@
           stock: parseInt(firstBtn.dataset.stock),
           fragrance: firstBtn.dataset.fragrance,
         };
+        elements.selectedProductId.value = currentProduct.id; // Update hidden input
         updateDisplay();
       }
     }
@@ -589,6 +494,8 @@
       const quantity = parseInt(elements.quantityInput.value);
       const total = currentProduct.price * quantity;
       elements.totalPrice.textContent = `NPR ${total}`;
+      // Update the hidden quantity input for form submission
+      elements.selectedQuantity.value = quantity;
     }
 
     function showToast(message) {
@@ -611,20 +518,23 @@
           stock: parseInt(btn.dataset.stock),
           fragrance: btn.dataset.fragrance,
         };
-        elements.quantityInput.value = 1;
+        elements.quantityInput.value = 1; // Reset quantity to 1 when changing product
+        elements.selectedProductId.value = currentProduct.id; // Update hidden input
         updateDisplay();
       });
     });
 
     elements.increaseBtn.addEventListener("click", () => {
-      elements.quantityInput.value =
-        parseInt(elements.quantityInput.value) + 1;
+      // Get current value, parse as integer, add 1, set new value
+      const currentValue = parseInt(elements.quantityInput.value);
+      elements.quantityInput.value = currentValue + 1;
       updateTotalPrice();
     });
 
     elements.decreaseBtn.addEventListener("click", () => {
       const qty = parseInt(elements.quantityInput.value);
       if (qty > 1) {
+        // Get current value, parse as integer, subtract 1, set new value
         elements.quantityInput.value = qty - 1;
         updateTotalPrice();
       }
@@ -640,9 +550,11 @@
       });
     });
 
-    elements.confirmBtn.addEventListener("click", () => {
+    elements.confirmBtn.addEventListener("click", (event) => {
+      // Prevent default form submission if validation fails
       if (currentProduct.stock <= 0) {
         showToast("Product is out of stock");
+        event.preventDefault(); // Prevent form submission
         return;
       }
 
@@ -652,8 +564,10 @@
         fragrance: currentProduct.fragrance,
         quantity: parseInt(elements.quantityInput.value),
         price: currentProduct.price,
+        variant: elements.variantSelect.value, // Include variant in item details
       };
 
+      // For this page, we only handle one item (currentProduct)
       cart = [item];
 
       const selectedPayment = document.querySelector(
@@ -669,8 +583,10 @@
         ),
       };
 
+      // Update the hidden quantity input one last time before form submission
+      elements.selectedQuantity.value = item.quantity;
 
-      cart = [];
+      // cart = []; // Clearing cart after submission logic is handled by backend
     });
 
     // Initialize page with first product
@@ -678,4 +594,5 @@
   });
 </script>
 
+</div>
 {% endblock content %}

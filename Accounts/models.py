@@ -19,6 +19,9 @@ class Province(models.Model):
         return self.name
 
 class Saflora_user(AbstractUser):
+    class Prefered_Language(models.TextChoices):
+        ENGLISH = "ENGLISH","English"
+        NEPALI = "NEPALI","Nepali"
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     contact = models.IntegerField(null=True, blank=True)
     address = models.TextField(null=True, blank=True)
@@ -26,6 +29,7 @@ class Saflora_user(AbstractUser):
     hear_about_us = models.CharField(max_length=20,default='Others')
     location = models.ForeignKey(Location,on_delete=models.CASCADE,null=True)
     province = models.ForeignKey(Province,on_delete=models.CASCADE,null=True)
+    language = models.CharField(default=Prefered_Language.ENGLISH,choices=Prefered_Language.choices,max_length=20)
 
 class AnonymousUser(models.Model):
     id = models.UUIDField(default=uuid.uuid4,primary_key=True,editable=False)

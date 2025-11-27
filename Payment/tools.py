@@ -84,7 +84,7 @@ def send_notification_saflora(cart_id):
         "Address": str(address),  # if this is a model
         "Location": str(location),  # convert model instance to string
         "Address_Type": address_type,
-        "Province": province,
+        "Province": str(province),
         "Postal_Code": postal_code
     }
 }
@@ -119,3 +119,19 @@ def send_notification_user(cart_id):
         print("----------------------Error---------------------")
         print(e)
         return None
+    
+
+
+
+
+
+"""
+
+    fixing Log:
+         update login ui  done !
+         50G -> 70G - Done !
+         language support
+         location 
+         incresed by 2 - >  lol need 1  done ! 
+         replae products images 
+"""
